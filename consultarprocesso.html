@@ -244,7 +244,7 @@
       color: #000;
     }
 
-    .preview-item-value.locked { color: #999; font-weight: 400; }
+    .preview-item-value.locked { color: #999; font-weight: 400; font-size: 0.75rem; }
 
     .preview-item-sub {
       font-size: 0.75rem;
@@ -381,7 +381,7 @@
             <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
           </div>
         </div>
-        <div class="preview-item-sub">Mais processos podem ser encontrados ao comprar</div>
+        <div class="preview-item-sub"><svg style="display:inline;vertical-align:middle;margin-right:4px;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Mais processos podem ser encontrados ao comprar</div>
       </div>
 
       <div class="preview-item">
@@ -412,7 +412,7 @@
             <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
           </div>
         </div>
-        <div class="preview-item-sub">Consulta realizada em todos os tribunais do Brasil</div>
+        <div class="preview-item-sub"><svg style="display:inline;vertical-align:middle;margin-right:4px;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Consulta realizada em todos os tribunais do Brasil</div>
       </div>
 
       <div class="preview-item">
@@ -488,6 +488,10 @@
         <div style="display:flex; align-items:center; gap:8px;">
           <span style="color:#22a94a; font-size:1rem; font-weight:700; flex-shrink:0;">✓</span>
           <span style="font-size:0.85rem; color:#333;">Histórico completo dos processos existentes</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="color:#22a94a; font-size:1rem; font-weight:700; flex-shrink:0;">✓</span>
+          <span style="font-size:0.85rem; color:#333;">Antecipe bloqueios, multas, negativação ou até mandados de prisão</span>
         </div>
         <div style="display:flex; align-items:center; gap:8px;">
           <span style="color:#22a94a; font-size:1rem; font-weight:700; flex-shrink:0;">✓</span>
@@ -613,7 +617,7 @@
         screenLoading.classList.remove('active');
         screenResult.classList.add('active');
         window.scrollTo(0, 0);
-      }, 3000);
+      }, 2000);
     }
 
     function scrollToPreco() {
