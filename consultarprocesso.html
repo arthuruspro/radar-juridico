@@ -5,6 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Consultar Processo</title>
   <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Meta Pixel Base -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2112230319524429');
+  fbq('init', '1961787600889582');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2112230319524429&ev=PageView&noscript=1"/><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1961787600889582&ev=PageView&noscript=1"/></noscript>
+
+  <!-- Pixel da UTMify -->
+  <script>
+  window.pixelId = "698683615ce6a0f57cf14451";
+  var a = document.createElement("script");
+  a.async=true;a.defer=true;
+  a.src="https://cdn.utmify.com.br/scripts/pixel/pixel.js";
+  document.head.appendChild(a);
+  </script>
+  <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids data-utmify-ignore-iframe data-utmify-ignore-retry async defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -503,7 +529,7 @@
         </div>
       </div>
       <div style="background:#f9f9f9; border-radius:12px; padding:20px;">
-        <button onclick="window.location.href='https://pay.cakto.com.br/pcoivto_775901'" style="width:100%; background:#000; color:#fff; font-family:'Sora',sans-serif; font-size:0.95rem; font-weight:700; border:none; border-radius:10px; padding:16px; cursor:pointer;">Pague com Pix</button>
+        <button id="paguePixBtn" onclick="window.location.href='https://pay.cakto.com.br/pcoivto_775901'" style="width:100%; background:#000; color:#fff; font-family:'Sora',sans-serif; font-size:0.95rem; font-weight:700; border:none; border-radius:10px; padding:16px; cursor:pointer;">Pague com Pix</button>
       </div>
       <div style="text-align:center; margin-top:12px; font-size:0.75rem; color:#999;">Ao prosseguir você concorda com os Termos de uso.</div>
     </div>
@@ -634,6 +660,13 @@
     // Preview items scroll to price
     document.querySelectorAll('.preview-item').forEach(item => {
       item.addEventListener('click', scrollToPreco);
+    });
+
+    document.getElementById('paguePixBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      const url = 'https://pay.cakto.com.br/pcoivto_775901';
+      if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout');
+      setTimeout(function() { window.location.href = url; }, 600);
     });
 
     btn.addEventListener('click', buscar);
