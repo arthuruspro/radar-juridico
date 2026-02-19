@@ -530,7 +530,7 @@
         </div>
         <div class="upsell-item">
           <div class="upsell-item-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
-          <div class="upsell-item-text"><strong>Receba alertas de movimentações e novos processos</strong> no email</div>
+          <div class="upsell-item-text"><strong>Receba alertas de novos processos</strong> no email e WhatsApp</div>
         </div>
       </div>
       <button class="btn-obter-2">Obter Todos os Processos</button>
@@ -617,7 +617,9 @@
     }
 
     function scrollToPreco() {
-      document.getElementById('preco').scrollIntoView({ behavior: 'smooth' });
+      const el = document.getElementById('preco');
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
+      window.scrollTo({ top, behavior: 'smooth' });
     }
 
     // Attach scroll to all obter buttons
