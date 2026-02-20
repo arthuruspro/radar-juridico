@@ -121,8 +121,6 @@ html, body {
 
 /* BUBBLES */
 .bubble {
-  max-width: 82%;
-  width: fit-content;
   padding: 8px 12px 5px;
   border-radius: 8px;
   font-size: 17px;
@@ -130,18 +128,35 @@ html, body {
   color: var(--text-dark);
   word-break: break-word;
 }
-.bubble-in  { background:var(--bubble-in); align-self:flex-start; border-top-left-radius:2px; box-shadow:0 1px 2px rgba(0,0,0,0.1); margin-left: 34px; }
-.av-row .bubble-in { margin-left: 0; }
-.bubble-out { background:var(--bubble-out);align-self:flex-end;   border-top-right-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.1); }
+.bubble-in {
+  background: var(--bubble-in);
+  align-self: flex-start;
+  border-top-left-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  margin-left: 34px;
+  max-width: 82%;
+}
+.bubble-out {
+  background: var(--bubble-out);
+  align-self: flex-end;
+  border-top-right-radius: 2px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  max-width: 82%;
+}
 .btime { display:block;text-align:right;font-size:10.5px;color:var(--text-mid);margin-top:2px; }
 .bubble-out .btime::after { content:' ✓✓';color:#53bdeb; }
 
-/* AVATAR ROW */
+/* AVATAR ROW — full width so bubble max-width calculates against full chat width */
 .av-row {
   display: flex;
   align-items: flex-end;
   gap: 6px;
   align-self: flex-start;
+  width: 100%;
+}
+.av-row .bubble-in {
+  margin-left: 0;
+  max-width: calc(100% - 34px);
 }
 .mini-av {
   width:28px;height:28px;border-radius:50%;overflow:hidden;
@@ -204,12 +219,6 @@ html, body {
   white-space: nowrap;
 }
 .choice-btn:active { opacity:.8; transform:scale(.97); }
-.choice-btn.selected {
-  background: var(--bubble-out);
-  color: var(--text-dark);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  cursor: default;
-}
 
 /* INPUT BAR */
 .input-bar {
@@ -333,7 +342,6 @@ html, body {
 .c-header { text-align:center;margin-bottom:28px; }
 .c-header h2 { font-family:'Lora',serif;font-size:28px;color:#1a1a1a;line-height:1.3;margin-bottom:8px; }
 .c-header h2 span { color:var(--gold); }
-.c-header p { color:#555;font-size:17px;line-height:1.6; }
 
 .testimonials { width:100%;max-width:400px;display:flex;flex-direction:column;gap:10px;margin-bottom:28px; }
 .testimonial {
@@ -365,42 +373,20 @@ html, body {
 .guarantee-badge {
   display:flex;align-items:center;gap:10px;
   background:#f0faf4;border:1px solid rgba(37,211,102,.25);
-  border-radius:12px;padding:12px 16px;margin-bottom:18px;
+  border-radius:12px;padding:12px 16px;
   width:100%;max-width:400px;
 }
 .guarantee-badge .icon{font-size:24px;flex-shrink:0;}
 .guarantee-badge p{color:#333;font-size:16px;line-height:1.5;}
 .guarantee-badge p strong{color:#111;}
 .cta-final {
-  width: 100%;
-  max-width: 400px;
-  background: linear-gradient(135deg, var(--gold-light), var(--gold));
-  color: #1a3a2a;
-  border: none;
-  border-radius: 16px;
-  padding: 20px 16px;
-  font-family: 'Nunito', sans-serif;
-  font-size: 15px;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 8px 32px rgba(201,168,76,.35);
-  transition: transform .2s;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-  display: block;
-}
-.cta-final span {
-  display: block;
-  line-height: 1.4;
-}
-.cta-final small {
-  display: block;
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.7;
-  margin-top: 5px;
-  line-height: 1.3;
+  width:100%;max-width:400px;
+  background:linear-gradient(135deg,var(--gold-light),var(--gold));
+  color:#1a3a2a;border:none;border-radius:16px;padding:20px 16px;
+  font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;
+  cursor:pointer;box-shadow:0 8px 32px rgba(201,168,76,.35);
+  transition:transform .2s;position:relative;overflow:hidden;
+  text-align:center;display:block;line-height:1.5;
 }
 .cta-final::after {
   content:'';position:absolute;inset:0;
@@ -410,7 +396,6 @@ html, body {
 @keyframes shimmer{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
 .cta-final:hover{transform:scale(1.02);}
 .cta-final small{display:block;font-size:13px;font-weight:600;opacity:.75;margin-top:4px;}
-.fine-print{color:#999;font-size:12px;text-align:center;margin-top:16px;line-height:1.6;max-width:400px;}
 
 /* ANIMATE IN */
 .fade-in { opacity:0;transform:translateY(8px);transition:opacity .35s ease,transform .35s ease; }
@@ -420,7 +405,6 @@ html, body {
 <body>
 
 <div class="phone" id="phoneScreen">
-  <!-- HEADER -->
   <div class="wa-header">
     <div class="back-arrow">‹</div>
     <div class="wa-avatar">
@@ -431,16 +415,14 @@ html, body {
       <div class="wa-sub" id="waStatus">online</div>
     </div>
     <div class="wa-icons">⋮</div>
-</div>
+  </div>
 
-  <!-- CHAT -->
   <div class="chat-area" id="chatArea">
     <div class="date-badge"><span>Hoje</span></div>
   </div>
 
-  <!-- INPUT BAR -->
   <div class="input-bar" id="inputBar">
-    <input type="text" class="text-field" id="textField" placeholder="Digite seu primeiro nome" maxlength="40" autocomplete="given-name">
+    <input type="text" class="text-field" id="textField" placeholder="✍️ Digite seu primeiro nome aqui" maxlength="40" autocomplete="given-name">
     <button class="send-btn-label" id="sendBtn" onclick="handleSend()">Enviar</button>
   </div>
 </div>
@@ -502,11 +484,11 @@ html, body {
     <div class="price-main">R$ 19<span style="font-size:50%">,90</span></div>
     <div class="price-sub">por mês · cancela quando quiser</div>
   </div>
-  <button onclick="window.location.href='https://pay.cakto.com.br/336vqbg_777840'" style="width:100%;max-width:400px;background:linear-gradient(135deg,#f5e6b8,#c9a84c);color:#1a3a2a;border:none;border-radius:16px;padding:20px 16px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 8px 32px rgba(201,168,76,.35);text-align:center;line-height:1.5;display:block;">
-    ✝ Sim, quero ouvir o que Jesus tem pra mim<br>
-    <span style="font-size:12px;font-weight:600;opacity:0.7;">Acesso imediato · Pagamento seguro</span>
+  <button class="cta-final" onclick="window.location.href='https://pay.cakto.com.br/336vqbg_777840'">
+    ✝ Sim, quero ouvir o que Jesus tem pra mim
+    <small>Acesso imediato · Pagamento seguro</small>
   </button>
-  <div class="guarantee-badge" style="margin-top:14px;margin-bottom:0;border:none;background:transparent;padding:10px 0 0;box-shadow:none;">
+  <div class="guarantee-badge" style="margin-top:14px;border:none;background:transparent;padding:10px 0 0;box-shadow:none;">
     <div class="icon">🛡️</div>
     <p><strong>Garantia de 30 dias.</strong> Se por qualquer motivo não gostar, devolvemos 100% do seu dinheiro. Sem perguntas.</p>
   </div>
@@ -552,7 +534,6 @@ function scrollCenter() {
   const lastBottom = last.offsetTop + last.offsetHeight;
   const visibleBottom = chatArea.scrollTop + chatArea.clientHeight;
   if (lastBottom > visibleBottom - 60) {
-    // Position last message at 75% down the screen (between middle and bottom)
     chatArea.scrollTop = lastBottom - (chatArea.clientHeight * 0.75);
   }
 }
@@ -636,7 +617,6 @@ function addChoices(options, callback) {
     wrap.appendChild(btn);
   });
   chatArea.appendChild(wrap);
-  // scroll so buttons land at 75% down the screen
   requestAnimationFrame(() => {
     const wrapBottom = wrap.offsetTop + wrap.offsetHeight;
     chatArea.scrollTop = wrapBottom - (chatArea.clientHeight * 0.75);
@@ -649,12 +629,11 @@ function addChoices(options, callback) {
 async function phaseIntro() {
   await sleep(500);
 
-  // Image
   const imgWrap = document.createElement('div');
   imgWrap.className = 'img-bubble fade-in';
   imgWrap.innerHTML = `<img src="https://raw.githubusercontent.com/arthuruspro/radar-juridico/main/jesusgrande.webp" alt="Jesus" onerror="this.style.minHeight='220px';this.style.background='linear-gradient(135deg,#f5e6b8,#c9a84c)'">`;
   chatArea.appendChild(imgWrap);
-  chatArea.scrollTop = 0; // sempre começa do topo, mostrando a imagem
+  chatArea.scrollTop = 0;
   requestAnimationFrame(() => requestAnimationFrame(() => imgWrap.classList.add('show')));
 
   await sleep(900);
@@ -663,7 +642,6 @@ async function phaseIntro() {
   b1.className = 'bubble bubble-in fade-in';
   b1.innerHTML = `<strong>Jesus</strong> tem uma msg para você!<span class="btime">${t()}</span>`;
   chatArea.appendChild(b1);
-  // não scrolla — deixa a mensagem aparecer abaixo da imagem naturalmente
   requestAnimationFrame(() => requestAnimationFrame(() => b1.classList.add('show')));
 
   await sleep(700);
@@ -680,14 +658,13 @@ async function phaseIntro() {
 
   await sleep(600);
 
-  // SIM DESEJO — scroll só o suficiente pra mostrar o botão sem esconder a imagem
   const wrap = document.createElement('div');
   wrap.className = 'choices fade-in';
   const btn = document.createElement('button');
   btn.className = 'choice-btn';
   btn.textContent = '✅ SIM, DESEJO!';
   btn.onclick = () => {
-    unlockAudio(); // unlock iOS audio on direct user gesture
+    unlockAudio();
     wrap.remove();
     outBubble('✅ SIM, DESEJO!');
     scrollCenter();
@@ -696,7 +673,6 @@ async function phaseIntro() {
   wrap.appendChild(btn);
   chatArea.appendChild(wrap);
   requestAnimationFrame(() => {
-    // scroll só até o botão ficar visível, sem esconder a imagem no topo
     const wrapBottom = wrap.offsetTop + wrap.offsetHeight + 16;
     const maxScroll = wrapBottom - chatArea.clientHeight;
     chatArea.scrollTop = Math.max(0, maxScroll);
@@ -711,7 +687,7 @@ async function phaseAskName() {
   hideTyping();
   inBubble('Escreva aqui seu primeiro nome.', true);
   await sleep(300);
-  document.getElementById('textField').placeholder = 'Digite seu primeiro nome';
+  document.getElementById('textField').placeholder = '✍️ Digite seu primeiro nome aqui';
   document.getElementById('sendBtn').textContent = 'Enviar';
   document.getElementById('inputBar').classList.add('show');
   document.getElementById('textField').focus();
@@ -783,7 +759,6 @@ async function phasePain() {
   inBubble('<strong>Que milagre você precisa?</strong>', true);
   await sleep(400);
 
-  // swap input to textarea
   const bar = document.getElementById('inputBar');
   bar.innerHTML = `
     <textarea class="textarea-field" id="textField" placeholder="Escreva aqui a sua dor..." rows="3"></textarea>
@@ -829,10 +804,8 @@ async function phaseCliffhanger(pain) {
   inBubble(`Tudo que você precisa fazer é...`);
   await sleep(600);
 
-  // CLIFFHANGER — overlay aparece imediatamente, sem typing dots
   document.getElementById('waStatus').textContent = 'digitando...';
 
-  // overlay
   const overlay = document.createElement('div');
   overlay.className = 'chat-overlay';
   overlay.innerHTML = `
@@ -846,12 +819,10 @@ async function phaseCliffhanger(pain) {
   document.getElementById('phoneScreen').appendChild(overlay);
   requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('show')));
 
-  // Scroll pra "Tudo que você precisa fazer é..." ficar minimamente visível sob o overlay
   await sleep(300);
   const all = chatArea.querySelectorAll('.bubble, .av-row');
   const last = all[all.length - 1];
   if (last) {
-    // posiciona a última mensagem logo acima do meio do overlay (levemente tampada)
     const targetScroll = last.offsetTop - (chatArea.clientHeight * 0.52);
     chatArea.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
   }
