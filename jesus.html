@@ -854,15 +854,12 @@ function showCheckout() {
 }
 
 // ─── START ──────────────────────────────────────────────────
-let introStarted = false;
-function startOnInteraction() {
-  if (introStarted) return;
-  introStarted = true;
-  waAudio.load();
-  phaseIntro();
-}
-document.addEventListener('touchstart', startOnInteraction, { once: true });
-document.addEventListener('click', startOnInteraction, { once: true });
+// unlock audio on first interaction (browser requirement)
+document.addEventListener('touchstart', () => { try { waAudio.load(); } catch(e){} }, { once: true });
+document.addEventListener('click', () => { try { waAudio.load(); } catch(e){} }, { once: true });
+
+// start messages immediately — no click required
+phaseIntro();
 </script>
 </body>
 </html>
