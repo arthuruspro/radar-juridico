@@ -277,13 +277,13 @@ html, body {
 .chat-overlay {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 30vh;
-  background: linear-gradient(to top, rgba(236,229,221,1) 60%, rgba(236,229,221,0.85) 80%, rgba(236,229,221,0) 100%);
+  height: 42vh;
+  background: linear-gradient(to top, rgba(236,229,221,1) 55%, rgba(236,229,221,0.95) 75%, rgba(236,229,221,0.5) 90%, rgba(236,229,221,0) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 12px 20px 24px;
+  padding: 12px 20px 28px;
   gap: 10px;
   opacity: 0;
   pointer-events: none;
@@ -665,17 +665,16 @@ async function phaseIntro() {
   imgWrap.className = 'img-bubble fade-in';
   imgWrap.innerHTML = `<img src="https://raw.githubusercontent.com/arthuruspro/radar-juridico/main/jesusgrande.webp" alt="Jesus" onerror="this.style.minHeight='220px';this.style.background='linear-gradient(135deg,#f5e6b8,#c9a84c)'">`;
   chatArea.appendChild(imgWrap);
-  scrollDown();
+  chatArea.scrollTop = 0; // sempre começa do topo, mostrando a imagem
   requestAnimationFrame(() => requestAnimationFrame(() => imgWrap.classList.add('show')));
 
   await sleep(900);
 
-  // primeiras 3 mensagens: usar scrollDown pra nao cobrir a imagem
   const b1 = document.createElement('div');
   b1.className = 'bubble bubble-in fade-in';
   b1.innerHTML = `<strong>Jesus</strong> tem uma msg para você!<span class="btime">${t()}</span>`;
   chatArea.appendChild(b1);
-  scrollDown();
+  // não scrolla — deixa a mensagem aparecer abaixo da imagem naturalmente
   requestAnimationFrame(() => requestAnimationFrame(() => b1.classList.add('show')));
 
   await sleep(700);
@@ -688,13 +687,31 @@ async function phaseIntro() {
   b2.innerHTML = `Deseja recebê-la?<span class="btime">${t()}</span>`;
   row1.appendChild(b2);
   chatArea.appendChild(row1);
-  scrollDown();
   requestAnimationFrame(() => requestAnimationFrame(() => row1.classList.add('show')));
 
   await sleep(600);
-  addChoices(['✅ SIM, DESEJO!'], async () => {
-    await phaseAskName();
+
+  // SIM DESEJO — scroll só o suficiente pra mostrar o botão sem esconder a imagem
+  const wrap = document.createElement('div');
+  wrap.className = 'choices fade-in';
+  const btn = document.createElement('button');
+  btn.className = 'choice-btn';
+  btn.textContent = '✅ SIM, DESEJO!';
+  btn.onclick = () => {
+    wrap.remove();
+    outBubble('✅ SIM, DESEJO!');
+    scrollCenter();
+    setTimeout(() => phaseAskName(), 400);
+  };
+  wrap.appendChild(btn);
+  chatArea.appendChild(wrap);
+  requestAnimationFrame(() => {
+    // scroll só até o botão ficar visível, sem esconder a imagem no topo
+    const wrapBottom = wrap.offsetTop + wrap.offsetHeight + 16;
+    const maxScroll = wrapBottom - chatArea.clientHeight;
+    chatArea.scrollTop = Math.max(0, maxScroll);
   });
+  requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add('show')));
 }
 
 async function phaseAskName() {
@@ -784,12 +801,15 @@ async function phasePain() {
   `;
   bar.classList.add('show');
   document.getElementById('textField').focus();
-  // scroll Jesus's question into view above the textarea
+  // "Que milagre você precisa?" fica a 25% de baixo (75% de cima)
   setTimeout(() => {
     const all = chatArea.querySelectorAll('.av-row, .bubble');
     const last = all[all.length - 1];
-    if (last) last.scrollIntoView({ behavior: 'smooth', block: 'center' });
-  }, 100);
+    if (last) {
+      const targetScroll = last.offsetTop - (chatArea.clientHeight * 0.75);
+      chatArea.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
+    }
+  }, 150);
   currentPhase = 'pain';
 }
 
@@ -845,12 +865,13 @@ async function phaseCliffhanger(pain) {
   document.getElementById('phoneScreen').appendChild(overlay);
   requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('show')));
 
-  // Scroll pra "Tudo que você precisa fazer é..." ficar levemente tampado pelo overlay
+  // Scroll pra "Tudo que você precisa fazer é..." ficar minimamente visível sob o overlay
   await sleep(300);
   const all = chatArea.querySelectorAll('.bubble, .av-row');
   const last = all[all.length - 1];
   if (last) {
-    const targetScroll = last.offsetTop - (chatArea.clientHeight * 0.42);
+    // posiciona a última mensagem logo acima do meio do overlay (levemente tampada)
+    const targetScroll = last.offsetTop - (chatArea.clientHeight * 0.52);
     chatArea.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
   }
 
