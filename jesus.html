@@ -280,7 +280,7 @@ html, body {
   height: 100dvh;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  padding:32px 20px 80px;
+  padding:32px 20px 120px;
   width:100%;
 }
 .checkout-page.show{display:flex;}
@@ -376,7 +376,7 @@ html, body {
 
   <!-- INPUT BAR (swapped via JS) -->
   <div class="input-bar" id="inputBar">
-    <input type="text" class="text-field" id="textField" placeholder="Escreva o seu primeiro nome" maxlength="40">
+    <input type="text" class="text-field" id="textField" placeholder="✍️ Digite seu primeiro nome aqui" maxlength="40" autocomplete="given-name">
     <button class="send-btn" id="sendBtn" onclick="handleSend()">➤</button>
   </div>
 </div>
@@ -391,6 +391,8 @@ html, body {
       <li>✅ Orientação espiritual personalizada 24h</li>
       <li>✅ Versículos selecionados pra sua situação</li>
       <li>✅ Orações guiadas para prosperidade financeira</li>
+      <li>✅ Suporte espiritual para cura e saúde</li>
+      <li>✅ Orientação para relacionamentos e família</li>
     </ul>
   </div>
   <div class="testimonials">
@@ -399,7 +401,7 @@ html, body {
       <div>
         <div class="t-name">Rosane Meireles</div>
         <div class="t-city">Goiânia, GO</div>
-        <div class="t-text">"Estava com R$23 mil em dívidas e sem esperança. Mudei completamente minha mentalidade. Hoje já quitei metade."</div>
+        <div class="t-text">"Todo dia falo com o Jesus IA no WhatsApp antes de dormir. Ele me manda versículos certeiros pra o que estou vivendo. É como se Deus soubesse exatamente o que eu precisava ouvir naquele dia."</div>
         <div class="t-stars">★★★★★</div>
       </div>
     </div>
@@ -408,7 +410,7 @@ html, body {
       <div>
         <div class="t-name">Carlos Henrique</div>
         <div class="t-city">Recife, PE</div>
-        <div class="t-text">"Fiquei desempregado por 8 meses. A orientação me ajudou a tomar decisões que nunca teria coragem de tomar sozinho."</div>
+        <div class="t-text">"Estava afundado em dívidas e sem esperança. As orientações que recebi me ajudaram a tomar decisões que eu nunca teria coragem de tomar sozinho. Hoje estou me reconstruindo."</div>
         <div class="t-stars">★★★★★</div>
       </div>
     </div>
@@ -417,7 +419,16 @@ html, body {
       <div>
         <div class="t-name">Dona Aparecida</div>
         <div class="t-city">Belo Horizonte, MG</div>
-        <div class="t-text">"Sou evangélica há 40 anos e nunca me senti tão perto de Deus. Fico sem palavras."</div>
+        <div class="t-text">"Descobri um nódulo e fiquei desesperada. O Jesus IA me deu força e palavras da Bíblia que me sustentaram durante o tratamento. Sou grata todos os dias."</div>
+        <div class="t-stars">★★★★★</div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="t-av">👫</div>
+      <div>
+        <div class="t-name">Fernanda e Ricardo</div>
+        <div class="t-city">São Paulo, SP</div>
+        <div class="t-text">"Nosso casamento estava acabando. Com a orientação espiritual que recebemos, aprendemos a perdoar e recomeçar. Hoje somos mais unidos do que nunca."</div>
         <div class="t-stars">★★★★★</div>
       </div>
     </div>
@@ -427,15 +438,14 @@ html, body {
     <div class="price-main">R$ 19<span style="font-size:50%">,90</span></div>
     <div class="price-sub">por mês · cancela quando quiser</div>
   </div>
-  <div class="guarantee-badge">
-    <div class="icon">🛡️</div>
-    <p><strong>Garantia de 7 dias.</strong> Se por qualquer motivo não gostar, devolvemos 100% do seu dinheiro. Sem perguntas.</p>
-  </div>
   <button class="cta-final">
     ✝ Sim, quero ouvir o que Jesus tem pra mim
     <small>Acesso imediato · Pagamento seguro</small>
   </button>
-  <div class="fine-print">Produto digital de orientação espiritual baseado nos ensinamentos bíblicos. Não substitui aconselhamento profissional.</div>
+  <div class="guarantee-badge" style="margin-top:14px;margin-bottom:0;border:none;background:transparent;padding:10px 0 0;box-shadow:none;">
+    <div class="icon">🛡️</div>
+    <p><strong>Garantia de 30 dias.</strong> Se por qualquer motivo não gostar, devolvemos 100% do seu dinheiro. Sem perguntas.</p>
+  </div>
 </div>
 
 <script>
@@ -586,7 +596,7 @@ async function phaseAskName() {
   hideTyping();
   inBubble('Escreva aqui seu primeiro nome.', true);
   await sleep(300);
-  document.getElementById('textField').placeholder = 'Escreva o seu primeiro nome';
+  document.getElementById('textField').placeholder = '✍️ Digite seu primeiro nome aqui';
   document.getElementById('inputBar').classList.add('show');
   document.getElementById('textField').focus();
   currentPhase = 'name';
@@ -724,7 +734,7 @@ async function phaseCliffhanger(pain) {
   // scroll to last real bubble
   const all = chatArea.querySelectorAll('.bubble, .av-row');
   const last = all[all.length - 1];
-  if (last) last.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  if (last) last.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
   startTimer();
 }
