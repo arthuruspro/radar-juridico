@@ -249,6 +249,21 @@ html, body {
   color:#fff;font-size:18px;flex-shrink:0;transition:background .2s;align-self:flex-end;
 }
 .send-btn:active { background:var(--green); }
+.send-btn-label {
+  background: var(--green-dark);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background .2s;
+  white-space: nowrap;
+}
+.send-btn-label:active { background: var(--green); }
 
 /* OVERLAY */
 .chat-overlay {
@@ -346,14 +361,35 @@ html, body {
 .guarantee-badge p{color:#333;font-size:14px;line-height:1.5;}
 .guarantee-badge p strong{color:#111;}
 .cta-final {
-  width:100%;max-width:400px;
-  background:linear-gradient(135deg,var(--gold-light),var(--gold));
-  color:#1a3a2a;border:none;border-radius:16px;padding:18px 24px;
-  font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;
-  cursor:pointer;box-shadow:0 8px 32px rgba(201,168,76,.35);
-  transition:transform .2s;position:relative;overflow:hidden;
-  line-height:1.4;text-align:center;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  width: 100%;
+  max-width: 400px;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: #1a3a2a;
+  border: none;
+  border-radius: 16px;
+  padding: 20px 16px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 32px rgba(201,168,76,.35);
+  transition: transform .2s;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  display: block;
+}
+.cta-final span {
+  display: block;
+  line-height: 1.4;
+}
+.cta-final small {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.7;
+  margin-top: 5px;
+  line-height: 1.3;
 }
 .cta-final::after {
   content:'';position:absolute;inset:0;
@@ -391,10 +427,10 @@ html, body {
     <div class="date-badge"><span>Hoje</span></div>
   </div>
 
-  <!-- INPUT BAR (swapped via JS) -->
+  <!-- INPUT BAR -->
   <div class="input-bar" id="inputBar">
     <input type="text" class="text-field" id="textField" placeholder="✍️ Digite seu primeiro nome aqui" maxlength="40" autocomplete="given-name">
-    <button class="send-btn" id="sendBtn" onclick="handleSend()">➤</button>
+    <button class="send-btn-label" id="sendBtn" onclick="handleSend()">Enviar</button>
   </div>
 </div>
 
@@ -618,6 +654,7 @@ async function phaseAskName() {
   inBubble('Escreva aqui seu primeiro nome.', true);
   await sleep(300);
   document.getElementById('textField').placeholder = '✍️ Digite seu primeiro nome aqui';
+  document.getElementById('sendBtn').textContent = 'Enviar';
   document.getElementById('inputBar').classList.add('show');
   document.getElementById('textField').focus();
   currentPhase = 'name';
