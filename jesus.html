@@ -854,7 +854,15 @@ function showCheckout() {
 }
 
 // ─── START ──────────────────────────────────────────────────
-phaseIntro();
+let introStarted = false;
+function startOnInteraction() {
+  if (introStarted) return;
+  introStarted = true;
+  waAudio.load();
+  phaseIntro();
+}
+document.addEventListener('touchstart', startOnInteraction, { once: true });
+document.addEventListener('click', startOnInteraction, { once: true });
 </script>
 </body>
 </html>
