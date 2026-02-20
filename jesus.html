@@ -801,15 +801,6 @@ async function phasePain() {
   `;
   bar.classList.add('show');
   document.getElementById('textField').focus();
-  // "Que milagre você precisa?" fica a 25% de baixo (75% de cima)
-  setTimeout(() => {
-    const all = chatArea.querySelectorAll('.av-row, .bubble');
-    const last = all[all.length - 1];
-    if (last) {
-      const targetScroll = last.offsetTop - (chatArea.clientHeight * 0.75);
-      chatArea.scrollTo({ top: Math.max(0, targetScroll), behavior: 'smooth' });
-    }
-  }, 150);
   currentPhase = 'pain';
 }
 
