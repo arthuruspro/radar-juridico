@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Jesus IA</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -482,6 +482,10 @@ function t() {
 }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 function scrollDown() { chatArea.scrollTop = chatArea.scrollHeight; }
+function scrollCenter() {
+  const last = chatArea.lastElementChild;
+  if (last) last.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
 function setStatus(s) { document.getElementById('waStatus').textContent = s; }
 
 function miniAv() {
@@ -502,7 +506,7 @@ function inBubble(html, withAvatar = false) {
     b.innerHTML = `${html}<span class="btime">${t()}</span>`;
     row.appendChild(b);
     chatArea.appendChild(row);
-    scrollDown();
+    scrollCenter();
     requestAnimationFrame(() => requestAnimationFrame(() => row.classList.add('show')));
     return row;
   } else {
@@ -510,7 +514,7 @@ function inBubble(html, withAvatar = false) {
     b.className = 'bubble bubble-in fade-in';
     b.innerHTML = `${html}<span class="btime">${t()}</span>`;
     chatArea.appendChild(b);
-    scrollDown();
+    scrollCenter();
     requestAnimationFrame(() => requestAnimationFrame(() => b.classList.add('show')));
     return b;
   }
@@ -521,7 +525,7 @@ function outBubble(text) {
   b.className = 'bubble bubble-out fade-in';
   b.innerHTML = `${text}<span class="btime">${t()}</span>`;
   chatArea.appendChild(b);
-  scrollDown();
+  scrollCenter();
   requestAnimationFrame(() => requestAnimationFrame(() => b.classList.add('show')));
   return b;
 }
@@ -538,7 +542,7 @@ function showTyping() {
   tb.innerHTML = '<div class="tdot"></div><div class="tdot"></div><div class="tdot"></div>';
   typingEl.appendChild(tb);
   chatArea.appendChild(typingEl);
-  scrollDown();
+  scrollCenter();
   requestAnimationFrame(() => requestAnimationFrame(() => typingEl.classList.add('show')));
 }
 function hideTyping() {
