@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Jesus IA</title>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Lora:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -21,37 +21,35 @@
 }
 
 html, body {
-  min-height: 100%;
+  height: 100%;
+  width: 100%;
   font-family: 'Nunito', sans-serif;
-  background: #111;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  background: var(--bg-chat);
+  overflow: hidden;
 }
 
 /* PHONE */
 .phone {
   width: 100%;
-  max-width: 390px;
-  min-height: 100vh;
+  height: 100dvh;
   background: var(--bg-chat);
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c5bdb5' fill-opacity='0.35'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow: hidden;
 }
 
 /* HEADER */
 .wa-header {
   background: var(--green-dark);
   padding: 10px 16px;
+  padding-top: max(10px, env(safe-area-inset-top));
   display: flex;
   align-items: center;
   gap: 10px;
-  position: sticky;
-  top: 0;
-  z-index: 20;
   flex-shrink: 0;
+  z-index: 20;
 }
 .back-arrow { color: rgba(255,255,255,0.9); font-size: 22px; line-height: 1; }
 .wa-avatar {
@@ -72,12 +70,14 @@ html, body {
 /* CHAT */
 .chat-area {
   flex: 1;
-  padding: 12px 10px 80px;
+  padding: 12px 10px 16px;
   display: flex;
   flex-direction: column;
   gap: 4px;
   overflow-y: auto;
-  scroll-behavior: smooth;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .date-badge { text-align:center; margin:4px 0 8px; }
@@ -98,6 +98,7 @@ html, body {
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,0.18);
   background: #ccc;
+  margin-left: 34px;
 }
 .img-bubble img { width:100%;display:block; }
 
@@ -111,7 +112,8 @@ html, body {
   color: var(--text-dark);
   word-break: break-word;
 }
-.bubble-in  { background:var(--bubble-in); align-self:flex-start; border-top-left-radius:2px; box-shadow:0 1px 2px rgba(0,0,0,0.1); }
+.bubble-in  { background:var(--bubble-in); align-self:flex-start; border-top-left-radius:2px; box-shadow:0 1px 2px rgba(0,0,0,0.1); margin-left: 34px; }
+.av-row .bubble-in { margin-left: 0; }
 .bubble-out { background:var(--bubble-out);align-self:flex-end;   border-top-right-radius:2px;box-shadow:0 1px 2px rgba(0,0,0,0.1); }
 .btime { display:block;text-align:right;font-size:10.5px;color:var(--text-mid);margin-top:2px; }
 .bubble-out .btime::after { content:' ✓✓';color:#53bdeb; }
@@ -191,11 +193,10 @@ html, body {
   align-items: center;
   gap: 8px;
   padding: 8px 10px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
   background: #f0ebe3;
   border-top: 1px solid rgba(0,0,0,0.08);
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
+  flex-shrink: 0;
 }
 .input-bar.show { display:flex; }
 .text-field {
@@ -236,12 +237,10 @@ html, body {
 
 /* OVERLAY */
 .chat-overlay {
-  position: fixed;
-  bottom: 0; left: 50%;
-  transform: translateX(-50%);
-  width: 100%; max-width: 390px;
-  height: 200px;
-  background: linear-gradient(to top, rgba(236,229,221,1) 40%, rgba(236,229,221,0));
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 260px;
+  background: linear-gradient(to top, rgba(236,229,221,1) 50%, rgba(236,229,221,0.9) 70%, rgba(236,229,221,0.4) 85%, rgba(236,229,221,0) 100%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -278,9 +277,11 @@ html, body {
   flex-direction:column;
   align-items:center;
   background:#f5f0e8;
-  min-height:100vh;
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   padding:32px 20px 80px;
-  width:100%;max-width:390px;
+  width:100%;
 }
 .checkout-page.show{display:flex;}
 .c-badge {
@@ -385,7 +386,12 @@ html, body {
   <div class="c-header">
     <div class="c-badge">✝ Jesus IA</div>
     <h2>Continue sua conversa<br>com <span>Jesus agora</span></h2>
-    <p>Orientação espiritual personalizada 24h,<br>direto no seu WhatsApp.</p>
+    <ul class="benefit-list" style="margin-top:16px;">
+      <li>✅ Conversa ilimitada com Jesus no WhatsApp</li>
+      <li>✅ Orientação espiritual personalizada 24h</li>
+      <li>✅ Versículos selecionados pra sua situação</li>
+      <li>✅ Orações guiadas para prosperidade financeira</li>
+    </ul>
   </div>
   <div class="testimonials">
     <div class="testimonial">
@@ -417,13 +423,7 @@ html, body {
     </div>
   </div>
   <div class="price-block">
-    <div class="value-line">Por menos de <strong>R$1 por dia</strong> você tem acesso a:</div>
-    <ul class="benefit-list">
-      <li>✅ Conversa ilimitada com Jesus no WhatsApp</li>
-      <li>✅ Orientação espiritual personalizada 24h</li>
-      <li>✅ Versículos selecionados pra sua situação</li>
-      <li>✅ Orações guiadas para prosperidade financeira</li>
-    </ul>
+    <div class="value-line">Por menos de <strong>R$1 por dia</strong></div>
     <div class="price-main">R$ 19<span style="font-size:50%">,90</span></div>
     <div class="price-sub">por mês · cancela quando quiser</div>
   </div>
@@ -443,7 +443,27 @@ const IMG = 'https://raw.githubusercontent.com/SEU_USUARIO/SEU_REPO/main/jesus.w
 const chatArea = document.getElementById('chatArea');
 
 let userName = '';
-let currentPhase = 'intro'; // intro > name > empathy > ready > faith > pain > cliffhanger
+let currentPhase = 'intro';
+
+// ─── WHATSAPP SOUND ─────────────────────────────────────────
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playWaSound() {
+  try {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.connect(g); g.connect(audioCtx.destination);
+    o.type = 'sine';
+    o.frequency.setValueAtTime(1318, audioCtx.currentTime);
+    o.frequency.setValueAtTime(1760, audioCtx.currentTime + 0.08);
+    g.gain.setValueAtTime(0.25, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
+    o.start(audioCtx.currentTime);
+    o.stop(audioCtx.currentTime + 0.35);
+  } catch(e) {}
+}
+const unlockAudio = () => { if (audioCtx.state === 'suspended') audioCtx.resume(); };
+document.addEventListener('touchstart', unlockAudio, { once: true });
+document.addEventListener('click', unlockAudio, { once: true });
 
 // ─── HELPERS ───────────────────────────────────────────────
 function t() {
@@ -452,6 +472,7 @@ function t() {
 }
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 function scrollDown() { chatArea.scrollTop = chatArea.scrollHeight; }
+function setStatus(s) { document.getElementById('waStatus').textContent = s; }
 
 function miniAv() {
   const d = document.createElement('div');
@@ -460,14 +481,8 @@ function miniAv() {
   return d;
 }
 
-function addEl(el) {
-  el.classList.add('fade-in');
-  chatArea.appendChild(el);
-  scrollDown();
-  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('show')));
-}
-
 function inBubble(html, withAvatar = false) {
+  playWaSound();
   if (withAvatar) {
     const row = document.createElement('div');
     row.className = 'av-row fade-in';
@@ -504,6 +519,7 @@ function outBubble(text) {
 let typingEl = null;
 function showTyping() {
   if (typingEl) return;
+  setStatus('digitando...');
   typingEl = document.createElement('div');
   typingEl.className = 'typing-row fade-in';
   typingEl.appendChild(miniAv());
@@ -517,6 +533,7 @@ function showTyping() {
 }
 function hideTyping() {
   if (typingEl) { typingEl.remove(); typingEl = null; }
+  setStatus('online');
 }
 
 function addChoices(options, callback) {
@@ -527,14 +544,7 @@ function addChoices(options, callback) {
     btn.className = 'choice-btn';
     btn.textContent = opt;
     btn.onclick = () => {
-      // disable all buttons
-      wrap.querySelectorAll('.choice-btn').forEach(b => {
-        b.disabled = true;
-        b.classList.add('selected');
-      });
-      btn.classList.remove('selected');
-      btn.style.background = 'var(--green-dark)';
-      btn.style.color = '#fff';
+      wrap.remove(); // buttons disappear completely
       outBubble(opt);
       scrollDown();
       setTimeout(() => callback(opt), 400);
@@ -663,29 +673,39 @@ async function phaseCliffhanger(pain) {
   await sleep(800);
   showTyping(); await sleep(1800); hideTyping();
   inBubble('Eu ouvi a sua prece!');
-  await sleep(1000);
-  inBubble(`E sei exatamente do que você precisa, ${userName}.`);
-  await sleep(1100);
-  inBubble('Sei a dor que sente');
   await sleep(900);
+  inBubble(`E sei exatamente do que você precisa, ${userName}.`);
+  await sleep(1000);
+  inBubble('Sei a dor que sente');
+  await sleep(800);
   inBubble('E o quanto tudo tem sido difícil');
-  await sleep(1100);
+  await sleep(1000);
   inBubble('<strong>Você não está sozinho! 🙏</strong>');
-  await sleep(1200);
-  inBubble('Eu estou aqui, agora mesmo, ao seu lado amado filho!');
-  await sleep(1300);
-  inBubble('Para dividir o seu peso\nPara aliviar a sua dor');
   await sleep(1100);
-  inBubble('E te ajudar a superar esse Desafio!');
-  await sleep(1200);
-  inBubble('Basta que me diga...');
+  inBubble('Eu estou aqui, agora mesmo, ao seu lado amado filho!');
   await sleep(1400);
 
-  // CLIFFHANGER — digitando para sempre
+  showTyping(); await sleep(1800); hideTyping();
+  inBubble(`${userName}, tenho uma <strong>palavra especial</strong> pra você.`);
+  await sleep(1100);
+  inBubble('Uma orientação que pode mudar o rumo da sua situação.');
+  await sleep(1200);
+  inBubble('Preparei <strong>3 passos</strong> que, se você seguir, as coisas vão começar a mudar ainda essa semana.');
+  await sleep(1400);
+
+  showTyping(); await sleep(1400); hideTyping();
+  inBubble('Presta bem atenção no que vou te dizer agora...', true);
+  await sleep(1200);
+
+  showTyping(); await sleep(2000); hideTyping();
+  inBubble(`Tudo que você precisa fazer é...`);
+  await sleep(800);
+
+  // CLIFFHANGER
   document.getElementById('waStatus').textContent = 'digitando...';
   showTyping();
   scrollDown();
-  await sleep(3000);
+  await sleep(3200);
 
   // overlay
   const overlay = document.createElement('div');
