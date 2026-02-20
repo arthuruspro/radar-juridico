@@ -40,7 +40,6 @@ html, body {
   display: flex;
   flex-direction: column;
   position: relative;
-  overflow: hidden;
 }
 
 /* HEADER */
@@ -79,7 +78,7 @@ html, body {
 /* CHAT */
 .chat-area {
   flex: 1;
-  padding: 12px 10px 16px;
+  padding: 12px 10px 300px;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -429,7 +428,7 @@ html, body {
 
   <!-- INPUT BAR -->
   <div class="input-bar" id="inputBar">
-    <input type="text" class="text-field" id="textField" placeholder="✍️ Digite seu primeiro nome aqui" maxlength="40" autocomplete="given-name">
+    <input type="text" class="text-field" id="textField" placeholder="Digite seu primeiro nome" maxlength="40" autocomplete="given-name">
     <button class="send-btn-label" id="sendBtn" onclick="handleSend()">Enviar</button>
   </div>
 </div>
@@ -491,9 +490,9 @@ html, body {
     <div class="price-main">R$ 19<span style="font-size:50%">,90</span></div>
     <div class="price-sub">por mês · cancela quando quiser</div>
   </div>
-  <button class="cta-final">
-    <span>✝ Sim, quero ouvir o que Jesus tem pra mim</span>
-    <small>Acesso imediato · Pagamento seguro</small>
+  <button onclick="" style="width:100%;max-width:400px;background:linear-gradient(135deg,#f5e6b8,#c9a84c);color:#1a3a2a;border:none;border-radius:16px;padding:20px 16px;font-family:'Nunito',sans-serif;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 8px 32px rgba(201,168,76,.35);text-align:center;line-height:1.5;display:block;">
+    ✝ Sim, quero ouvir o que Jesus tem pra mim<br>
+    <span style="font-size:12px;font-weight:600;opacity:0.7;">Acesso imediato · Pagamento seguro</span>
   </button>
   <div class="guarantee-badge" style="margin-top:14px;margin-bottom:0;border:none;background:transparent;padding:10px 0 0;box-shadow:none;">
     <div class="icon">🛡️</div>
@@ -512,16 +511,19 @@ let currentPhase = 'intro';
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playWaSound() {
   try {
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.connect(g); g.connect(audioCtx.destination);
-    o.type = 'sine';
-    o.frequency.setValueAtTime(1318, audioCtx.currentTime);
-    o.frequency.setValueAtTime(1760, audioCtx.currentTime + 0.08);
-    g.gain.setValueAtTime(0.25, audioCtx.currentTime);
-    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.35);
-    o.start(audioCtx.currentTime);
-    o.stop(audioCtx.currentTime + 0.35);
+    const now = audioCtx.currentTime;
+    // WhatsApp notification: short bright ping ~1174Hz with fast decay
+    const o1 = audioCtx.createOscillator();
+    const o2 = audioCtx.createOscillator();
+    const g  = audioCtx.createGain();
+    o1.connect(g); o2.connect(g); g.connect(audioCtx.destination);
+    o1.type = 'sine'; o1.frequency.value = 1174;
+    o2.type = 'sine'; o2.frequency.value = 2349; // harmonic octave
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(0.3, now + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+    o1.start(now); o1.stop(now + 0.45);
+    o2.start(now); o2.stop(now + 0.2);
   } catch(e) {}
 }
 const unlockAudio = () => { if (audioCtx.state === 'suspended') audioCtx.resume(); };
@@ -653,7 +655,7 @@ async function phaseAskName() {
   hideTyping();
   inBubble('Escreva aqui seu primeiro nome.', true);
   await sleep(300);
-  document.getElementById('textField').placeholder = '✍️ Digite seu primeiro nome aqui';
+  document.getElementById('textField').placeholder = 'Digite seu primeiro nome';
   document.getElementById('sendBtn').textContent = 'Enviar';
   document.getElementById('inputBar').classList.add('show');
   document.getElementById('textField').focus();
@@ -760,6 +762,8 @@ async function phaseCliffhanger(pain) {
   await sleep(1400);
 
   showTyping(); await sleep(1800); hideTyping();
+  inBubble('Não foi por acaso que você chegou até aqui.');
+  await sleep(1100);
   inBubble(`${userName}, tenho uma <strong>palavra especial</strong> pra você.`);
   await sleep(1100);
   inBubble('Uma orientação que pode mudar o rumo da sua situação.');
@@ -799,9 +803,9 @@ async function phaseCliffhanger(pain) {
   const all = chatArea.querySelectorAll('.bubble, .av-row');
   const last = all[all.length - 1];
   if (last) {
-    // scroll so last message sits in upper portion of screen, visible above overlay
-    last.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    chatArea.scrollTop += 60;
+    // Scroll so the last message is partially covered by overlay (tantalizing peek)
+    const lastBottom = last.offsetTop + last.offsetHeight;
+    chatArea.scrollTop = lastBottom - (chatArea.clientHeight * 0.55);
   }
 
   startTimer();
