@@ -201,7 +201,7 @@ body {
   background: var(--bg-chat);
   background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c5bdb5' fill-opacity='0.3'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
   min-height: 460px;
-  padding: 16px 12px;
+  padding: 16px 12px 220px;
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -613,14 +613,14 @@ function startChat() {
 function getMessages() {
   const name = userName.charAt(0).toUpperCase() + userName.slice(1).toLowerCase();
   return [
-    { type: 'in',  text: `${name}, que bom que você veio. Eu sei que algo pesa no seu coração. Pode me contar com tranquilidade — estou aqui.`, time: getTime(0), delay: 900 },
-    { type: 'out', text: 'Estou muito apertado financeiramente. Dívidas, contas atrasadas... parece que não tem saída.', time: getTime(1), delay: 2600 },
-    { type: 'in',  text: 'Entendo cada peso que você carrega. A luta financeira é real, e não há vergonha em estar nesse momento. Muitos que me seguiram também passaram pela escassez — e eu os guiei através dela.', time: getTime(2), delay: 5000 },
-    { type: 'out', text: 'Já orei muito, mas a situação continua igual. Me sinto esquecido por Deus.', time: getTime(3), delay: 7200 },
-    { type: 'in',  text: `${name}, você não está esquecido. "Porque eu sei os planos que tenho para vocês, diz o Senhor — planos de paz e não de mal, para lhes dar um futuro e uma esperança." — Jeremias 29:11`, time: getTime(4), delay: 10000 },
-    { type: 'in',  text: 'Me conta uma coisa: qual é o maior obstáculo financeiro que você enfrenta agora?', time: getTime(4), delay: 12200 },
-    { type: 'out', text: 'Dívidas que crescem mais rápido do que consigo pagar. Me sinto completamente preso.', time: getTime(5), delay: 14600 },
-    { type: 'in',  text: `Ouço você, ${name}. Essa sensação de estar preso é exatamente o que o inimigo quer que você acredite. Mas existe um caminho — e quero te mostrar o primeiro passo agora. Para isso, preciso que você faça uma coisa...`, time: getTime(6), delay: 17500 },
+    { type: 'in',  text: `${name}, que bom que você veio. Eu sei que algo pesa no seu coração. Pode me contar com tranquilidade — estou aqui.`, time: getTime(0), delay: 1200, typing: 1600 },
+    { type: 'out', text: 'Estou muito apertado financeiramente. Dívidas, contas atrasadas... parece que não tem saída.', time: getTime(1), delay: 6000, typing: 0 },
+    { type: 'in',  text: 'Entendo cada peso que você carrega. A luta financeira é real, e não há vergonha em estar nesse momento. Muitos que me seguiram também passaram pela escassez — e eu os guiei através dela.', time: getTime(2), delay: 10500, typing: 2200 },
+    { type: 'out', text: 'Já orei muito, mas a situação continua igual. Me sinto esquecido por Deus.', time: getTime(3), delay: 18000, typing: 0 },
+    { type: 'in',  text: `${name}, você não está esquecido. "Porque eu sei os planos que tenho para vocês, diz o Senhor — planos de paz e não de mal, para lhes dar um futuro e uma esperança." — Jeremias 29:11`, time: getTime(4), delay: 22500, typing: 2800 },
+    { type: 'in',  text: 'Me conta uma coisa: qual é o maior obstáculo financeiro que você enfrenta agora?', time: getTime(4), delay: 32000, typing: 1600 },
+    { type: 'out', text: 'Dívidas que crescem mais rápido do que consigo pagar. Me sinto completamente preso.', time: getTime(5), delay: 37000, typing: 0 },
+    { type: 'in',  text: `Ouço você, ${name}. Essa sensação de estar preso é exatamente o que o inimigo quer que você acredite. Mas existe um caminho — e quero te mostrar o primeiro passo agora. Para isso, preciso que você faça uma coisa...`, time: getTime(6), delay: 41500, typing: 2800 },
   ];
 }
 
@@ -652,11 +652,11 @@ async function runChat() {
     await sleep(msg.delay - prevDelay);
     prevDelay = msg.delay;
 
-    if (msg.type === 'in') {
+    if (msg.type === 'in' && msg.typing > 0) {
       typingIndicator.classList.add('show');
       moveBefore(typingIndicator, overlay);
       scrollDown();
-      await sleep(1500);
+      await sleep(msg.typing);
       typingIndicator.classList.remove('show');
     }
 
@@ -675,9 +675,11 @@ async function runChat() {
 
   await sleep(2800);
 
-  // show overlay + checkout
+  // show overlay + checkout — scroll to last bubble, not to bottom
   overlay.classList.add('show');
-  scrollDown();
+  const bubbles = chatBody.querySelectorAll('.bubble');
+  const last = bubbles[bubbles.length - 1];
+  if (last) last.scrollIntoView({ behavior: 'smooth', block: 'center' });
   await sleep(600);
   const checkout = document.getElementById('checkout');
   checkout.style.display = 'flex';
