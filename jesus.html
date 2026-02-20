@@ -124,8 +124,8 @@ html, body {
   max-width: 82%;
   padding: 8px 12px 5px;
   border-radius: 8px;
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.55;
   color: var(--text-dark);
   word-break: break-word;
 }
@@ -557,13 +557,13 @@ function t() {
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 function scrollDown() { chatArea.scrollTop = chatArea.scrollHeight; }
 function scrollCenter() {
-  // Only scroll down — never scroll up and hide the Jesus image
   const last = chatArea.lastElementChild;
   if (!last) return;
   const lastBottom = last.offsetTop + last.offsetHeight;
   const visibleBottom = chatArea.scrollTop + chatArea.clientHeight;
   if (lastBottom > visibleBottom - 60) {
-    chatArea.scrollTop = lastBottom - chatArea.clientHeight + 80;
+    // Position last message at 75% down the screen (between middle and bottom)
+    chatArea.scrollTop = lastBottom - (chatArea.clientHeight * 0.75);
   }
 }
 function setStatus(s) { document.getElementById('waStatus').textContent = s; }
