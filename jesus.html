@@ -662,8 +662,7 @@ async function phaseIntro() {
   chatArea.scrollTop = 0;
   requestAnimationFrame(() => requestAnimationFrame(() => imgWrap.classList.add('show')));
 
-  await sleep(1800);
-
+  // primeira mensagem aparece junto com a imagem, sem delay
   const b1 = document.createElement('div');
   b1.className = 'bubble bubble-in fade-in';
   b1.innerHTML = `<strong>Jesus</strong> tem uma msg para você!<span class="btime">${t()}</span>`;
@@ -835,7 +834,7 @@ async function phaseCliffhanger(pain) {
   const overlay = document.createElement('div');
   overlay.className = 'chat-overlay';
   overlay.innerHTML = `
-    <div class="lock-text">🔒 Essa conversa está bloqueada</div>
+    <div class="lock-text">🔒 Jesus está esperando por você</div>
     <div class="timer-row">
       <div class="tdot2"></div>
       <div class="tlabel">Expira em <span id="timerDisplay">14:59</span></div>
