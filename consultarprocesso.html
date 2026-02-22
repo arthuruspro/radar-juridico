@@ -541,7 +541,9 @@
         </div>
       </div>
       <div style="background:#f9f9f9; border-radius:12px; padding:20px;">
-        <button id="paguePixBtn" onclick="window.location.href='https://pay.cakto.com.br/pcoivto_775901'" style="width:100%; background:#000; color:#fff; font-family:'Sora',sans-serif; font-size:0.95rem; font-weight:700; border:none; border-radius:10px; padding:16px; cursor:pointer;">Pague com Pix</button>
+        <!-- MUDANÇA 1: âncora oculta que a UTMify processa automaticamente -->
+        <a id="checkoutLink" href="https://pay.cakto.com.br/pcoivto_775901" style="display:none;"></a>
+        <button id="paguePixBtn" style="width:100%; background:#000; color:#fff; font-family:'Sora',sans-serif; font-size:0.95rem; font-weight:700; border:none; border-radius:10px; padding:16px; cursor:pointer;">Pague com Pix</button>
       </div>
       <div style="text-align:center; margin-top:12px; font-size:0.75rem; color:#999;">Ao prosseguir você concorda com os Termos de uso.</div>
     </div>
@@ -674,11 +676,13 @@
       item.addEventListener('click', scrollToPreco);
     });
 
+    // MUDANÇA 2: clica na âncora oculta (já processada pela UTMify) em vez de window.location.href
     document.getElementById('paguePixBtn').addEventListener('click', function(e) {
       e.preventDefault();
-      const url = 'https://pay.cakto.com.br/pcoivto_775901';
       if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout');
-      setTimeout(function() { window.location.href = url; }, 600);
+      setTimeout(function() {
+        document.getElementById('checkoutLink').click();
+      }, 600);
     });
 
     btn.addEventListener('click', buscar);
