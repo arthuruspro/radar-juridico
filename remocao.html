@@ -140,17 +140,32 @@
     50% { opacity: 0.4; }
   }
 
-  .scanning-notice {
-    margin-top: 32px;
-    padding-top: 24px;
-    border-top: 1px solid var(--green-bg-deep);
-    font-size: 14px;
-    color: var(--gray-400);
-    animation: fadeInUp 0.5s ease 1.5s both;
+  .loading-section {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(13, 148, 98, 0.08);
   }
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
+
+  .loading-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--gray-600);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .spinner-small {
+    width: 18px;
+    height: 18px;
+    border: 2.5px solid var(--gray-200);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
   }
 
   .scanning-dots::after {
@@ -537,18 +552,17 @@
   /* ========== PROGRESS BAR ========== */
   .progress-bar {
     width: 100%;
-    height: 4px;
+    height: 6px;
     background: var(--gray-100);
-    border-radius: 2px;
+    border-radius: 3px;
     overflow: hidden;
-    margin-top: 8px;
   }
   .progress-fill {
     height: 100%;
     background: var(--blue);
-    border-radius: 2px;
+    border-radius: 3px;
     width: 0%;
-    transition: width 0.5s ease;
+    transition: width 5s ease;
   }
 
   /* ========== GUARANTEE ========== */
@@ -594,13 +608,16 @@
       Proteção ativa 24h
     </div>
 
-    <div class="scanning-notice">
-      <span class="scanning-dots">Verificando exposição pública do seu CPF</span>
-    </div>
   </div>
 
-  <div class="progress-bar" style="margin-top: 24px;">
-    <div class="progress-fill" id="progress1"></div>
+  <div class="loading-section">
+    <div class="loading-text">
+      <div class="spinner-small"></div>
+      <span class="scanning-dots">Verificando exposição pública do seu CPF</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress1"></div>
+    </div>
   </div>
 </div>
 
@@ -661,9 +678,7 @@
   <div class="pain-card">
     <div class="subtitle">⚠️ Atenção</div>
 
-    <h2>Seu monitoramento protege você de novos processos. Mas os que já existem estão visíveis agora.</h2>
-
-    <p>Se alguém pesquisar seu nome no Google agora — um familiar, um cliente, um vizinho — vai encontrar <strong>todos os seus processos judiciais</strong> no JusBrasil e Escavador.</p>
+    <p>Identificamos que se alguém pesquisar seu nome no Google agora — um familiar, um cliente, um vizinho — vai encontrar <strong>todos os seus processos judiciais no JusBrasil e Escavador.</strong></p>
 
     <p>Isso pode te prejudicar:</p>
 
@@ -770,11 +785,11 @@
     setTimeout(() => {
       const progress = document.getElementById('progress1');
       progress.style.width = '100%';
-    }, 500);
+    }, 300);
 
     setTimeout(() => {
       showScreen(2);
-    }, 3500);
+    }, 6000);
   }
 
   // If page is visible now, start. Otherwise wait until user comes back.
