@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Seu CPF está protegido</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --blue: #1a56db;
@@ -13,7 +13,7 @@
     --red: #dc2626;
     --red-dark: #b91c1c;
     --red-bg: #fef2f2;
-    --green: #0d9462;
+    --green: #16a34a;
     --green-light: #10b981;
     --green-bg: #ecfdf5;
     --green-bg-deep: #d1fae5;
@@ -36,7 +36,7 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     background: var(--gray-50);
     color: var(--gray-800);
     min-height: 100vh;
@@ -145,7 +145,8 @@
     padding: 20px 24px;
     background: white;
     border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(13, 148, 98, 0.08);
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   }
 
   .loading-text {
@@ -182,22 +183,22 @@
   /* ========== SCREEN 2: SCANNING ========== */
   .scan-card {
     background: white;
-    border-radius: 20px;
-    padding: 36px 28px;
+    border-radius: 24px;
+    padding: 40px 28px;
     text-align: center;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.07);
     margin-top: 20px;
   }
 
   .scan-icon {
-    width: 56px;
-    height: 56px;
-    background: var(--gray-50);
+    width: 64px;
+    height: 64px;
+    background: var(--gray-100);
     border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 20px;
+    margin: 0 auto 24px;
   }
   .scan-icon svg {
     width: 28px;
@@ -227,20 +228,23 @@
     text-align: left;
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 0;
   }
 
   .scan-step {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--gray-100);
     font-size: 17px;
     font-weight: 500;
     color: var(--gray-400);
     transition: all 0.4s ease;
   }
+  .scan-step:last-child { border-bottom: none; }
   .scan-step.resolved {
-    color: var(--gray-700);
+    color: var(--gray-900);
   }
   .scan-step.found {
     color: var(--red);
@@ -255,36 +259,41 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: all 0.3s;
   }
   .step-icon.green {
-    background: var(--green-bg);
-    color: var(--green);
+    background: #16a34a;
+    border: none;
+    color: #fff;
   }
   .step-icon.loading {
-    background: var(--gray-100);
-    color: var(--gray-400);
+    background: transparent;
+    border: 2px solid var(--gray-200);
+    color: transparent;
+  }
+  .step-icon.loading .spinner {
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--blue);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
   }
   .step-icon.red {
     background: var(--red-bg);
+    border: none;
     color: var(--red);
   }
 
   .step-icon svg { width: 16px; height: 16px; }
 
-  .spinner {
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--gray-200);
-    border-top-color: var(--blue);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-  }
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .scan-alert {
-    margin-top: 20px;
-    padding: 14px 16px;
+    margin-top: 16px;
+    padding: 12px 16px;
     background: var(--red-bg);
+    border: 1px solid rgba(220, 38, 38, 0.18);
     border-radius: 12px;
     font-size: 16px;
     font-weight: 600;
@@ -325,7 +334,7 @@
 
   .pain-card {
     background: white;
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 32px 24px;
     box-shadow: 0 4px 24px rgba(220, 38, 38, 0.08);
     margin-top: 16px;
@@ -383,7 +392,8 @@
 
   .good-news {
     background: var(--green-bg);
-    border-radius: 14px;
+    border: 1px solid rgba(22, 163, 74, 0.15);
+    border-radius: 16px;
     padding: 20px;
     margin-top: 24px;
   }
@@ -398,24 +408,24 @@
   .cta-button {
     display: block;
     width: 100%;
-    padding: 18px 24px;
+    padding: 20px 24px;
     background: var(--red);
     color: white;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 17px;
     font-weight: 700;
     border: none;
     border-radius: 14px;
     cursor: pointer;
     margin-top: 20px;
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
     box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3);
     letter-spacing: -0.2px;
   }
   .cta-button:hover {
     background: var(--red-dark);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(220, 38, 38, 0.4);
   }
   .cta-button:active {
     transform: translateY(0);
@@ -424,11 +434,11 @@
   /* ========== SCREEN 4: OFFER ========== */
   .offer-card {
     background: white;
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 32px 24px;
     box-shadow: var(--shadow-lg);
     margin-top: 16px;
-    border: 2px solid var(--gray-100);
+    border: 1px solid var(--gray-200);
   }
 
   .offer-card h2 {
@@ -573,8 +583,9 @@
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    background: var(--gray-50);
-    border-radius: 14px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 16px;
     padding: 16px;
     margin-top: 16px;
   }
@@ -809,7 +820,7 @@
 
         if (step.status === 'green') {
           icon.className = 'step-icon green';
-          icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+          icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
           el.classList.add('resolved');
         } else {
           icon.className = 'step-icon red';
