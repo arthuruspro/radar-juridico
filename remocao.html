@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seu CPF está protegido</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blue: #1a56db;
+    --blue-dark: #1041a3;
+    --red: #dc2626;
+    --red-dark: #b91c1c;
+    --red-bg: #fef2f2;
+    --green: #0d9462;
+    --green-light: #10b981;
+    --green-bg: #ecfdf5;
+    --green-bg-deep: #d1fae5;
+    --green-surface: #f0fdf8;
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+    --shadow-xl: 0 20px 50px rgba(0,0,0,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ========== LAYOUT ========== */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 24px 20px 40px;
+    max-width: 440px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease;
+  }
+  .screen.active { display: flex; flex-direction: column; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== SCREEN 1: CONFIRMATION ========== */
+  #screen1 {
+    background: var(--green-surface);
+  }
+  #screen1.active {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .confirmation-card {
+    background: white;
+    border-radius: 24px;
+    padding: 48px 28px 40px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(13, 148, 98, 0.1);
+    width: 100%;
+  }
+
+  .check-circle {
+    width: 88px;
+    height: 88px;
+    background: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px;
+    animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 8px 24px rgba(13, 148, 98, 0.3);
+  }
+  @keyframes scaleIn {
+    from { transform: scale(0); }
+    to { transform: scale(1); }
+  }
+
+  .check-circle svg {
+    width: 42px;
+    height: 42px;
+    color: white;
+  }
+
+  .confirmation-card h1 {
+    font-size: 23px;
+    font-weight: 800;
+    color: var(--gray-900);
+    line-height: 1.3;
+    margin-bottom: 14px;
+  }
+
+  .confirmation-card p {
+    font-size: 15px;
+    color: var(--gray-500);
+    line-height: 1.6;
+    margin-bottom: 8px;
+  }
+
+  .protection-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--green-bg);
+    color: var(--green);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 18px;
+    border-radius: 100px;
+    margin-top: 16px;
+    border: 1px solid var(--green-bg-deep);
+  }
+  .protection-badge .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .scanning-notice {
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--green-bg-deep);
+    font-size: 14px;
+    color: var(--gray-400);
+    animation: fadeInUp 0.5s ease 1.5s both;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .scanning-dots::after {
+    content: '';
+    animation: dots 1.5s steps(4, end) infinite;
+  }
+  @keyframes dots {
+    0% { content: ''; }
+    25% { content: '.'; }
+    50% { content: '..'; }
+    75% { content: '...'; }
+  }
+
+  /* ========== SCREEN 2: SCANNING ========== */
+  .scan-card {
+    background: white;
+    border-radius: 20px;
+    padding: 36px 28px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    margin-top: 20px;
+  }
+
+  .scan-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--gray-50);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .scan-icon svg {
+    width: 28px;
+    height: 28px;
+    color: var(--gray-600);
+    animation: searchPulse 1.5s ease infinite;
+  }
+  @keyframes searchPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+
+  .scan-card h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: 6px;
+  }
+  .scan-cpf {
+    font-size: 14px;
+    color: var(--gray-400);
+    font-weight: 500;
+    margin-bottom: 28px;
+  }
+
+  .scan-steps {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .scan-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--gray-400);
+    transition: all 0.4s ease;
+  }
+  .scan-step.resolved {
+    color: var(--gray-700);
+  }
+  .scan-step.found {
+    color: var(--red);
+    font-weight: 600;
+  }
+
+  .step-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-icon.green {
+    background: var(--green-bg);
+    color: var(--green);
+  }
+  .step-icon.loading {
+    background: var(--gray-100);
+    color: var(--gray-400);
+  }
+  .step-icon.red {
+    background: var(--red-bg);
+    color: var(--red);
+  }
+
+  .step-icon svg { width: 16px; height: 16px; }
+
+  .spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--gray-200);
+    border-top-color: var(--blue);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .scan-alert {
+    margin-top: 20px;
+    padding: 14px 16px;
+    background: var(--red-bg);
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transform: scale(0.95);
+    transition: all 0.4s ease;
+  }
+  .scan-alert.visible {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+
+
+  /* ========== SCREEN 3: PAIN ========== */
+  .alert-banner {
+    background: var(--red);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    margin-top: 16px;
+    letter-spacing: -0.2px;
+  }
+  .alert-banner svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+  .pain-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px 24px;
+    box-shadow: var(--shadow-md);
+    margin-top: 16px;
+  }
+
+  .pain-card .subtitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--red);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+
+  .pain-card h2 {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--gray-900);
+    line-height: 1.3;
+    margin-bottom: 16px;
+  }
+
+  .pain-card p {
+    font-size: 15px;
+    color: var(--gray-600);
+    line-height: 1.7;
+    margin-bottom: 16px;
+  }
+
+  .pain-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 20px 0 24px;
+  }
+  .pain-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--gray-700);
+  }
+  .pain-item .x-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--red-bg);
+    color: var(--red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .pain-item .x-icon svg { width: 14px; height: 14px; }
+
+  .good-news {
+    background: var(--green-bg);
+    border-radius: 14px;
+    padding: 20px;
+    margin-top: 24px;
+  }
+  .good-news p {
+    font-size: 15px;
+    color: var(--green);
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .cta-button {
+    display: block;
+    width: 100%;
+    padding: 18px 24px;
+    background: var(--red);
+    color: white;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 16px rgba(220, 38, 38, 0.3);
+    letter-spacing: -0.2px;
+  }
+  .cta-button:hover {
+    background: var(--red-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+  }
+  .cta-button:active {
+    transform: translateY(0);
+  }
+
+  /* ========== SCREEN 4: OFFER ========== */
+  .offer-card {
+    background: white;
+    border-radius: 20px;
+    padding: 32px 24px;
+    box-shadow: var(--shadow-lg);
+    margin-top: 16px;
+    border: 2px solid var(--gray-100);
+  }
+
+  .offer-card h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--gray-900);
+    line-height: 1.3;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .offer-checks {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .offer-check {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--gray-700);
+  }
+  .offer-check .check-icon {
+    width: 28px;
+    height: 28px;
+    background: var(--green-bg);
+    color: var(--green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .offer-check .check-icon svg { width: 14px; height: 14px; }
+
+  .price-box {
+    text-align: center;
+    padding: 24px 0;
+    border-top: 1px solid var(--gray-100);
+    border-bottom: 1px solid var(--gray-100);
+    margin-bottom: 24px;
+  }
+  .price-old {
+    font-size: 18px;
+    color: var(--gray-400);
+    text-decoration: line-through;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .price-new {
+    font-size: 42px;
+    font-weight: 800;
+    color: var(--gray-900);
+    letter-spacing: -1px;
+  }
+  .price-new span {
+    font-size: 20px;
+    font-weight: 600;
+    vertical-align: top;
+    position: relative;
+    top: 8px;
+    margin-right: 2px;
+  }
+  .price-label {
+    font-size: 14px;
+    color: var(--gray-500);
+    font-weight: 500;
+    margin-top: 4px;
+  }
+
+  .cta-button.primary {
+    background: var(--blue);
+    box-shadow: 0 4px 16px rgba(26, 86, 219, 0.3);
+    font-size: 15px;
+    padding: 18px 20px;
+  }
+  .cta-button.primary:hover {
+    background: var(--blue-dark);
+    box-shadow: 0 6px 20px rgba(26, 86, 219, 0.4);
+  }
+
+  .security-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 16px;
+    font-size: 12px;
+    color: var(--gray-400);
+    font-weight: 500;
+  }
+  .security-line svg { width: 14px; height: 14px; }
+
+  .skip-link {
+    display: block;
+    text-align: center;
+    margin-top: 24px;
+    font-size: 13px;
+    color: var(--gray-400);
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .skip-link:hover { color: var(--gray-500); }
+
+  /* ========== URGENCY BAR ========== */
+  .urgency-bar {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 12px;
+    padding: 12px 16px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #92400e;
+    font-weight: 500;
+  }
+
+  /* ========== PROGRESS BAR ========== */
+  .progress-bar {
+    width: 100%;
+    height: 4px;
+    background: var(--gray-100);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--blue);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.5s ease;
+  }
+
+  /* ========== GUARANTEE ========== */
+  .guarantee {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--gray-50);
+    border-radius: 14px;
+    padding: 16px;
+    margin-top: 16px;
+  }
+  .guarantee-icon {
+    width: 36px;
+    height: 36px;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: var(--shadow-sm);
+  }
+  .guarantee-icon svg { width: 18px; height: 18px; color: var(--green); }
+  .guarantee-text { font-size: 13px; color: var(--gray-600); line-height: 1.5; }
+  .guarantee-text strong { color: var(--gray-800); }
+</style>
+</head>
+<body>
+
+<!-- ============ SCREEN 1: CONFIRMATION ============ -->
+<div class="screen active" id="screen1">
+  <div class="confirmation-card">
+    <div class="check-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+
+    <h1>Parabéns! Seu CPF já está sendo monitorado.</h1>
+    <p>Você receberá alertas no WhatsApp se qualquer processo surgir.</p>
+
+    <div class="protection-badge">
+      <span class="dot"></span>
+      Proteção ativa 24h
+    </div>
+
+    <div class="scanning-notice">
+      <span class="scanning-dots">Verificando exposição pública do seu CPF</span>
+    </div>
+  </div>
+
+  <div class="progress-bar" style="margin-top: 24px;">
+    <div class="progress-fill" id="progress1"></div>
+  </div>
+</div>
+
+<!-- ============ SCREEN 2: SCANNING ============ -->
+<div class="screen" id="screen2">
+  <div class="scan-card">
+    <div class="scan-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </div>
+
+    <h2>Analisando exposição do seu CPF...</h2>
+    <div class="scan-cpf">CPF: •••.XXX.XXX-••</div>
+
+    <div class="scan-steps">
+      <!-- Step 1 - all visible from start with spinners -->
+      <div class="scan-step" id="step1">
+        <div class="step-icon loading" id="icon1"><div class="spinner"></div></div>
+        <span id="step1text">CPF válido</span>
+      </div>
+      <!-- Step 2 -->
+      <div class="scan-step" id="step2">
+        <div class="step-icon loading" id="icon2"><div class="spinner"></div></div>
+        <span id="step2text">Monitoramento ativo</span>
+      </div>
+      <!-- Step 3 -->
+      <div class="scan-step" id="step3">
+        <div class="step-icon loading" id="icon3"><div class="spinner"></div></div>
+        <span id="step3text">Verificando JusBrasil...</span>
+      </div>
+      <!-- Step 4 -->
+      <div class="scan-step" id="step4">
+        <div class="step-icon loading" id="icon4"><div class="spinner"></div></div>
+        <span id="step4text">Verificando Escavador...</span>
+      </div>
+      <!-- Step 5 -->
+      <div class="scan-step" id="step5">
+        <div class="step-icon loading" id="icon5"><div class="spinner"></div></div>
+        <span id="step5text">Verificando Google...</span>
+      </div>
+    </div>
+
+    <div class="scan-alert" id="scanAlert">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      <span>3 problemas graves encontrados</span>
+    </div>
+
+
+  </div>
+</div>
+
+<!-- ============ SCREEN 3: PAIN ============ -->
+<div class="screen" id="screen3">
+  <div class="alert-banner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+    Seus processos estão expostos publicamente
+  </div>
+
+  <div class="pain-card">
+    <div class="subtitle">⚠️ Atenção</div>
+
+    <h2>Seu monitoramento protege você de novos processos. Mas os que já existem estão visíveis agora.</h2>
+
+    <p>Se alguém pesquisar seu nome no Google agora — um familiar, um cliente, um vizinho — vai encontrar <strong>todos os seus processos judiciais</strong> no JusBrasil e Escavador.</p>
+
+    <p>Isso pode te prejudicar:</p>
+
+    <div class="pain-list">
+      <div class="pain-item">
+        <span class="x-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+        Numa vaga de emprego
+      </div>
+      <div class="pain-item">
+        <span class="x-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+        Na aprovação de um crédito
+      </div>
+      <div class="pain-item">
+        <span class="x-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
+        Na sua reputação com quem você convive
+      </div>
+    </div>
+
+    <div class="good-news">
+      <p>✅ A boa notícia: nós podemos esconder todos os seus processos. De uma vez. Pra sempre.</p>
+    </div>
+
+    <button class="cta-button" onclick="showScreen(4)">
+      QUERO PROTEGER MINHA REPUTAÇÃO
+    </button>
+  </div>
+</div>
+
+<!-- ============ SCREEN 4: OFFER ============ -->
+<div class="screen" id="screen4">
+  <div class="offer-card">
+    <h2><span style="font-size:24px; font-weight:900;">Remoção de Processos</span><br>JusBrasil, Escavador e Google</h2>
+
+    <div class="offer-checks">
+      <div class="offer-check">
+        <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Esconde todos os processos
+      </div>
+      <div class="offer-check">
+        <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Remove nome, CPF e CNPJ
+      </div>
+      <div class="offer-check">
+        <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        JusBrasil + Escavador + Google
+      </div>
+      <div class="offer-check">
+        <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Cobre processos atuais e futuros
+      </div>
+      <div class="offer-check">
+        <span class="check-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+        Pagamento único — funciona pra sempre
+      </div>
+    </div>
+
+    <div class="price-box">
+      <div class="price-old">R$ 597</div>
+      <div class="price-new"><span>R$</span>297</div>
+      <div class="price-label">Pagamento único. Sem mensalidade.</div>
+    </div>
+
+    <a href="https://pay.cakto.com.br/32mm37f_781601?src=upsell" style="text-decoration:none;">
+      <button class="cta-button primary">
+        PROTEGER MINHA REPUTAÇÃO — R$297
+      </button>
+    </a>
+
+    <div class="security-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Pagamento seguro
+    </div>
+
+    <div class="guarantee">
+      <div class="guarantee-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div class="guarantee-text">
+        <strong>Garantia total.</strong> Se seus processos não forem removidos do JusBrasil, Escavador e Google, devolvemos 100% do seu dinheiro.
+      </div>
+    </div>
+  </div>
+
+  <a class="skip-link" href="https://wa.me/553597475980?text=Ol%C3%A1,%20vou%20salvar%20este%20contato%20para%20ativar%20o%20monitoramento%20do%20meu%20CPF!">Não quero proteger minha reputação</a>
+</div>
+
+<script>
+  // ========== SCREEN MANAGEMENT ==========
+  function showScreen(num) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen' + num).classList.add('active');
+    window.scrollTo(0, 0);
+
+    if (num === 2) startScan();
+  }
+
+  // ========== WAIT FOR USER TO ACTUALLY SEE THE PAGE ==========
+  let hasStarted = false;
+
+  function startFlow() {
+    if (hasStarted) return;
+    hasStarted = true;
+
+    setTimeout(() => {
+      const progress = document.getElementById('progress1');
+      progress.style.width = '100%';
+    }, 500);
+
+    setTimeout(() => {
+      showScreen(2);
+    }, 3500);
+  }
+
+  // If page is visible now, start. Otherwise wait until user comes back.
+  if (document.visibilityState === 'visible') {
+    startFlow();
+  } else {
+    document.addEventListener('visibilitychange', function handler() {
+      if (document.visibilityState === 'visible') {
+        startFlow();
+        document.removeEventListener('visibilitychange', handler);
+      }
+    });
+  }
+
+  // ========== SCREEN 2: SCANNING ANIMATION ==========
+  function startScan() {
+    const steps = [
+      { id: 1, delay: 800, status: 'green', text: 'CPF válido ✓' },
+      { id: 2, delay: 2000, status: 'green', text: 'Monitoramento ativo ✓' },
+      { id: 3, delay: 3500, status: 'red', text: 'JusBrasil — processos encontrados' },
+      { id: 4, delay: 5000, status: 'red', text: 'Escavador — processos encontrados' },
+      { id: 5, delay: 6500, status: 'red', text: 'Google — nome exposto em resultados' },
+    ];
+
+    steps.forEach(step => {
+      setTimeout(() => {
+        const el = document.getElementById('step' + step.id);
+        const icon = document.getElementById('icon' + step.id);
+        const textEl = document.getElementById('step' + step.id + 'text');
+
+        if (step.status === 'green') {
+          icon.className = 'step-icon green';
+          icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+          el.classList.add('resolved');
+        } else {
+          icon.className = 'step-icon red';
+          icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+          el.classList.add('found');
+        }
+        if (step.text) {
+          textEl.textContent = step.text;
+        }
+      }, step.delay);
+    });
+
+    // Show alert
+    setTimeout(() => {
+      document.getElementById('scanAlert').classList.add('visible');
+    }, 7500);
+
+    // Auto transition to screen 3
+    setTimeout(() => {
+      showScreen(3);
+    }, 10000);
+  }
+</script>
+
+<script
+  src="https://cdn.utmify.com.br/scripts/utms/latest.js"
+  data-utmify-prevent-xcod-sck
+  data-utmify-prevent-subids
+  async
+  defer
+></script>
+
+</body>
+</html>
