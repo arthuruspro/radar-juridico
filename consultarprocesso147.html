@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consultar Processo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Meta Pixel Base -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '2112230319524429');
+  fbq('init', '1961787600889582');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2112230319524429&ev=PageView&noscript=1"/><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1961787600889582&ev=PageView&noscript=1"/></noscript>
+
+  <!-- Pixel da UTMify -->
+  <script>
+  window.pixelId = "698683615ce6a0f57cf14451";
+  var a = document.createElement("script");
+  a.async=true;a.defer=true;
+  a.src="https://cdn.utmify.com.br/scripts/pixel/pixel.js";
+  document.head.appendChild(a);
+  </script>
+  <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids data-utmify-ignore-iframe data-utmify-ignore-retry async defer></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #ffffff;
+      font-family: 'Sora', sans-serif;
+      min-height: 100vh;
+    }
+
+    #screen-search {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+
+    h1 {
+      font-size: clamp(1.6rem, 5vw, 2.2rem);
+      font-weight: 700;
+      color: #000;
+      text-align: center;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .search-wrap { width: 100%; position: relative; }
+
+    .search-input {
+      width: 100%;
+      padding: 22px 70px 22px 28px;
+      font-family: 'Sora', sans-serif;
+      font-size: 1.05rem;
+      color: #000;
+      background: #F2F2F2;
+      border: none;
+      border-radius: 12px;
+      outline: none;
+      transition: background 0.15s;
+    }
+    .search-input::placeholder { color: #999; }
+    .search-input:focus { background: #EBEBEB; }
+
+    .search-btn {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      transition: opacity 0.15s;
+    }
+    .search-btn:hover { opacity: 0.5; }
+    .search-btn svg {
+      width: 30px; height: 30px;
+      stroke: #999; fill: none;
+      stroke-width: 2.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    #screen-loading {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    #screen-loading.active { display: flex; }
+
+    .loading-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #000;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .dots span { opacity: 0; animation: blink 1.2s infinite; }
+    .dots span:nth-child(2) { animation-delay: 0.3s; }
+    .dots span:nth-child(3) { animation-delay: 0.6s; }
+
+    @keyframes blink {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    #screen-result {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 20px 60px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    #screen-result.active { display: flex; }
+
+    .badge-encontrados {
+      background: #e00;
+      color: #fff;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 7px 20px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    .pessoa-card {
+      width: 100%;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 10px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .pessoa-icon {
+      width: 40px; height: 40px;
+      background: #f2f2f2;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .pessoa-icon svg {
+      width: 20px; height: 20px;
+      stroke: #999; fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .pessoa-info strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 2px;
+    }
+    .pessoa-info span {
+      font-size: 0.82rem;
+      color: #555;
+    }
+
+    .btn-obter {
+      width: 100%;
+      background: #000;
+      color: #fff;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      margin-bottom: 28px;
+      transition: opacity 0.15s;
+    }
+    .btn-obter:hover { opacity: 0.8; }
+
+    .preview-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 14px;
+      align-self: flex-start;
+    }
+
+    .preview-list {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .preview-item {
+      background: #f9f9f9;
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+    }
+    .preview-item:hover { background: #f0f0f0; }
+
+    .preview-item-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .preview-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .preview-item-icon {
+      width: 34px; height: 34px;
+      background: #efefef;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .preview-item-icon svg {
+      width: 17px; height: 17px;
+      stroke: #777; fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .preview-item-label {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .preview-item-value {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .preview-item-value.locked { color: #999; font-weight: 400; font-size: 0.75rem; }
+
+    .preview-item-sub {
+      font-size: 0.75rem;
+      color: #999;
+      margin-top: 5px;
+      padding-left: 46px;
+    }
+
+    .chevron svg {
+      width: 16px; height: 16px;
+      stroke: #bbb; fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .upsell {
+      width: 100%;
+      background: #f0f6ff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .upsell-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .upsell-items {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+    .upsell-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .upsell-item-icon {
+      width: 34px; height: 34px;
+      background: #cde3ff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .upsell-item-icon svg {
+      width: 16px; height: 16px;
+      stroke: #1a6fd4; fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .upsell-item-text {
+      font-size: 0.85rem;
+      color: #222;
+      line-height: 1.4;
+    }
+    .upsell-item-text strong { color: #000; }
+
+    .btn-obter-2 {
+      width: 100%;
+      background: #000;
+      color: #fff;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn-obter-2:hover { opacity: 0.8; }
+  </style>
+  
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-11225982551">
+</script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-11225982551');
+</script>
+  
+</head>
+<body>
+
+  <!-- SEARCH -->
+  <div id="screen-search">
+    <div class="container">
+      <h1>Consulte Processos</h1>
+      <div class="search-wrap">
+        <input class="search-input" id="cpf-input" type="text"
+          placeholder="Digite o CPF ou CNPJ" maxlength="18" inputmode="numeric" />
+        <button class="search-btn" id="search-btn" type="button" aria-label="Consultar">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="16.5" y1="16.5" x2="22" y2="22"/>
+          </svg>
+        </button>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; color:#999; font-size:0.82rem;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#bbb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <span>+ <strong>808.794</strong> consultas realizadas</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div id="screen-loading">
+    <div class="loading-text">
+      Buscando processos<span class="dots"><span>.</span><span>.</span><span>.</span></span>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="screen-result">
+    <div class="badge-encontrados" id="badge">2 processos encontrados</div>
+
+    <div class="pessoa-card">
+      <div class="pessoa-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="pessoa-info">
+        <strong id="result-cpf">—</strong>
+        <span id="result-tipo">CPF</span>
+      </div>
+    </div>
+
+    <button class="btn-obter">Obter Todos os Processos</button>
+
+    <div class="preview-title">Consulta Prévia</div>
+
+    <div class="preview-list">
+      <div class="preview-item">
+        <div class="preview-item-top">
+          <div class="preview-item-left">
+            <div class="preview-item-icon">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+            </div>
+            <div class="preview-item-label">Quantidade de processos</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="preview-item-value" id="qtd-value">2 processos encontrados</div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+        <div class="preview-item-sub"><svg style="display:inline;vertical-align:middle;margin-right:4px;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Mais processos podem ser encontrados ao comprar</div>
+      </div>
+
+      <div class="preview-item">
+        <div class="preview-item-top">
+          <div class="preview-item-left">
+            <div class="preview-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="preview-item-label">Infos dos processos</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="preview-item-value locked">Disponível no Relatório</div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-item">
+        <div class="preview-item-top">
+          <div class="preview-item-left">
+            <div class="preview-item-icon">
+              <svg viewBox="0 0 24 24"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 2 7 22 7"/></svg>
+            </div>
+            <div class="preview-item-label">Tribunais encontrados</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="preview-item-value locked">Disponível no Relatório</div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+        <div class="preview-item-sub"><svg style="display:inline;vertical-align:middle;margin-right:4px;" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>Consulta realizada em todos os tribunais do Brasil</div>
+      </div>
+
+      <div class="preview-item">
+        <div class="preview-item-top">
+          <div class="preview-item-left">
+            <div class="preview-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="preview-item-label">Pessoas envolvidas</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="preview-item-value locked">Disponível no Relatório</div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-item">
+        <div class="preview-item-top">
+          <div class="preview-item-left">
+            <div class="preview-item-icon">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="preview-item-label">Valor das causas</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="preview-item-value locked">Disponível no Relatório</div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-item">
+        <div class="preview-item-top">
+          <div class="preview-item-left">
+            <div class="preview-item-icon">
+              <svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg>
+            </div>
+            <div class="preview-item-label">Movimentações</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="preview-item-value locked">Disponível no Relatório</div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="preview-item">
+        <div class="preview-item-top">
+          <div class="preview-item-left">
+            <div class="preview-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="preview-item-label">Documentos públicos</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="preview-item-value locked">Disponível no Relatório</div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PRICE SECTION -->
+    <div id="preco" style="width:100%; margin-bottom:28px;">
+      <div style="font-size:1.1rem; font-weight:700; color:#000; text-align:center; line-height:1.4; margin-bottom:20px;">
+        Obtenha o Relatório com todos os processos do CPF <span id="cpf-preco" style="background:#f2f2f2; border-radius:6px; padding:2px 10px; font-size:0.95rem;"></span> por apenas:
+      </div>
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="font-size:2rem; font-weight:700; color:#000;">R$ 147,00</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="color:#22a94a; font-size:1rem; font-weight:700; flex-shrink:0;">✓</span>
+          <span style="font-size:0.85rem; color:#333;">Histórico completo dos processos existentes</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="color:#22a94a; font-size:1rem; font-weight:700; flex-shrink:0;">✓</span>
+          <span style="font-size:0.85rem; color:#333;">Antecipe bloqueios, multas, negativação ou até mandados de prisão</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span style="color:#22a94a; font-size:1rem; font-weight:700; flex-shrink:0;">✓</span>
+          <span style="font-size:0.85rem; color:#333;">Alertas de novos processos no seu email e WhatsApp</span>
+        </div>
+      </div>
+      <div style="background:#f9f9f9; border-radius:12px; padding:20px;">
+        <!-- MUDANÇA 1: âncora oculta que a UTMify processa automaticamente -->
+        <a id="checkoutLink" href="https://pay.cakto.com.br/k6h4vwy" style="display:none;"></a>
+        <button id="paguePixBtn" style="width:100%; background:#000; color:#fff; font-family:'Sora',sans-serif; font-size:0.95rem; font-weight:700; border:none; border-radius:10px; padding:16px; cursor:pointer;">Pague com Pix</button>
+      </div>
+      <div style="text-align:center; margin-top:12px; font-size:0.75rem; color:#999;">Ao prosseguir você concorda com os Termos de uso.</div>
+    </div>
+
+    <!-- upsell -->
+    <div class="upsell">
+      <div class="upsell-title">Acesse o Relatório Completo em segundos</div>
+      <div class="upsell-items">
+        <div class="upsell-item">
+          <div class="upsell-item-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg></div>
+          <div class="upsell-item-text"><strong>Encontre todos os processos</strong> de um CPF ou CNPJ</div>
+        </div>
+        <div class="upsell-item">
+          <div class="upsell-item-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/></svg></div>
+          <div class="upsell-item-text"><strong>Acesse infos completas</strong> dos processos (status, envolvidos, valor e muito mais)</div>
+        </div>
+        <div class="upsell-item">
+          <div class="upsell-item-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l2 2"/><circle cx="17" cy="7" r="3" fill="#cde3ff" stroke="#1a6fd4"/></svg></div>
+          <div class="upsell-item-text"><strong>Tire todas as suas dúvidas</strong> conversando com a nossa IA Jurídica</div>
+        </div>
+        <div class="upsell-item">
+          <div class="upsell-item-icon"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/></svg></div>
+          <div class="upsell-item-text"><strong>Veja as movimentações</strong>, últimos acontecimentos e fique por dentro</div>
+        </div>
+        <div class="upsell-item">
+          <div class="upsell-item-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          <div class="upsell-item-text"><strong>Baixe e acesse documentos</strong> públicos dos processos, decisões e petições</div>
+        </div>
+        <div class="upsell-item">
+          <div class="upsell-item-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+          <div class="upsell-item-text"><strong>Receba alertas de novos processos</strong> no email e WhatsApp</div>
+        </div>
+      </div>
+      <button class="btn-obter-2">Obter Todos os Processos</button>
+    </div>
+
+    <!-- como funciona -->
+    <div style="width:100%; margin-top:24px;">
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="display:inline-block; background:#e8f0fe; color:#1a6fd4; font-size:0.78rem; font-weight:700; padding:6px 16px; border-radius:999px; margin-bottom:14px;">É fácil demais consultar</div>
+        <div style="font-size:1.2rem; font-weight:700; color:#000; line-height:1.3;">Siga este passo a passo</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div style="background:#f9f9f9; border-radius:12px; padding:20px;">
+          <div style="width:42px; height:42px; background:#e8f0fe; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a6fd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="22" y2="22"/></svg>
+          </div>
+          <div style="font-size:1rem; font-weight:700; color:#000; margin-bottom:6px;">Informe o CPF ou CNPJ</div>
+          <div style="font-size:0.85rem; color:#555; line-height:1.5;">Digite o documento de quem você deseja consultar</div>
+        </div>
+        <div style="background:#f9f9f9; border-radius:12px; padding:20px;">
+          <div style="width:42px; height:42px; background:#e8f0fe; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a6fd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+          <div style="font-size:1rem; font-weight:700; color:#000; margin-bottom:6px;">Realize o pagamento</div>
+          <div style="font-size:0.85rem; color:#555; line-height:1.5;">Processo simples, rápido e seguro</div>
+        </div>
+        <div style="background:#f9f9f9; border-radius:12px; padding:20px;">
+          <div style="width:42px; height:42px; background:#e8f0fe; border-radius:50%; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1a6fd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div style="font-size:1rem; font-weight:700; color:#000; margin-bottom:6px;">Acesse o Relatório</div>
+          <div style="font-size:0.85rem; color:#555; line-height:1.5;">A página será atualizada com o relatório em segundos. Também enviaremos para o seu email e WhatsApp.</div>
+        </div>
+      </div>
+      <button class="btn-obter" style="margin-top:24px; margin-bottom:0;">Obter Todos os Processos</button>
+    </div>
+
+  </div>
+
+  <script>
+    const input = document.getElementById('cpf-input');
+    const btn = document.getElementById('search-btn');
+    const screenSearch = document.getElementById('screen-search');
+    const screenLoading = document.getElementById('screen-loading');
+    const screenResult = document.getElementById('screen-result');
+
+    input.addEventListener('input', function(e) {
+      let v = e.target.value.replace(/\D/g, '');
+      if (v.length <= 11) {
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+      } else {
+        v = v.slice(0, 14);
+        v = v.replace(/(\d{2})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d)/, '$1.$2');
+        v = v.replace(/(\d{3})(\d)/, '$1/$2');
+        v = v.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+      }
+      e.target.value = v;
+    });
+
+    function buscar() {
+      const val = input.value.trim();
+      if (val.replace(/\D/g, '').length < 11) return;
+
+      const isCNPJ = val.replace(/\D/g, '').length > 11;
+      const qtd = Math.floor(Math.random() * 4) + 1;
+
+      screenSearch.style.display = 'none';
+      screenLoading.classList.add('active');
+
+      setTimeout(() => {
+        document.getElementById('result-cpf').textContent = val;
+        document.getElementById('result-tipo').textContent = isCNPJ ? 'CNPJ' : 'CPF';
+        document.getElementById('cpf-preco').textContent = val;
+        document.getElementById('badge').textContent = qtd + (qtd === 1 ? ' processo recente encontrado' : ' processos recentes encontrados');
+        document.getElementById('qtd-value').textContent = qtd + (qtd === 1 ? ' processo recente encontrado' : ' processos recentes encontrados');
+
+        screenLoading.classList.remove('active');
+        screenResult.classList.add('active');
+        window.scrollTo(0, 0);
+      }, 2000);
+    }
+
+    function scrollToPreco() {
+      const el = document.getElementById('preco');
+      const top = el.getBoundingClientRect().top + window.pageYOffset - 20;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+
+    // Attach scroll to all obter buttons
+    document.querySelectorAll('.btn-obter, .btn-obter-2').forEach(b => {
+      b.addEventListener('click', scrollToPreco);
+    });
+
+    // Preview items scroll to price
+    document.querySelectorAll('.preview-item').forEach(item => {
+      item.addEventListener('click', scrollToPreco);
+    });
+
+    // MUDANÇA 2: clica na âncora oculta (já processada pela UTMify) em vez de window.location.href
+    document.getElementById('paguePixBtn').addEventListener('click', function(e) {
+      e.preventDefault();
+      if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout');
+      setTimeout(function() {
+        document.getElementById('checkoutLink').click();
+      }, 600);
+    });
+
+    btn.addEventListener('click', buscar);
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') buscar();
+    });
+  </script>
+</body>
+</html>
