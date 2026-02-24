@@ -304,6 +304,10 @@
 
 
   /* ========== SCREEN 3: PAIN ========== */
+  #screen3 {
+    background: #fef2f2;
+  }
+
   .alert-banner {
     background: var(--red);
     color: white;
@@ -323,17 +327,16 @@
     background: white;
     border-radius: 20px;
     padding: 32px 24px;
-    box-shadow: var(--shadow-md);
+    box-shadow: 0 4px 24px rgba(220, 38, 38, 0.08);
     margin-top: 16px;
   }
 
   .pain-card .subtitle {
-    font-size: 15px;
-    font-weight: 600;
+    font-size: 22px;
+    font-weight: 800;
     color: var(--red);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 12px;
+    letter-spacing: -0.3px;
+    margin-bottom: 16px;
   }
 
   .pain-card h2 {
@@ -670,15 +673,10 @@
 
 <!-- ============ SCREEN 3: PAIN ============ -->
 <div class="screen" id="screen3">
-  <div class="alert-banner">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-    Seus processos estão expostos publicamente
-  </div>
-
   <div class="pain-card">
-    <div class="subtitle">⚠️ Atenção</div>
+    <div class="subtitle">🚨 ATENÇÃO</div>
 
-    <p>Identificamos que se alguém pesquisar seu nome no Google agora — um familiar, um cliente, um vizinho — vai encontrar <strong>todos os seus processos judiciais no JusBrasil e Escavador.</strong></p>
+    <p>Identificamos que se alguém pesquisar seu nome no Google agora — um familiar, um cliente, um vizinho — vai encontrar <strong>todos os seus processos judiciais expostos no JusBrasil e Escavador.</strong></p>
 
     <p>Isso pode te prejudicar:</p>
 
@@ -693,12 +691,12 @@
       </div>
       <div class="pain-item">
         <span class="x-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>
-        Na sua reputação com quem você convive
+        Na <strong>sua reputação</strong> com quem você convive
       </div>
     </div>
 
     <div class="good-news">
-      <p>✅ A boa notícia: nós podemos esconder todos os seus processos. De uma vez. Pra sempre.</p>
+      <p>✅ A boa notícia: nós podemos esconder todos os seus processos. Rápido, sem burocracia e de uma vez por todas.</p>
     </div>
 
     <button class="cta-button" onclick="showScreen(4)">
