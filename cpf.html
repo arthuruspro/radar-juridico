@@ -364,9 +364,13 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
 
 document.getElementById('checkoutBtn').addEventListener('click',function(e){
   e.preventDefault();
-  const base=this.href.split('?')[0];
+  // Pega o href completo — UTMify já terá adicionado os parâmetros dela no href
+  let url=this.href;
   const primeiro=firstName?firstName.split(' ')[0]:'';
-  const url=base+(primeiro?'?nome='+encodeURIComponent(primeiro):'');
+  if(primeiro){
+    // Adiciona ?nome= ou &nome= dependendo se já há parâmetros na URL
+    url+=(url.indexOf('?')!==-1?'&':'?')+'nome='+encodeURIComponent(primeiro);
+  }
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout');
   setTimeout(function(){window.location.href=url},600);
 });
