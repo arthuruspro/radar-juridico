@@ -365,15 +365,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
 document.getElementById('checkoutBtn').addEventListener('click',function(e){
   e.preventDefault();
   let url=this.href;
-  // Tenta pegar o nome: 1) variável global, 2) o que está renderizado no DOM
-  let primeiro=firstName?firstName.split(' ')[0]:'';
-  if(!primeiro){
-    const nameEl=document.getElementById('cpfAttentionName');
-    if(nameEl&&nameEl.textContent){
-      primeiro=nameEl.textContent.replace(',','').trim().split(' ')[0];
-    }
-  }
-  console.log('[Checkout] firstName='+firstName+' | primeiro='+primeiro+' | url='+url);
+  const primeiro=this.dataset.nome||'';
   if(primeiro){
     url+=(url.indexOf('?')!==-1?'&':'?')+'nome='+encodeURIComponent(primeiro);
   }
