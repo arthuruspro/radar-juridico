@@ -376,7 +376,7 @@ document.getElementById('checkoutBtn').addEventListener('click',function(e){
     url+=(url.indexOf('?')!==-1?'&':'?')+'nome='+encodeURIComponent(primeiro);
   }
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout');
-  setTimeout(function(){window.location.href=url},600);
+  setTimeout(function(){window.location.href=url},5000);
 });
 </script>
 </body>
