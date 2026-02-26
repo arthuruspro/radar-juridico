@@ -392,6 +392,9 @@ document.getElementById('checkoutBtn').addEventListener('click',function(e){
   if(primeiro){
     url+=(url.indexOf('?')!==-1?'&':'?')+'nome='+encodeURIComponent(primeiro);
   }
+  if(rawCpf){
+    url+=(url.indexOf('?')!==-1?'&':'?')+'cpf='+rawCpf;
+  }
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout');
   setTimeout(function(){window.location.href=url},300);
 },true);
