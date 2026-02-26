@@ -170,7 +170,7 @@ Monitorar meu CPF
     <li>Qualquer tipo de processo</li>
     <li>Todos os Tribunais do Brasil</li>
   </ul>
-  <a id="checkoutBtn" href="https://pay.cakto.com.br/3a8uz4m" class="cpf-result-btn" style="margin-top:20px;">Teste por 7 dias</a>
+  <button id="checkoutBtn" data-href-monthly="https://pay.cakto.com.br/3a8uz4m" data-href-annual="https://pay.cakto.com.br/yowzc5t" class="cpf-result-btn" style="margin-top:20px;">Teste por 7 dias</button>
 </div>
 </div>
 
@@ -199,7 +199,7 @@ function toggleBilling(){
     knob.style.transform='translateX(22px)';
     priceDisplay.innerHTML='R$ 997<span>/ano</span>';
     annualNote.style.display='block';
-    checkoutBtn.href='https://pay.cakto.com.br/yowzc5t';
+    checkoutBtn.dataset.hrefCurrent='https://pay.cakto.com.br/yowzc5t';
     labelMonthly.style.color='var(--text-muted)';
     labelMonthly.style.fontWeight='600';
     labelAnnual.style.color='var(--text)';
@@ -208,7 +208,7 @@ function toggleBilling(){
     knob.style.transform='translateX(0)';
     priceDisplay.innerHTML='R$ 147<span>/mês</span>';
     annualNote.style.display='none';
-    checkoutBtn.href='https://pay.cakto.com.br/3a8uz4m';
+    checkoutBtn.dataset.hrefCurrent='https://pay.cakto.com.br/3a8uz4m';
     labelMonthly.style.color='var(--text)';
     labelMonthly.style.fontWeight='700';
     labelAnnual.style.color='var(--text-muted)';
@@ -369,18 +369,17 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
 
 document.getElementById('checkoutBtn').addEventListener('click',function(e){
   e.preventDefault();
-  let url=this.href;
+  e.stopImmediatePropagation();
+  const base=this.dataset.hrefCurrent||(isAnnual?'https://pay.cakto.com.br/yowzc5t':'https://pay.cakto.com.br/3a8uz4m');
   const primeiro=this.dataset.nome||'';
-  if(primeiro){
-    url+=(url.indexOf('?')!==-1?'&':'?')+'nome='+encodeURIComponent(primeiro);
-  }
-  // DEBUG: mostra a URL final e só redireciona quando o usuário clicar OK
-  if(!confirm('URL final:\n'+url+'\n\nfirstName: '+firstName+'\ndataset.nome: '+(this.dataset.nome||'vazio'))){
-    return;
-  }
+  // Preserva UTMs da página atual
+  const pageParams=new URLSearchParams(window.location.search).toString();
+  let url=base;
+  const extraParams=[pageParams,primeiro?'nome='+encodeURIComponent(primeiro):''].filter(Boolean).join('&');
+  if(extraParams) url+='?'+extraParams;
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout');
-  window.location.href=url;
-});
+  setTimeout(function(){window.location.href=url},300);
+},true);
 </script>
 </body>
 </html>
