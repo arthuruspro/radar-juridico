@@ -257,16 +257,21 @@ function maskCpf(cpf){return'•••.'+cpf.slice(3,6)+'.'+cpf.slice(6,9)+'-•
 async function fetchNome(cpf){
   try{
     const target=`https://api.cpf-brasil.org/cpf/${cpf}?api_key=0c95cf3687f2b81885c57d23d31fb398`;
-    // allorigins.win funciona em produção e não exige plano pago
     const proxyUrl=`https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+    console.log('[CPF API] chamando proxy...');
     const r=await fetch(proxyUrl);
     const wrapper=await r.json();
+    console.log('[CPF API] wrapper:', JSON.stringify(wrapper).slice(0,200));
     const data=JSON.parse(wrapper.contents);
+    console.log('[CPF API] data:', JSON.stringify(data).slice(0,200));
     if(data&&data.success&&data.data&&data.data.NOME){
       firstName=data.data.NOME.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
+      console.log('[CPF API] nome:', firstName);
+    } else {
+      console.warn('[CPF API] estrutura inesperada:', JSON.stringify(data));
     }
   }catch(e){
-    console.warn('[CPF API] Erro:', e.message);
+    console.warn('[CPF API] Erro:', e.message, e);
   }
 }
 
@@ -333,6 +338,7 @@ function animateProcessCounter(){
   },2000+Math.random()*2000);
   setTimeout(()=>clearInterval(ticker),15000);
 }
+
 // Intersection observer for reveal
 const observer=new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible')});
