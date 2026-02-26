@@ -256,7 +256,7 @@ function maskCpf(cpf){return'•••.'+cpf.slice(3,6)+'.'+cpf.slice(6,9)+'-•
 // Busca o nome via API (em paralelo com a animação)
 async function fetchNome(cpf){
   try{
-    const target=`https://api.cpf-brasil.org/cpf/${cpf}?api_key=0c95cf3687f2b81885c57d23d31fb398`;
+    const target=`https://api.cpf-brasil.org/cpf/${cpf}?key=0c95cf3687f2b81885c57d23d31fb398`;
     const proxyUrl=`https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
     console.log('[CPF API] chamando proxy...');
     const r=await fetch(proxyUrl);
