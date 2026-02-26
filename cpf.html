@@ -333,7 +333,6 @@ function animateProcessCounter(){
   },2000+Math.random()*2000);
   setTimeout(()=>clearInterval(ticker),15000);
 }
-
 // Intersection observer for reveal
 const observer=new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{if(entry.isIntersecting)entry.target.classList.add('visible')});
