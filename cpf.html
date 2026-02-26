@@ -226,7 +226,6 @@ function showStep(n){
   document.getElementById('cpfStep'+n).classList.add('active');
   document.querySelector('.cpf-modal-box').scrollTop=0;
   if(n===6){
-    document.getElementById('checkoutBtn').href='https://pay.cakto.com.br/3a8uz4m';
     isAnnual=false;
   }
 }
@@ -321,17 +320,23 @@ function startAnalysis(){
     },c.doneDelay);
   });
   setTimeout(()=>{document.getElementById('cpfCounterBar').classList.add('visible');animateProcessCounter()},3000);
-  setTimeout(async ()=>{
-    // Aguarda a API terminar (já deve ter terminado faz tempo)
-    await nomePromise;
+  setTimeout(()=>{
     document.getElementById('cpfMasked').textContent=maskCpf(rawCpf);
     const nameEl=document.getElementById('cpfAttentionName');
     if(firstName){
       nameEl.innerHTML='<strong>'+firstName+',</strong>';
+      document.getElementById('checkoutBtn').dataset.nome=firstName.split(' ')[0];
     } else {
       nameEl.innerHTML='';
     }
     showStep(5);
+    // Se a API ainda não terminou, atualiza quando chegar
+    nomePromise.then(()=>{
+      if(firstName){
+        document.getElementById('cpfAttentionName').innerHTML='<strong>'+firstName+',</strong>';
+        document.getElementById('checkoutBtn').dataset.nome=firstName.split(' ')[0];
+      }
+    });
   },11500);
 }
 
