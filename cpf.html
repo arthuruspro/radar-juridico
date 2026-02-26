@@ -195,12 +195,11 @@ function toggleBilling(){
   const labelMonthly=document.getElementById('toggleLabelMonthly');
   const labelAnnual=document.getElementById('toggleLabelAnnual');
 
-  const cpfParam=rawCpf?'?cpf='+rawCpf:'';
   if(isAnnual){
     knob.style.transform='translateX(22px)';
     priceDisplay.innerHTML='R$ 997<span>/ano</span>';
     annualNote.style.display='block';
-    checkoutBtn.href='https://pay.cakto.com.br/yowzc5t'+cpfParam;
+    checkoutBtn.href='https://pay.cakto.com.br/yowzc5t';
     labelMonthly.style.color='var(--text-muted)';
     labelMonthly.style.fontWeight='600';
     labelAnnual.style.color='var(--text)';
@@ -209,7 +208,7 @@ function toggleBilling(){
     knob.style.transform='translateX(0)';
     priceDisplay.innerHTML='R$ 147<span>/mês</span>';
     annualNote.style.display='none';
-    checkoutBtn.href='https://pay.cakto.com.br/3a8uz4m'+cpfParam;
+    checkoutBtn.href='https://pay.cakto.com.br/3a8uz4m';
     labelMonthly.style.color='var(--text)';
     labelMonthly.style.fontWeight='700';
     labelAnnual.style.color='var(--text-muted)';
@@ -227,8 +226,7 @@ function showStep(n){
   document.getElementById('cpfStep'+n).classList.add('active');
   document.querySelector('.cpf-modal-box').scrollTop=0;
   if(n===6){
-    const cpfParam=rawCpf?'?cpf='+rawCpf:'';
-    document.getElementById('checkoutBtn').href='https://pay.cakto.com.br/3a8uz4m'+cpfParam;
+    document.getElementById('checkoutBtn').href='https://pay.cakto.com.br/3a8uz4m';
     isAnnual=false;
   }
 }
@@ -366,9 +364,9 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
 
 document.getElementById('checkoutBtn').addEventListener('click',function(e){
   e.preventDefault();
-  const cpfParam=rawCpf?'?cpf='+rawCpf:'';
   const base=this.href.split('?')[0];
-  const url=base+cpfParam;
+  const primeiro=firstName?firstName.split(' ')[0]:'';
+  const url=base+(primeiro?'?nome='+encodeURIComponent(primeiro):'');
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout');
   setTimeout(function(){window.location.href=url},600);
 });
