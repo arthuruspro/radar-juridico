@@ -371,12 +371,15 @@ document.getElementById('checkoutBtn').addEventListener('click',function(e){
   e.preventDefault();
   let url=this.href;
   const primeiro=this.dataset.nome||'';
-  alert('DEBUG\nfirstName='+firstName+'\ndataset.nome='+this.dataset.nome+'\nprimeiro='+primeiro+'\nurl='+url);
   if(primeiro){
     url+=(url.indexOf('?')!==-1?'&':'?')+'nome='+encodeURIComponent(primeiro);
   }
+  // DEBUG: mostra a URL final e só redireciona quando o usuário clicar OK
+  if(!confirm('URL final:\n'+url+'\n\nfirstName: '+firstName+'\ndataset.nome: '+(this.dataset.nome||'vazio'))){
+    return;
+  }
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout');
-  setTimeout(function(){window.location.href=url},5000);
+  window.location.href=url;
 });
 </script>
 </body>
