@@ -296,10 +296,10 @@ function startAnalysis(){
   const nomePromise = fetchNome(rawCpf);
 
   const checks=[
-    {id:'check1',activeDelay:200,doneDelay:1000,doneText:'CPF válido ✓'},
-    {id:'check2',activeDelay:1100,doneDelay:2500,doneText:'91 tribunais consultados ✓'},
-    {id:'check3',activeDelay:2600,doneDelay:3800,doneText:'Análise concluída ✓'},
-    {id:'check4',activeDelay:3900,doneDelay:5000,doneText:'Relatório pronto ✓'},
+    {id:'check1',activeDelay:300,doneDelay:2000,doneText:'CPF válido ✓'},
+    {id:'check2',activeDelay:2200,doneDelay:5000,doneText:'91 tribunais consultados ✓'},
+    {id:'check3',activeDelay:5200,doneDelay:8000,doneText:'Análise concluída ✓'},
+    {id:'check4',activeDelay:8200,doneDelay:10500,doneText:'Relatório pronto ✓'},
   ];
   checks.forEach(c=>{
     setTimeout(()=>{document.getElementById(c.id).classList.add('active')},c.activeDelay);
@@ -316,7 +316,7 @@ function startAnalysis(){
       }
     },c.doneDelay);
   });
-  setTimeout(()=>{document.getElementById('cpfCounterBar').classList.add('visible');animateProcessCounter()},1500);
+  setTimeout(()=>{document.getElementById('cpfCounterBar').classList.add('visible');animateProcessCounter()},3000);
   setTimeout(async ()=>{
     // Aguarda a API terminar (já deve ter terminado faz tempo)
     await nomePromise;
@@ -328,7 +328,7 @@ function startAnalysis(){
       nameEl.innerHTML='';
     }
     showStep(5);
-  },6000);
+  },11500);
 }
 
 function animateProcessCounter(){
