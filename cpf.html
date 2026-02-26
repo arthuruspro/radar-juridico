@@ -364,11 +364,17 @@ document.querySelectorAll('a[href^="#"]').forEach(link=>{
 
 document.getElementById('checkoutBtn').addEventListener('click',function(e){
   e.preventDefault();
-  // Pega o href completo — UTMify já terá adicionado os parâmetros dela no href
   let url=this.href;
-  const primeiro=firstName?firstName.split(' ')[0]:'';
+  // Tenta pegar o nome: 1) variável global, 2) o que está renderizado no DOM
+  let primeiro=firstName?firstName.split(' ')[0]:'';
+  if(!primeiro){
+    const nameEl=document.getElementById('cpfAttentionName');
+    if(nameEl&&nameEl.textContent){
+      primeiro=nameEl.textContent.replace(',','').trim().split(' ')[0];
+    }
+  }
+  console.log('[Checkout] firstName='+firstName+' | primeiro='+primeiro+' | url='+url);
   if(primeiro){
-    // Adiciona ?nome= ou &nome= dependendo se já há parâmetros na URL
     url+=(url.indexOf('?')!==-1?'&':'?')+'nome='+encodeURIComponent(primeiro);
   }
   if(typeof fbq!=='undefined')fbq('track','InitiateCheckout');
