@@ -256,22 +256,14 @@ function maskCpf(cpf){return'•••.'+cpf.slice(3,6)+'.'+cpf.slice(6,9)+'-•
 // Busca o nome via API (em paralelo com a animação)
 async function fetchNome(cpf){
   try{
-    // Chave como query param para funcionar com proxies CORS
     const target=`https://api.cpf-brasil.org/cpf/${cpf}?api_key=0c95cf3687f2b81885c57d23d31fb398`;
-    let data=null;
-    try{
-      // Tenta direto (funciona em servidor)
-      const r1=await fetch(target);
-      data=await r1.json();
-    }catch(e1){
-      // Fallback: proxy CORS para uso local
-      const r2=await fetch(`https://corsproxy.io/?url=${encodeURIComponent(target)}`);
-      data=await r2.json();
-    }
+    // allorigins.win funciona em produção e não exige plano pago
+    const proxyUrl=`https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
+    const r=await fetch(proxyUrl);
+    const wrapper=await r.json();
+    const data=JSON.parse(wrapper.contents);
     if(data&&data.success&&data.data&&data.data.NOME){
       firstName=data.data.NOME.split(' ').map(w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase()).join(' ');
-    } else {
-      console.warn('[CPF API] Resposta inesperada:', JSON.stringify(data));
     }
   }catch(e){
     console.warn('[CPF API] Erro:', e.message);
