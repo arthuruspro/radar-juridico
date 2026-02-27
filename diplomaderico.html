@@ -65,8 +65,8 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .hr-av-eye{position:absolute;bottom:-3px;right:-5px;background:rgba(8,6,3,0.9);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;pointer-events:none;color:var(--gold);opacity:0.9;border:1px solid rgba(200,168,75,0.35)}
 .hr-info{flex:1;min-width:0}
 .hr-name{font-family:var(--fp);font-size:14px;font-weight:700;color:var(--cream)}
-.hr-ig{font-family:var(--fm);font-size:10px;color:var(--gd);margin-left:6px}
-.ig-link{font-family:var(--fm);font-size:11px;font-weight:400;color:var(--gd);text-decoration:none;transition:color 0.15s;letter-spacing:0.05em}
+.hr-ig{font-family:var(--fm);font-size:13px;color:var(--gd);margin-left:6px}
+.ig-link{font-family:var(--fm);font-size:14px;font-weight:400;color:var(--gd);text-decoration:none;transition:color 0.15s;letter-spacing:0.05em}
 .ig-link:hover{color:var(--gold)}
 .ig-link-arrow{font-size:9px;opacity:0.7}
 .hr-frase{font-style:italic;font-size:14px;color:var(--cream-d, #c8bfa8);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}
@@ -461,7 +461,7 @@ function renderHero(){
       <div class="hr-med">${M[i]||i+1}</div>
       <div class="hr-av" onclick="viewDiploma(event,${i})" style="cursor:pointer" title="Ver diploma"><img src="${r.foto}" alt="${r.nome[0]}"><div class="hr-av-eye"><svg width="13" height="9" viewBox="0 0 9 6" fill="none"><path d="M4.5 0.5C2.5 0.5 0.8 2 0.5 3C0.8 4 2.5 5.5 4.5 5.5C6.5 5.5 8.2 4 8.5 3C8.2 2 6.5 0.5 4.5 0.5Z" stroke="#c8a84b" stroke-width="0.8"/><circle cx="4.5" cy="3" r="1.2" fill="#c8a84b"/></svg></div></div>
       <div class="hr-info">
-        <div class="hr-name"><a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig} <span class="ig-link-arrow">↗</span></a>
+        <div class="hr-name"><a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig}</a>
         </div>
         <div class="hr-frase">${r.frase}</div>
       </div>
