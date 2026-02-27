@@ -76,6 +76,9 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .share-mini:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,0.08)}
 .topup-mini{background:none;border:1px solid rgba(200,168,75,0.25);color:var(--gd);font-size:11px;border-radius:2px;padding:2px 5px;cursor:pointer;margin-left:4px;line-height:1;transition:all 0.15s;vertical-align:middle;font-family:var(--fm)}
 .topup-mini:hover{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,0.07)}
+.ver-mais-btn{width:100%;margin-top:12px;padding:13px;background:transparent;border:1px solid var(--b);border-radius:1px;color:var(--cd);font-family:var(--fp);font-size:15px;cursor:pointer;transition:all 0.2s;letter-spacing:0.01em}
+.ver-mais-btn span{font-family:var(--fm);font-size:11px;color:var(--gd);margin-left:8px;letter-spacing:0.1em}
+.ver-mais-btn:hover{border-color:var(--bb);color:var(--cream);background:rgba(200,168,75,0.05)}
 
 /* FULL RANKING */
 .rsec{max-width:680px;margin:0 auto;padding:80px 24px}
@@ -392,14 +395,38 @@ const DATA=[
   {nome:'Juliana Costa',     ig:'@julianacostareal',valor:250,  frase:'"só pra entrar no ranking 😂"',           foto:'https://i.pravatar.cc/100?img=2', data:'1 semana'},
   {nome:'Pedro Nascimento',  ig:'@pedronascimento', valor:200,  frase:'"minha ex também vai ver"',               foto:'https://i.pravatar.cc/100?img=41',data:'2 semanas'},
   {nome:'Ana Lima',          ig:'@analimaoficial',  valor:150,  frase:'"começando pequeno"',                     foto:'https://i.pravatar.cc/100?img=6', data:'2 semanas'},
+  {nome:'Rodrigo Sampaio',   ig:'@rodrigosampaio',  valor:4200, frase:'"provando pra mim mesmo"',                foto:'https://i.pravatar.cc/100?img=12',data:'3 dias'},
+  {nome:'Isabela Martins',   ig:'@isabelamartins',  valor:3700, frase:'"dinheiro é só um número. um número grande."', foto:'https://i.pravatar.cc/100?img=45',data:'4 dias'},
+  {nome:'Lucas Carvalho',    ig:'@lucascarvalho',   valor:2900, frase:'"meu contador vai ver isso e chorar"',    foto:'https://i.pravatar.cc/100?img=18',data:'4 dias'},
+  {nome:'Fernanda Rocha',    ig:'@fernandarocha',   valor:2100, frase:'"investimento em marca pessoal 😎"',      foto:'https://i.pravatar.cc/100?img=49',data:'5 dias'},
+  {nome:'Bruno Rezende',     ig:'@brunorezendesp',  valor:1600, frase:'"fui chamado de louco. não me arrependo."', foto:'https://i.pravatar.cc/100?img=22',data:'5 dias'},
+  {nome:'Carla Mendes',      ig:'@carlamendes',     valor:1350, frase:'"melhor que terapia e mais barato"',       foto:'https://i.pravatar.cc/100?img=47',data:'6 dias'},
+  {nome:'Diego Santana',     ig:'@diegosantana',    valor:950,  frase:'"a humildade pode esperar"',               foto:'https://i.pravatar.cc/100?img=30',data:'1 semana'},
+  {nome:'Vitória Lopes',     ig:'@vitorialopess',   valor:750,  frase:'"meu pai disse que era besteira. entrei."', foto:'https://i.pravatar.cc/100?img=44',data:'1 semana'},
+  {nome:'Henrique Castro',   ig:'@henriquecastro',  valor:620,  frase:'"histórico de família agora inclui isso"', foto:'https://i.pravatar.cc/100?img=17',data:'1 semana'},
+  {nome:'Beatriz Nunes',     ig:'@beatriznunes_',   valor:480,  frase:'"to no ranking, logo existo"',             foto:'https://i.pravatar.cc/100?img=43',data:'2 semanas'},
+  {nome:'Mateus Oliveira',   ig:'@mateusoliveira',  valor:380,  frase:'"quando crescer quero ser o Felipe"',      foto:'https://i.pravatar.cc/100?img=28',data:'2 semanas'},
+  {nome:'Sabrina Freitas',   ig:'@sabrinafreitas',  valor:320,  frase:'"entrei pra ver o que acontece"',          foto:'https://i.pravatar.cc/100?img=48',data:'2 semanas'},
+  {nome:'Caio Ferreira',     ig:'@caioferreira_',   valor:270,  frase:'"tô quebrado mas tô no ranking"',          foto:'https://i.pravatar.cc/100?img=36',data:'2 semanas'},
+  {nome:'Natália Campos',    ig:'@nataliacampos',   valor:230,  frase:'"o diploma valeu mais que a faculdade"',   foto:'https://i.pravatar.cc/100?img=46',data:'3 semanas'},
+  {nome:'Vinícius Barros',   ig:'@viniciusbarros',  valor:190,  frase:'"primeiro passo de uma longa jornada"',    foto:'https://i.pravatar.cc/100?img=32',data:'3 semanas'},
+  {nome:'Laís Teixeira',     ig:'@laisteixeira',    valor:170,  frase:'"entrei pra tirar foto com o diploma"',    foto:'https://i.pravatar.cc/100?img=40',data:'3 semanas'},
+  {nome:'Rafael Prado',      ig:'@rafaelprado',     valor:160,  frase:'"suporte técnico também pode ser rico"',   foto:'https://i.pravatar.cc/100?img=29',data:'3 semanas'},
+  {nome:'Mônica Silveira',   ig:'@monicasilveira',  valor:130,  frase:'"dizem que é loucura. concordo."',         foto:'https://i.pravatar.cc/100?img=42',data:'1 mês'},
+  {nome:'Enzo Ramos',        ig:'@enzoramos',       valor:120,  frase:'"entrei no ranking antes de ser famoso"',  foto:'https://i.pravatar.cc/100?img=35',data:'1 mês'},
+  {nome:'Amanda Soares',     ig:'@amandasoares',    valor:110,  frase:'"R$110 bem investidos"',                   foto:'https://i.pravatar.cc/100?img=50',data:'1 mês'},
 ];
 const M=['🥇','🥈','🥉'];
 let uPhoto='';
 const fR=n=>'R$ '+n.toLocaleString('pt-BR');
 
+let hrShown=15;
 function renderHero(){
   const el=document.getElementById('hrList');
-  DATA.forEach((r,i)=>{
+  const start=el.querySelectorAll('.hr-item').length;
+  const end=Math.min(hrShown,DATA.length);
+  for(let i=start;i<end;i++){
+    const r=DATA[i];
     const d=document.createElement('div');
     d.className='hr-item';
     d.innerHTML=`
@@ -414,7 +441,18 @@ function renderHero(){
       </div>
       <div class="hr-val">${fR(r.valor)}</div>`;
     el.appendChild(d);
-  });
+  }
+  const old=document.getElementById('verMaisBtn');
+  if(old)old.remove();
+  if(hrShown<DATA.length){
+    const rest=DATA.length-hrShown;
+    const btn=document.createElement('button');
+    btn.id='verMaisBtn';
+    btn.className='ver-mais-btn';
+    btn.innerHTML=`Ver mais <span>${rest} diplomados</span>`;
+    btn.onclick=()=>{hrShown+=15;renderHero();};
+    el.after(btn);
+  }
 }
 
 let tuIdx=-1;
