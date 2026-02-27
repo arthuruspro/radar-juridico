@@ -188,7 +188,7 @@ Monitorar meu CPF
 
 <div class="cpf-result-solution">
   <div class="cpf-result-price" style="margin-bottom:20px;">
-    <div class="price-value" id="priceDisplay">R$ 5<span>/mês</span></div>
+    <div class="price-value" id="priceDisplay">R$ 147<span>/mês</span></div>
     <div id="annualNote" style="display:none;font-size:13px;color:var(--text-muted);margin-top:6px;">você economiza R$767</div>
   </div>
   <ul class="cpf-solution-list">
@@ -239,7 +239,7 @@ Monitorar meu CPF
 <div class="cpf-step" id="cpfStep7">
 <div class="cpf-step-icon" style="background:#fef3c7;font-size:32px;">⏳</div>
 <h2 style="color:#16a34a;">Quase lá!</h2>
-<p class="cpf-desc" style="margin-bottom:20px;">Escaneie o QR Code abaixo no <strong>app do seu banco</strong> para autorizar o PIX Automático de <strong id="successPrice">R$5/mês</strong>.</p>
+<p class="cpf-desc" style="margin-bottom:20px;">Escaneie o QR Code abaixo no <strong>app do seu banco</strong> para autorizar o PIX Automático de <strong id="successPrice">R$147/mês</strong>.</p>
 
 <div class="qr-wrap">
   <img id="qrCodeImg" src="" alt="QR Code PIX Automático">
@@ -269,6 +269,9 @@ Monitorar meu CPF
       <div>Pronto — você receberá um <strong>WhatsApp de confirmação</strong> em instantes</div>
     </li>
   </ul>
+  <button onclick="window.location.href='https://radar-juridico.com/remocao/'" style="display:block;width:100%;margin-top:24px;padding:18px;background:#16a34a;color:#fff;font-family:var(--font-body);font-size:17px;font-weight:700;border:none;border-radius:14px;cursor:pointer;transition:all 0.25s;" onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
+    ✅ Já autorizei — continuar
+  </button>
 </div>
 </div>
 
@@ -304,9 +307,9 @@ function toggleBilling(){
     labelAnnual.style.color  = 'var(--text)';        labelAnnual.style.fontWeight  = '700';
   } else {
     knob.style.transform = 'translateX(0)';
-    priceDisplay.innerHTML = 'R$ 5<span>/mês</span>';
+    priceDisplay.innerHTML = 'R$ 147<span>/mês</span>';
     annualNote.style.display = 'none';
-    successPrice.textContent = 'R$5/mês';
+    successPrice.textContent = 'R$147/mês';
     labelMonthly.style.color = 'var(--text)';        labelMonthly.style.fontWeight = '700';
     labelAnnual.style.color  = 'var(--text-muted)';  labelAnnual.style.fontWeight  = '600';
   }
