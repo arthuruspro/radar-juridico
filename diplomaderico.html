@@ -8,1027 +8,459 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-
 :root{
-  --bg:#08060300;
-  --bg-solid:#080603;
-  --gold:#c8a84b;
-  --gold-light:#e9d07c;
-  --gold-dim:#7a6128;
-  --gold-muted:rgba(200,168,75,0.15);
-  --cream:#f2ead8;
-  --cream-dim:#a89870;
-  --border:rgba(200,168,75,0.2);
-  --border-bright:rgba(200,168,75,0.55);
-  --red-seal:#8b1a1a;
-  --fp:'Playfair Display',Georgia,serif;
-  --fb:'Cormorant Garamond',Georgia,serif;
+  --bg:#080603;
+  --gold:#c8a84b;--gl:#e9d07c;--gd:#7a6128;
+  --cream:#f2ead8;--cd:#a89870;
+  --b:rgba(200,168,75,0.2);--bb:rgba(200,168,75,0.55);
+  --fp:'Playfair Display',serif;
+  --fb:'Cormorant Garamond',serif;
   --fm:'DM Mono',monospace;
 }
+html{background:var(--bg);color:var(--cream);font-family:var(--fb);min-height:100vh;overflow-x:hidden}
+html::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.6) 100%);pointer-events:none;z-index:9999}
 
-html{
-  background:var(--bg-solid);
-  color:var(--cream);
-  font-family:var(--fb);
-  min-height:100vh;
-  overflow-x:hidden;
-  cursor:default;
-}
+/* TOPBAR */
+.tb{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(8,6,3,0.98) 60%,transparent);backdrop-filter:blur(4px)}
+.tl{font-family:var(--fm);font-size:11px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.tl::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 2s infinite}
+@keyframes blink{0%,100%{box-shadow:0 0 0 0 rgba(200,168,75,0.5)}50%{box-shadow:0 0 0 5px rgba(200,168,75,0)}}
+.tcta{padding:8px 20px;background:var(--gold);color:#000;font-family:var(--fp);font-size:12px;font-weight:700;border:none;border-radius:1px;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;transition:all 0.2s}
+.tcta:hover{background:var(--gl)}
 
-/* === GRAIN + VIGNETTE === */
-html::before{
-  content:'';
-  position:fixed;inset:0;
-  background:
-    radial-gradient(ellipse at center,transparent 40%,rgba(0,0,0,0.7) 100%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)' opacity='0.07'/%3E%3C/svg%3E");
-  pointer-events:none;
-  z-index:9999;
-}
-
-/* === TOP BAR === */
-.topbar{
-  position:fixed;top:0;left:0;right:0;
-  z-index:200;
-  padding:0 32px;
-  height:56px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:linear-gradient(to bottom,rgba(8,6,3,0.97) 60%,transparent);
-  backdrop-filter:blur(4px);
-}
-.topbar-logo{
-  font-family:var(--fm);
-  font-size:11px;letter-spacing:0.22em;
-  color:var(--gold);text-transform:uppercase;
-  display:flex;align-items:center;gap:10px;
-}
-.topbar-logo::before{
-  content:'';width:8px;height:8px;
-  border-radius:50%;background:var(--gold);
-  animation:pulse 2s infinite;
-}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(200,168,75,0.4)}50%{opacity:0.8;box-shadow:0 0 0 6px rgba(200,168,75,0)}}
-
-.topbar-cta{
-  padding:9px 22px;
-  background:var(--gold);color:#000;
-  font-family:var(--fp);font-size:12px;font-weight:700;
-  border:none;border-radius:1px;
-  cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;
-  transition:all 0.2s;
-}
-.topbar-cta:hover{background:var(--gold-light);transform:translateY(-1px)}
-
-/* === HERO === */
-.hero{
-  min-height:100vh;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:80px 24px 60px;
-  text-align:center;
-  position:relative;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% -10%,rgba(200,168,75,0.13) 0%,transparent 70%),
-    radial-gradient(ellipse 40% 40% at 50% 50%,rgba(200,168,75,0.04) 0%,transparent 100%);
-}
-
-.hero::after{
-  content:'';
-  position:absolute;bottom:0;left:8%;right:8%;
-  height:1px;
-  background:linear-gradient(90deg,transparent,var(--gold),transparent);
-}
+/* HERO */
+.hero{display:flex;flex-direction:column;align-items:center;padding:90px 24px 60px;text-align:center;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(200,168,75,0.12),transparent 70%);position:relative}
+.hero::after{content:'';position:absolute;bottom:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 
 /* BRASÃO */
-.seal{
-  position:relative;
-  width:112px;height:112px;
-  margin:0 auto 36px;
-  animation:levitate 6s ease-in-out infinite;
-}
-@keyframes levitate{
-  0%,100%{transform:translateY(0) rotate(0deg)}
-  33%{transform:translateY(-8px) rotate(0.5deg)}
-  66%{transform:translateY(-4px) rotate(-0.5deg)}
-}
-.seal svg{width:100%;height:100%;filter:drop-shadow(0 0 20px rgba(200,168,75,0.35))}
+.seal{width:96px;height:96px;margin:0 auto 24px;animation:lev 6s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(200,168,75,0.3))}
+@keyframes lev{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
-/* LABEL TOPO */
-.eyebrow{
-  font-family:var(--fm);
-  font-size:10px;letter-spacing:0.28em;
-  color:var(--gold-dim);text-transform:uppercase;
-  margin-bottom:20px;
-  opacity:0;animation:rise 0.7s ease 0.1s forwards;
-}
+.eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:0.24em;color:var(--gd);text-transform:uppercase;margin-bottom:16px;opacity:0;animation:up 0.7s ease 0.1s forwards}
+h1{font-family:var(--fp);font-size:clamp(48px,9vw,96px);font-weight:900;line-height:0.95;letter-spacing:-0.025em;color:var(--gl);opacity:0;animation:up 0.7s ease 0.2s forwards}
+h1 em{font-style:italic;color:var(--cream);display:block}
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.hdesc{font-size:clamp(15px,2vw,18px);font-style:italic;color:var(--cd);margin-top:16px;max-width:440px;line-height:1.7;opacity:0;animation:up 0.7s ease 0.3s forwards}
 
-/* HEADLINE */
-h1{
-  font-family:var(--fp);
-  font-size:clamp(52px,10vw,104px);
-  font-weight:900;line-height:0.95;
-  letter-spacing:-0.03em;
-  color:var(--gold-light);
-  opacity:0;animation:rise 0.7s ease 0.2s forwards;
-  margin-bottom:4px;
-}
-h1 em{
-  font-style:italic;color:var(--cream);
-  display:block;
-}
+/* STATS */
+.stats{display:flex;border:1px solid var(--b);border-radius:1px;overflow:hidden;margin:28px auto;width:fit-content;opacity:0;animation:up 0.7s ease 0.35s forwards}
+.stat{padding:14px 28px;text-align:center;position:relative}
+.stat+.stat::before{content:'';position:absolute;left:0;top:20%;bottom:20%;width:1px;background:var(--b)}
+.sn{font-family:var(--fp);font-size:24px;font-weight:700;color:var(--gold);display:block;line-height:1}
+.sl{font-family:var(--fm);font-size:9px;letter-spacing:0.12em;color:var(--cd);text-transform:uppercase;display:block;margin-top:4px}
 
-@keyframes rise{
-  from{opacity:0;transform:translateY(28px)}
-  to{opacity:1;transform:translateY(0)}
-}
+/* RANKING NO HERO */
+.hrank{width:100%;max-width:600px;opacity:0;animation:up 0.7s ease 0.45s forwards}
+.hr-label{font-family:var(--fm);font-size:9px;letter-spacing:0.22em;color:var(--gd);text-transform:uppercase;margin-bottom:12px;text-align:left;padding-left:2px}
+.hr-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(110deg,rgba(200,168,75,0.08),rgba(200,168,75,0.02));border:1px solid var(--b);border-radius:1px;margin-bottom:7px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;text-align:left}
+.hr-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--gd)}
+.hr-item:nth-child(1)::before{background:var(--gl);box-shadow:0 0 8px var(--gold)}
+.hr-item:nth-child(2)::before{background:#c0c0c0}
+.hr-item:nth-child(3)::before{background:#cd7f32}
+.hr-item:hover{border-color:var(--bb);transform:translateX(3px)}
+.hr-med{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.hr-av{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--bb);flex-shrink:0;overflow:hidden;background:rgba(200,168,75,0.08)}
+.hr-av img{width:100%;height:100%;object-fit:cover;display:block}
+.hr-info{flex:1;min-width:0}
+.hr-name{font-family:var(--fp);font-size:14px;font-weight:700;color:var(--cream)}
+.hr-ig{font-family:var(--fm);font-size:10px;color:var(--gd);margin-left:6px}
+.hr-frase{font-style:italic;font-size:12px;color:var(--cd);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px}
+.hr-val{font-family:var(--fp);font-size:16px;font-weight:700;color:var(--gold);flex-shrink:0}
+.hr-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--b)}
+.hr-foot-txt{font-family:var(--fm);font-size:9px;letter-spacing:0.1em;color:var(--gd);text-transform:uppercase}
+.hr-foot-btn{padding:10px 22px;background:var(--gold);color:#000;font-family:var(--fp);font-size:14px;font-weight:700;border:none;border-radius:1px;cursor:pointer;transition:all 0.2s;white-space:nowrap}
+.hr-foot-btn:hover{background:var(--gl)}
 
-.hero-desc{
-  font-size:clamp(16px,2.2vw,20px);
-  font-style:italic;color:var(--cream-dim);
-  margin-top:20px;max-width:480px;line-height:1.65;
-  opacity:0;animation:rise 0.7s ease 0.3s forwards;
-}
-
-/* STATS — FOMO */
-.stats{
-  display:flex;align-items:center;gap:0;
-  margin:40px auto;
-  border:1px solid var(--border);
-  border-radius:2px;
-  overflow:hidden;
-  opacity:0;animation:rise 0.7s ease 0.4s forwards;
-  width:fit-content;
-}
-.stat{
-  padding:18px 32px;text-align:center;
-  position:relative;
-}
-.stat+.stat::before{
-  content:'';position:absolute;left:0;top:20%;bottom:20%;
-  width:1px;background:var(--border);
-}
-.stat-n{
-  font-family:var(--fp);font-size:28px;font-weight:700;
-  color:var(--gold);display:block;line-height:1;
-}
-.stat-l{
-  font-family:var(--fm);font-size:9px;letter-spacing:0.14em;
-  color:var(--cream-dim);text-transform:uppercase;
-  display:block;margin-top:5px;
-}
-
-/* CTA */
-.hero-cta{
-  opacity:0;animation:rise 0.7s ease 0.5s forwards;
-  display:flex;flex-direction:column;align-items:center;gap:12px;
-}
-.cta-main{
-  padding:20px 56px;
-  background:var(--gold);color:#000;
-  font-family:var(--fp);font-size:19px;font-weight:700;
-  border:none;border-radius:1px;cursor:pointer;
-  letter-spacing:0.01em;
-  transition:all 0.25s;
-  box-shadow:0 0 0 0 rgba(200,168,75,0.5);
-  position:relative;overflow:hidden;
-}
-.cta-main::after{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(255,255,255,0.12) 0%,transparent 50%);
-}
-.cta-main:hover{
-  background:var(--gold-light);
-  box-shadow:0 8px 48px rgba(200,168,75,0.45);
-  transform:translateY(-2px);
-}
-.cta-sub{
-  font-family:var(--fm);font-size:10px;
-  letter-spacing:0.14em;color:var(--gold-dim);
-  text-transform:uppercase;
-}
-
-/* === RANKING PREVIEW (visible antes do fold em desktop) === */
-.rank-preview{
-  opacity:0;animation:rise 0.7s ease 0.65s forwards;
-  margin-top:48px;width:100%;max-width:560px;
-  border-top:1px solid var(--border);
-  padding-top:24px;
-}
-.rp-label{
-  font-family:var(--fm);font-size:9px;letter-spacing:0.22em;
-  color:var(--gold-dim);text-transform:uppercase;
-  margin-bottom:14px;text-align:left;
-}
-.rp-item{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 0;border-bottom:1px solid rgba(200,168,75,0.08);
-  text-align:left;
-}
-.rp-medal{font-size:15px;width:20px;text-align:center;flex-shrink:0}
-.rp-avatar{
-  width:36px;height:36px;border-radius:50%;
-  border:1.5px solid var(--border-bright);
-  object-fit:cover;flex-shrink:0;
-  background:rgba(200,168,75,0.08);
-  overflow:hidden;
-}
-.rp-avatar img{width:100%;height:100%;object-fit:cover}
-.rp-info{flex:1;min-width:0}
-.rp-name{font-family:var(--fp);font-size:14px;font-weight:700;color:var(--cream)}
-.rp-comment{font-style:italic;font-size:12px;color:var(--cream-dim);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rp-val{font-family:var(--fp);font-size:16px;font-weight:700;color:var(--gold);flex-shrink:0}
-.rp-more{
-  text-align:center;padding:14px;
-  font-family:var(--fm);font-size:10px;letter-spacing:0.12em;
-  color:var(--gold-dim);text-transform:uppercase;cursor:pointer;
-  transition:color 0.2s;
-}
-.rp-more:hover{color:var(--gold)}
-
-/* === FULL RANKING SECTION === */
-.rank-section{
-  max-width:680px;margin:0 auto;
-  padding:80px 24px;
-}
-.section-eyebrow{
-  text-align:center;
-  font-family:var(--fm);font-size:10px;letter-spacing:0.22em;
-  color:var(--gold-dim);text-transform:uppercase;margin-bottom:12px;
-}
-.section-title{
-  text-align:center;
-  font-family:var(--fp);font-size:clamp(28px,5vw,44px);
-  font-weight:700;color:var(--gold);margin-bottom:8px;
-}
-.section-sub{
-  text-align:center;font-style:italic;
-  color:var(--cream-dim);font-size:16px;margin-bottom:48px;
-}
-.rank-divider{
-  display:flex;align-items:center;gap:12px;margin-bottom:48px;
-}
-.rank-divider-line{flex:1;height:1px;background:var(--border)}
-.rank-divider-gem{color:var(--gold);font-size:12px}
-
-.full-list{display:flex;flex-direction:column;gap:8px}
-
-.ri{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 18px;
-  background:linear-gradient(110deg,rgba(200,168,75,0.07) 0%,rgba(200,168,75,0.02) 100%);
-  border:1px solid var(--border);
-  border-radius:1px;
-  transition:all 0.22s;
-  position:relative;overflow:hidden;
-}
-.ri::before{
-  content:'';position:absolute;
-  left:0;top:0;bottom:0;width:2.5px;
-  background:var(--gold-dim);
-}
-.ri:nth-child(1)::before{background:var(--gold-light);box-shadow:0 0 12px var(--gold)}
-.ri:nth-child(2)::before{background:#b8b8b8}
-.ri:nth-child(3)::before{background:#b07f3c}
-.ri:hover{border-color:var(--border-bright);transform:translateX(3px)}
-
-.ri-pos{
-  font-family:var(--fm);font-size:11px;color:var(--gold-dim);
-  width:22px;text-align:center;flex-shrink:0;
-}
-.ri:nth-child(1) .ri-pos{font-size:18px;color:var(--gold-light)}
+/* FULL RANKING */
+.rsec{max-width:680px;margin:0 auto;padding:80px 24px}
+.sey{text-align:center;font-family:var(--fm);font-size:10px;letter-spacing:0.22em;color:var(--gd);text-transform:uppercase;margin-bottom:10px}
+.stitle{text-align:center;font-family:var(--fp);font-size:clamp(26px,5vw,42px);font-weight:700;color:var(--gold);margin-bottom:8px}
+.ssub{text-align:center;font-style:italic;color:var(--cd);font-size:16px;margin-bottom:44px}
+.rdiv{display:flex;align-items:center;gap:12px;margin-bottom:44px}
+.rdl{flex:1;height:1px;background:var(--b)}
+.rdg{color:var(--gold);font-size:11px}
+.fl{display:flex;flex-direction:column;gap:8px}
+.ri{display:flex;align-items:center;gap:14px;padding:14px 18px;background:linear-gradient(110deg,rgba(200,168,75,0.07),rgba(200,168,75,0.02));border:1px solid var(--b);border-radius:1px;transition:all 0.22s;position:relative;overflow:hidden}
+.ri::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2.5px;background:var(--gd)}
+.ri:nth-child(1)::before{background:var(--gl);box-shadow:0 0 10px var(--gold)}
+.ri:nth-child(2)::before{background:#c0c0c0}
+.ri:nth-child(3)::before{background:#cd7f32}
+.ri:hover{border-color:var(--bb);transform:translateX(3px)}
+.ri-pos{font-family:var(--fm);font-size:11px;color:var(--gd);width:22px;text-align:center;flex-shrink:0}
+.ri:nth-child(1) .ri-pos{font-size:18px;color:var(--gl)}
 .ri:nth-child(2) .ri-pos{font-size:16px;color:#c0c0c0}
 .ri:nth-child(3) .ri-pos{font-size:15px;color:#cd7f32}
-
-.ri-avatar{
-  width:46px;height:46px;border-radius:50%;
-  border:2px solid var(--border);flex-shrink:0;
-  overflow:hidden;background:rgba(200,168,75,0.06);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--fp);font-size:19px;font-weight:700;color:var(--gold);
-}
-.ri-avatar img{width:100%;height:100%;object-fit:cover}
-
+.ri-av{width:46px;height:46px;border-radius:50%;border:2px solid var(--b);flex-shrink:0;overflow:hidden;background:rgba(200,168,75,0.06);display:flex;align-items:center;justify-content:center;font-family:var(--fp);font-size:19px;font-weight:700;color:var(--gold)}
+.ri-av img{width:100%;height:100%;object-fit:cover}
 .ri-info{flex:1;min-width:0}
-.ri-name{
-  font-family:var(--fp);font-size:15px;font-weight:700;color:var(--cream);
-  display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;
-}
-.ri-insta{font-family:var(--fm);font-size:10px;color:var(--gold-dim);letter-spacing:0.06em}
-.ri-comment{
-  font-style:italic;font-size:13px;color:var(--cream-dim);
-  margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
-  max-width:320px;
-}
+.ri-name{font-family:var(--fp);font-size:15px;font-weight:700;color:var(--cream)}
+.ri-ig{font-family:var(--fm);font-size:10px;color:var(--gd);margin-left:6px}
+.ri-frase{font-style:italic;font-size:13px;color:var(--cd);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
+.ri-r{text-align:right;flex-shrink:0}
+.ri-val{font-family:var(--fp);font-size:18px;font-weight:700;color:var(--gold)}
+.ri-date{font-family:var(--fm);font-size:9px;color:var(--gd);margin-top:2px}
+.rcta{text-align:center;margin-top:36px}
+.rcta-btn{padding:14px 40px;background:transparent;border:1px solid var(--bb);color:var(--gold);font-family:var(--fp);font-size:16px;font-weight:700;border-radius:1px;cursor:pointer;transition:all 0.2s}
+.rcta-btn:hover{background:rgba(200,168,75,0.07)}
 
-.ri-right{text-align:right;flex-shrink:0}
-.ri-valor{font-family:var(--fp);font-size:18px;font-weight:700;color:var(--gold)}
-.ri-date{font-family:var(--fm);font-size:9px;color:var(--gold-dim);margin-top:2px}
+footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-family:var(--fm);font-size:9px;letter-spacing:0.14em;color:var(--gd);text-transform:uppercase;line-height:2}
 
-.rank-enter-cta{
-  text-align:center;margin-top:40px;
-}
-.rank-enter-btn{
-  padding:15px 44px;
-  background:transparent;
-  border:1px solid var(--border-bright);
-  color:var(--gold);
-  font-family:var(--fp);font-size:17px;font-weight:700;
-  border-radius:1px;cursor:pointer;
-  transition:all 0.2s;letter-spacing:0.01em;
-}
-.rank-enter-btn:hover{background:rgba(200,168,75,0.07);border-color:var(--gold)}
-
-/* === MODAL === */
-.overlay{
-  display:none;position:fixed;inset:0;
-  z-index:300;background:rgba(4,3,1,0.9);
-  backdrop-filter:blur(12px);
-  align-items:center;justify-content:center;
-  padding:20px;
-}
-.overlay.on{display:flex}
-
-.modal{
-  background:#0e0b05;
-  border:1px solid var(--border-bright);
-  border-radius:2px;
-  width:100%;max-width:480px;
-  max-height:92vh;overflow-y:auto;
-  padding:44px 40px;
-  position:relative;
-  scroll-behavior:smooth;
-}
-.modal::before{
-  content:'';position:absolute;top:0;left:0;right:0;
-  height:2px;
-  background:linear-gradient(90deg,transparent 0%,var(--gold) 50%,transparent 100%);
-}
-
-.modal-close{
-  position:absolute;top:14px;right:16px;
-  background:none;border:none;
-  color:var(--gold-dim);font-size:18px;
-  cursor:pointer;padding:6px;line-height:1;
-  transition:color 0.2s;
-}
-.modal-close:hover{color:var(--gold)}
-
-.modal-eyebrow{
-  text-align:center;
-  font-family:var(--fm);font-size:9px;letter-spacing:0.22em;
-  color:var(--gold-dim);text-transform:uppercase;margin-bottom:8px;
-}
-.modal-title{
-  font-family:var(--fp);font-size:26px;font-weight:700;
-  color:var(--gold);text-align:center;margin-bottom:6px;
-}
-.modal-sub{
-  text-align:center;font-style:italic;
-  color:var(--cream-dim);font-size:14px;margin-bottom:32px;
-}
-
-/* fields */
-.flabel{
-  display:block;
-  font-family:var(--fm);font-size:9px;letter-spacing:0.16em;
-  text-transform:uppercase;color:var(--gold-dim);
-  margin-bottom:7px;
-}
-.flabel small{font-size:9px;color:var(--cream-dim);text-transform:none;letter-spacing:0;font-style:italic;margin-left:4px}
-
-.finp{
-  width:100%;
-  background:rgba(200,168,75,0.04);
-  border:1px solid var(--border);border-radius:1px;
-  padding:13px 15px;
-  font-family:var(--fb);font-size:16px;color:var(--cream);
-  outline:none;transition:border-color 0.2s;
-  margin-bottom:20px;
-}
-.finp:focus{border-color:var(--gold)}
-.finp::placeholder{color:rgba(162,152,112,0.3)}
-
-.valor-row{display:flex;align-items:stretch;margin-bottom:6px}
-.valor-pre{
-  background:rgba(200,168,75,0.08);
-  border:1px solid var(--border);border-right:none;border-radius:1px 0 0 1px;
-  padding:13px 15px;
-  font-family:var(--fp);font-size:20px;color:var(--gold);
-  display:flex;align-items:center;flex-shrink:0;
-}
-.valor-finp{
-  flex:1;
-  background:rgba(200,168,75,0.04);
-  border:1px solid var(--border);border-left:none;border-radius:0 1px 1px 0;
-  padding:13px 15px;
-  font-family:var(--fp);font-size:26px;font-weight:700;color:var(--gold-light);
-  outline:none;transition:border-color 0.2s;
-}
-.valor-finp:focus{border-color:var(--gold)}
-.valor-finp::placeholder{color:rgba(200,168,75,0.15)}
-.valor-hint{font-size:12px;font-style:italic;color:var(--cream-dim);margin-bottom:20px;margin-top:4px}
-
-/* foto upload */
-.foto-zone{
-  border:1.5px dashed var(--border);border-radius:2px;
-  padding:26px;text-align:center;cursor:pointer;
-  transition:all 0.2s;margin-bottom:20px;position:relative;overflow:hidden;
-}
-.foto-zone:hover{border-color:var(--gold);background:rgba(200,168,75,0.03)}
-.foto-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.foto-zone-preview{
-  width:68px;height:68px;border-radius:50%;
-  object-fit:cover;border:2.5px solid var(--gold);
-  margin:0 auto 8px;display:none;
-}
-.foto-ph-icon{font-size:26px;margin-bottom:6px}
-.foto-ph-txt{font-style:italic;color:var(--cream-dim);font-size:14px}
-.foto-ph-sub{font-family:var(--fm);font-size:9px;color:var(--gold-dim);margin-top:4px}
-
-/* submit btn */
-.submit-btn{
-  width:100%;padding:17px;
-  background:var(--gold);color:#000;
-  font-family:var(--fp);font-size:17px;font-weight:700;
-  border:none;border-radius:1px;cursor:pointer;
-  transition:all 0.2s;letter-spacing:0.01em;
-  position:relative;overflow:hidden;
-}
-.submit-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 50%)}
-.submit-btn:hover{background:var(--gold-light);transform:translateY(-1px);box-shadow:0 6px 28px rgba(200,168,75,0.3)}
+/* OVERLAY */
+.ov{display:none;position:fixed;inset:0;z-index:300;background:rgba(4,3,1,0.92);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px}
+.ov.on{display:flex}
+.modal{background:#0e0b05;border:1px solid var(--bb);border-radius:2px;width:100%;max-width:480px;max-height:92vh;overflow-y:auto;padding:44px 40px;position:relative}
+.modal::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.mcl{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--gd);font-size:18px;cursor:pointer;padding:6px;line-height:1;transition:color 0.2s}
+.mcl:hover{color:var(--gold)}
+.mey{text-align:center;font-family:var(--fm);font-size:9px;letter-spacing:0.22em;color:var(--gd);text-transform:uppercase;margin-bottom:8px}
+.mtitle{font-family:var(--fp);font-size:26px;font-weight:700;color:var(--gold);text-align:center;margin-bottom:6px}
+.msub{text-align:center;font-style:italic;color:var(--cd);font-size:14px;margin-bottom:32px}
+.fl2{display:block;font-family:var(--fm);font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gd);margin-bottom:7px}
+.fl2 small{font-size:9px;color:var(--cd);text-transform:none;letter-spacing:0;font-style:italic;margin-left:4px}
+.inp{width:100%;background:rgba(200,168,75,0.04);border:1px solid var(--b);border-radius:1px;padding:13px 15px;font-family:var(--fb);font-size:16px;color:var(--cream);outline:none;transition:border-color 0.2s;margin-bottom:20px}
+.inp:focus{border-color:var(--gold)}
+.inp::placeholder{color:rgba(162,152,112,0.3)}
+.vrow{display:flex;align-items:stretch;margin-bottom:6px}
+.vpre{background:rgba(200,168,75,0.08);border:1px solid var(--b);border-right:none;border-radius:1px 0 0 1px;padding:13px 15px;font-family:var(--fp);font-size:20px;color:var(--gold);display:flex;align-items:center;flex-shrink:0}
+.vinp{flex:1;background:rgba(200,168,75,0.04);border:1px solid var(--b);border-left:none;border-radius:0 1px 1px 0;padding:13px 15px;font-family:var(--fp);font-size:26px;font-weight:700;color:var(--gl);outline:none;transition:border-color 0.2s}
+.vinp:focus{border-color:var(--gold)}
+.vinp::placeholder{color:rgba(200,168,75,0.15)}
+.vhint{font-size:12px;font-style:italic;color:var(--cd);margin-bottom:20px;margin-top:4px}
+.fz{border:1.5px dashed var(--b);border-radius:2px;padding:26px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:20px;position:relative;overflow:hidden}
+.fz:hover{border-color:var(--gold);background:rgba(200,168,75,0.03)}
+.fz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.fprev{width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold);margin:0 auto 8px;display:none}
+.fph{font-style:italic;color:var(--cd);font-size:14px}
+.fphs{font-family:var(--fm);font-size:9px;color:var(--gd);margin-top:4px}
+.sbtn{width:100%;padding:17px;background:var(--gold);color:#000;font-family:var(--fp);font-size:17px;font-weight:700;border:none;border-radius:1px;cursor:pointer;transition:all 0.2s;margin-top:6px}
+.sbtn:hover{background:var(--gl);transform:translateY(-1px)}
 
 /* PIX */
-.pix-box{
-  display:none;
-  background:rgba(200,168,75,0.04);
-  border:1px solid var(--border-bright);
-  border-radius:2px;padding:28px;
-  text-align:center;margin-top:20px;
-}
-.pix-box.show{display:block}
-.pix-title-t{font-family:var(--fp);font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px}
-.pix-val{font-family:var(--fp);font-size:36px;font-weight:900;color:var(--gold-light);margin-bottom:18px}
-.pix-qr{
-  width:156px;height:156px;background:#fff;
-  border-radius:6px;margin:0 auto 16px;
-  overflow:hidden;display:flex;align-items:center;justify-content:center;
-}
-.pix-qr img{width:100%;height:100%}
-.pix-chave{
-  font-family:var(--fm);font-size:12px;color:var(--cream-dim);
-  background:rgba(0,0,0,0.4);padding:10px 14px;border-radius:2px;
-  margin-bottom:12px;word-break:break-all;
-}
-.pix-copy{
-  width:100%;padding:11px;
-  background:transparent;border:1px solid var(--border);
-  color:var(--gold);font-family:var(--fm);font-size:11px;
-  letter-spacing:0.08em;border-radius:1px;cursor:pointer;
-  transition:all 0.2s;
-}
-.pix-copy:hover{border-color:var(--gold)}
-.pix-copy.ok{border-color:#22c55e;color:#22c55e}
-.pix-paid{
-  width:100%;padding:14px;margin-top:10px;
-  background:transparent;
-  border:1px solid rgba(200,168,75,0.35);
-  color:var(--cream-dim);
-  font-family:var(--fp);font-size:15px;
-  border-radius:1px;cursor:pointer;
-  transition:all 0.2s;
-}
-.pix-paid:hover{border-color:var(--gold);color:var(--cream)}
+.pbox{display:none;background:rgba(200,168,75,0.04);border:1px solid var(--bb);border-radius:2px;padding:28px;text-align:center;margin-top:20px}
+.pbox.on{display:block}
+.pt{font-family:var(--fp);font-size:18px;font-weight:700;color:var(--gold);margin-bottom:6px}
+.pv{font-family:var(--fp);font-size:36px;font-weight:900;color:var(--gl);margin-bottom:18px}
+.pqr{width:156px;height:156px;background:#fff;border-radius:6px;margin:0 auto 16px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pqr img{width:100%;height:100%}
+.pkey{font-family:var(--fm);font-size:12px;color:var(--cd);background:rgba(0,0,0,0.4);padding:10px 14px;border-radius:2px;margin-bottom:12px;word-break:break-all}
+.pcopy{width:100%;padding:11px;background:transparent;border:1px solid var(--b);color:var(--gold);font-family:var(--fm);font-size:11px;letter-spacing:0.08em;border-radius:1px;cursor:pointer;transition:all 0.2s}
+.pcopy:hover{border-color:var(--gold)}
+.pcopy.ok{border-color:#22c55e;color:#22c55e}
+.ppaid{width:100%;padding:14px;margin-top:10px;background:transparent;border:1px solid rgba(200,168,75,0.35);color:var(--cd);font-family:var(--fp);font-size:15px;border-radius:1px;cursor:pointer;transition:all 0.2s}
+.ppaid:hover{border-color:var(--gold);color:var(--cream)}
 
-/* === DIPLOMA MODAL === */
-.dip-overlay{
-  display:none;position:fixed;inset:0;
-  z-index:400;
-  background:rgba(2,1,0,0.97);
-  backdrop-filter:blur(16px);
-  align-items:center;justify-content:center;
-  padding:20px;flex-direction:column;gap:20px;
-}
-.dip-overlay.on{display:flex}
-
-/* THE DIPLOMA ITSELF */
-.diploma{
-  background:linear-gradient(160deg,#faf5e4 0%,#f0e8cc 50%,#e8ddb8 100%);
-  color:#1a1004;
-  max-width:640px;width:100%;
-  padding:48px 52px;
-  text-align:center;
-  position:relative;
-  font-family:var(--fp);
-  box-shadow:
-    0 0 0 6px #c8a84b,
-    0 0 0 10px #7a6128,
-    0 0 0 12px #c8a84b,
-    0 32px 100px rgba(0,0,0,0.9);
-}
-.diploma::before,.diploma::after{
-  content:'';position:absolute;pointer-events:none;
-}
+/* DIPLOMA */
+.dov{display:none;position:fixed;inset:0;z-index:400;background:rgba(2,1,0,0.97);backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:20px;flex-direction:column;gap:20px}
+.dov.on{display:flex}
+.diploma{background:linear-gradient(160deg,#faf5e4,#f0e8cc 50%,#e8ddb8);color:#1a1004;max-width:640px;width:100%;padding:48px 52px;text-align:center;position:relative;font-family:var(--fp);box-shadow:0 0 0 6px #c8a84b,0 0 0 10px #7a6128,0 0 0 12px #c8a84b,0 32px 100px rgba(0,0,0,0.9)}
+.diploma::before,.diploma::after{content:'';position:absolute;pointer-events:none}
 .diploma::before{inset:14px;border:1.5px solid rgba(200,168,75,0.4)}
 .diploma::after{inset:18px;border:0.5px solid rgba(200,168,75,0.2)}
+.co{position:absolute;color:rgba(200,168,75,0.55);font-size:18px;line-height:1}
+.co.tl{top:22px;left:22px}
+.co.tr{top:22px;right:22px;transform:scaleX(-1)}
+.co.bl{bottom:22px;left:22px;transform:scaleY(-1)}
+.co.br{bottom:22px;right:22px;transform:scale(-1)}
+.dh{font-family:var(--fm);font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#8a6f2e;margin-bottom:14px}
+.di{font-family:var(--fp);font-size:clamp(16px,3vw,24px);font-weight:900;color:#1a1004;line-height:1.15;margin-bottom:4px}
+.di em{color:#7a5c1e;font-style:italic}
+.dline{display:flex;align-items:center;gap:8px;margin:16px auto;width:fit-content}
+.dlb{width:60px;height:1.5px;background:#c8a84b}
+.dlg{color:#c8a84b;font-size:10px}
+.dc{font-family:var(--fb);font-size:14px;font-style:italic;color:#5a4010}
+.dfoto{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid #c8a84b;display:none;margin:14px auto 6px}
+.dnome{font-family:var(--fp);font-size:clamp(26px,6vw,46px);font-weight:700;font-style:italic;color:#1a1004;line-height:1.1;margin:12px 0}
+.dbody{font-family:var(--fb);font-size:13px;font-style:italic;color:#5a4010;line-height:1.8;max-width:420px;margin:0 auto 20px}
+.dvb{display:inline-block;border:1.5px solid #c8a84b;padding:12px 32px;margin-bottom:20px}
+.dvl{font-family:var(--fm);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:#8a6f2e;margin-bottom:4px}
+.dvn{font-family:var(--fp);font-size:clamp(28px,6vw,44px);font-weight:900;color:#7a5c1e}
+.dft{display:flex;justify-content:space-between;align-items:flex-end;margin-top:28px;padding-top:18px;border-top:1px solid rgba(200,168,75,0.35)}
+.ds{text-align:center}
+.dsn{font-style:italic;font-size:16px;color:#1a1004;margin-bottom:2px}
+.dsl{width:100px;height:1px;background:#1a1004;margin:6px auto 4px}
+.dsc{font-family:var(--fm);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:#5a4010}
+.dacts{display:flex;gap:10px;width:100%;max-width:640px}
+.da{flex:1;padding:14px;font-family:var(--fp);font-size:14px;font-weight:700;border-radius:1px;cursor:pointer;transition:all 0.2s;border:none}
+.da.p{background:var(--gold);color:#000}
+.da.p:hover{background:var(--gl)}
+.da.g{background:transparent;border:1px solid var(--b);color:var(--cream)}
+.da.g:hover{border-color:var(--gold)}
 
-/* ornamentos cantos */
-.corner{
-  position:absolute;width:28px;height:28px;
-  color:rgba(200,168,75,0.6);font-size:20px;line-height:1;
-}
-.corner-tl{top:22px;left:22px}
-.corner-tr{top:22px;right:22px;transform:scaleX(-1)}
-.corner-bl{bottom:22px;left:22px;transform:scaleY(-1)}
-.corner-br{bottom:22px;right:22px;transform:scale(-1)}
-
-.dip-header{
-  font-family:var(--fm);font-size:9px;letter-spacing:0.28em;
-  text-transform:uppercase;color:#8a6f2e;margin-bottom:16px;
-}
-.dip-inst{
-  font-family:var(--fp);font-size:clamp(16px,3vw,24px);
-  font-weight:900;color:#1a1004;line-height:1.15;margin-bottom:4px;
-}
-.dip-inst em{color:#7a5c1e;font-style:italic}
-
-.dip-line{
-  display:flex;align-items:center;gap:8px;
-  margin:18px auto;width:fit-content;
-}
-.dip-line-bar{width:60px;height:1.5px;background:#c8a84b}
-.dip-line-gem{color:#c8a84b;font-size:10px}
-
-.dip-certifica{
-  font-family:var(--fb);font-size:14px;
-  font-style:italic;color:#5a4010;margin-bottom:0;
-}
-.dip-foto{
-  width:72px;height:72px;border-radius:50%;
-  object-fit:cover;border:3px solid #c8a84b;
-  display:none;margin:14px auto 6px;
-}
-.dip-nome{
-  font-family:var(--fp);
-  font-size:clamp(26px,6vw,46px);
-  font-weight:700;font-style:italic;
-  color:#1a1004;line-height:1.1;margin:12px 0;
-}
-.dip-body{
-  font-family:var(--fb);font-size:13px;font-style:italic;
-  color:#5a4010;line-height:1.8;
-  max-width:420px;margin:0 auto 20px;
-}
-.dip-valor-box{
-  display:inline-block;
-  border:1.5px solid #c8a84b;
-  padding:12px 32px;margin-bottom:20px;
-}
-.dip-valor-label{
-  font-family:var(--fm);font-size:8px;
-  letter-spacing:0.22em;text-transform:uppercase;
-  color:#8a6f2e;margin-bottom:4px;
-}
-.dip-valor-num{
-  font-family:var(--fp);font-size:clamp(28px,6vw,44px);
-  font-weight:900;color:#7a5c1e;
-}
-.dip-footer{
-  display:flex;justify-content:space-between;align-items:flex-end;
-  margin-top:28px;padding-top:18px;
-  border-top:1px solid rgba(200,168,75,0.35);
-}
-.dip-sig{text-align:center}
-.dip-sig-name{font-style:italic;font-size:16px;color:#1a1004;margin-bottom:2px}
-.dip-sig-line{width:100px;height:1px;background:#1a1004;margin:6px auto 4px}
-.dip-sig-cargo{font-family:var(--fm);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:#5a4010}
-.dip-seal-icon{font-size:28px;display:block;margin-bottom:4px}
-.dip-reg{font-family:var(--fm);font-size:7px;color:#8a7040;letter-spacing:0.1em}
-
-/* diploma actions */
-.dip-actions{
-  display:flex;gap:10px;
-  width:100%;max-width:640px;
-}
-.dip-act{
-  flex:1;padding:14px;
-  font-family:var(--fp);font-size:14px;font-weight:700;
-  border-radius:1px;cursor:pointer;transition:all 0.2s;
-  border:none;letter-spacing:0.01em;
-}
-.dip-act.primary{background:var(--gold);color:#000}
-.dip-act.primary:hover{background:var(--gold-light)}
-.dip-act.ghost{background:transparent;border:1px solid var(--border);color:var(--cream)}
-.dip-act.ghost:hover{border-color:var(--gold)}
-
-/* === FOOTER === */
-footer{
-  border-top:1px solid var(--border);
-  padding:28px 24px;text-align:center;
-  font-family:var(--fm);font-size:9px;
-  letter-spacing:0.14em;color:var(--gold-dim);
-  text-transform:uppercase;line-height:2;
-}
-
-/* === RESPONSIVE === */
-@media(max-width:600px){
+@media(max-width:580px){
   h1{font-size:52px}
-  .stats{flex-direction:column;gap:0;width:100%}
-  .stat+.stat::before{left:20%;right:20%;top:0;bottom:auto;width:auto;height:1px}
-  .modal{padding:28px 22px}
-  .diploma{padding:28px 22px}
-  .dip-footer{flex-direction:column;gap:16px;align-items:center}
-  .dip-actions{flex-direction:column}
-  .rank-preview{display:none}
+  .modal{padding:28px 20px}
+  .diploma{padding:28px 18px}
+  .dft{flex-direction:column;gap:14px;align-items:center}
+  .dacts{flex-direction:column}
+  .hr-frase{display:none}
 }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="topbar">
-  <span class="topbar-logo">Diploma de Rico</span>
-  <button class="topbar-cta" onclick="openModal()">Obter Diploma</button>
+<div class="tb">
+  <span class="tl">Diploma de Rico</span>
+  <button class="tcta" onclick="openM()">Obter Diploma</button>
 </div>
 
-<!-- ===================== HERO ===================== -->
 <section class="hero">
-
-  <!-- BRASÃO SVG -->
   <div class="seal">
     <svg viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <!-- estrela externa -->
-      <polygon points="60,6 72,42 110,42 80,64 92,100 60,78 28,100 40,64 10,42 48,42"
-        fill="none" stroke="#c8a84b" stroke-width="1.2" stroke-linejoin="round"/>
-      <!-- anel -->
+      <polygon points="60,6 72,42 110,42 80,64 92,100 60,78 28,100 40,64 10,42 48,42" fill="none" stroke="#c8a84b" stroke-width="1.2"/>
       <circle cx="60" cy="60" r="28" fill="none" stroke="#c8a84b" stroke-width="1"/>
       <circle cx="60" cy="60" r="33" fill="none" stroke="#7a6128" stroke-width="0.5" stroke-dasharray="3,2.5"/>
-      <!-- glória interior -->
       <circle cx="60" cy="60" r="24" fill="rgba(200,168,75,0.06)"/>
-      <!-- monograma -->
-      <text x="60" y="55" text-anchor="middle" font-family="Playfair Display,serif"
-        font-size="13" fill="#c8a84b" font-weight="900" letter-spacing="1">DR</text>
-      <text x="60" y="67" text-anchor="middle" font-family="DM Mono,monospace"
-        font-size="5" fill="#7a6128" letter-spacing="2">MDCCCLXXI</text>
-      <!-- ornamentos -->
-      <path d="M38,60 Q60,48 82,60 Q60,72 38,60Z" fill="none" stroke="rgba(200,168,75,0.25)" stroke-width="0.5"/>
+      <text x="60" y="55" text-anchor="middle" font-family="Playfair Display,serif" font-size="13" fill="#c8a84b" font-weight="900" letter-spacing="1">DR</text>
+      <text x="60" y="67" text-anchor="middle" font-family="DM Mono,monospace" font-size="5" fill="#7a6128" letter-spacing="2">MDCCCLXXI</text>
     </svg>
   </div>
 
   <p class="eyebrow">Instituição Oficial · Fundada em 1871 · Reconhecida por nós mesmos</p>
-
   <h1>Diploma<em>de Rico</em></h1>
+  <p class="hdesc">A única instituição do mundo que certifica, oficialmente, que você tem dinheiro demais — e juízo de menos.</p>
 
-  <p class="hero-desc">
-    A única instituição do mundo que certifica, oficialmente,
-    que você tem dinheiro demais — e juízo de menos.
-  </p>
-
-  <!-- STATS DE FOMO -->
   <div class="stats">
     <div class="stat">
-      <span class="stat-n" id="sTot">847</span>
-      <span class="stat-l">Diplomados</span>
+      <span class="sn">847</span>
+      <span class="sl">Diplomados</span>
     </div>
     <div class="stat">
-      <span class="stat-n">R$312K</span>
-      <span class="stat-l">Investido</span>
-    </div>
-    <div class="stat">
-      <span class="stat-n">R$100</span>
-      <span class="stat-l">Mínimo</span>
+      <span class="sn">R$312K</span>
+      <span class="sl">Investido em vaidade</span>
     </div>
   </div>
 
-  <!-- CTA -->
-  <div class="hero-cta">
-    <button class="cta-main" onclick="openModal()">
-      🎓&nbsp;&nbsp;Quero meu Diploma
-    </button>
-    <span class="cta-sub">Pagamento único · PIX · Diploma entregue na hora</span>
+  <!-- RANKING NO HERO — sem botão acima dele -->
+  <div class="hrank">
+    <div class="hr-label">🏆 Os mais ricos do momento</div>
+    <div id="hrList"></div>
+    <div class="hr-foot">
+      <span class="hr-foot-txt">Mínimo R$100 · PIX · Diploma na hora</span>
+      <button class="hr-foot-btn" onclick="openM()">🎓 Entrar no ranking</button>
+    </div>
   </div>
-
-  <!-- RANKING PREVIEW — topo do ranking já no fold -->
-  <div class="rank-preview" id="rankPreview">
-    <div class="rp-label">↓ Os mais ricos do ranking</div>
-    <!-- preenchido por JS -->
-  </div>
-
 </section>
 
-<!-- ===================== RANKING COMPLETO ===================== -->
-<section class="rank-section">
-  <p class="section-eyebrow">Salão da Fama</p>
-  <h2 class="section-title">Ranking dos Ricos</h2>
-  <p class="section-sub">Ordenado por quem mais investiu na própria vaidade</p>
-
-  <div class="rank-divider">
-    <div class="rank-divider-line"></div>
-    <div class="rank-divider-gem">◆</div>
-    <div class="rank-divider-line"></div>
-  </div>
-
-  <div class="full-list" id="fullList"></div>
-
-  <div class="rank-enter-cta">
-    <button class="rank-enter-btn" onclick="openModal()">+ Entrar para o ranking</button>
+<section class="rsec">
+  <p class="sey">Salão da Fama</p>
+  <h2 class="stitle">Ranking Completo</h2>
+  <p class="ssub">Ordenado por quem mais investiu na própria vaidade</p>
+  <div class="rdiv"><div class="rdl"></div><div class="rdg">◆</div><div class="rdl"></div></div>
+  <div class="fl" id="fullList"></div>
+  <div class="rcta">
+    <button class="rcta-btn" onclick="openM()">+ Entrar para o ranking</button>
   </div>
 </section>
 
 <footer>
-  © 2025 Diploma de Rico &nbsp;·&nbsp; Diploma sem valor jurídico &nbsp;·&nbsp; Mas com muito valor social<br>
-  Instituto Internacional de Certificação Financeira &nbsp;·&nbsp; Est. MDCCCLXXI
+  © 2025 Diploma de Rico · Diploma sem valor jurídico · Mas com muito valor social<br>
+  Instituto Internacional de Certificação Financeira · Est. MDCCCLXXI
 </footer>
 
-<!-- ===================== CHECKOUT MODAL ===================== -->
-<div class="overlay" id="checkoutOverlay">
+<!-- CHECKOUT -->
+<div class="ov" id="mOv">
   <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <p class="modal-eyebrow">Instituto Internacional de Certificação Financeira</p>
-    <h2 class="modal-title">Obtenha seu Diploma</h2>
-    <p class="modal-sub">Preencha para entrar para a história</p>
+    <button class="mcl" onclick="closeM()">✕</button>
+    <p class="mey">Instituto Internacional de Certificação Financeira</p>
+    <h2 class="mtitle">Obtenha seu Diploma</h2>
+    <p class="msub">Preencha para entrar para a história</p>
 
-    <label class="flabel">@ Instagram <small>(exibido no ranking público)</small></label>
-    <input class="finp" type="text" id="f_insta" placeholder="@seunome" autocomplete="off">
+    <label class="fl2">@ Instagram <small>(aparecerá no ranking público)</small></label>
+    <input class="inp" type="text" id="f_ig" placeholder="@seunome" autocomplete="off">
 
-    <label class="flabel">Nome completo <small>(como aparecerá no diploma)</small></label>
-    <input class="finp" type="text" id="f_nome" placeholder="João da Silva Milionário">
+    <label class="fl2">Nome completo <small>(como aparecerá no diploma)</small></label>
+    <input class="inp" type="text" id="f_nome" placeholder="João da Silva Milionário">
 
-    <label class="flabel">Sua foto <small>(obrigatório · aparecerá no ranking)</small></label>
-    <div class="foto-zone" id="fotoZone">
-      <input type="file" id="fotoInput" accept="image/*" onchange="handleFoto(event)">
-      <img class="foto-zone-preview" id="fotoPreview" alt="">
-      <div id="fotoPh">
-        <div class="foto-ph-icon">📸</div>
-        <div class="foto-ph-txt">Clique para enviar sua foto</div>
-        <div class="foto-ph-sub">JPG ou PNG · Será exibida no ranking público</div>
+    <label class="fl2">Sua foto <small>(obrigatório · aparecerá no ranking)</small></label>
+    <div class="fz" id="fz">
+      <input type="file" id="fi" accept="image/*" onchange="onFoto(event)">
+      <img class="fprev" id="fprev" alt="">
+      <div id="fph">
+        <div style="font-size:26px;margin-bottom:6px">📸</div>
+        <div class="fph">Clique para enviar sua foto</div>
+        <div class="fphs">JPG ou PNG · Será exibida no ranking</div>
       </div>
     </div>
 
-    <label class="flabel">Valor do investimento <small>(mínimo R$100)</small></label>
-    <div class="valor-row">
-      <div class="valor-pre">R$</div>
-      <input class="valor-finp" type="text" id="f_valor" placeholder="100" inputmode="numeric">
+    <label class="fl2">Valor do investimento <small>(mínimo R$100)</small></label>
+    <div class="vrow">
+      <div class="vpre">R$</div>
+      <input class="vinp" type="text" id="f_val" placeholder="100" inputmode="numeric">
     </div>
-    <p class="valor-hint">Quanto maior, mais alto no ranking — e mais falado você será.</p>
+    <p class="vhint">Quanto maior, mais alto no ranking — e mais falado você será.</p>
 
-    <label class="flabel">Frase para a posteridade <small>(opcional · máx 80 chars)</small></label>
-    <input class="finp" type="text" id="f_frase"
-      placeholder='"dinheiro não traz felicidade, mas prefiro chorar no Porsche"'
-      maxlength="80">
+    <label class="fl2">Frase para a posteridade <small>(opcional · máx 80 chars)</small></label>
+    <input class="inp" type="text" id="f_frase" placeholder='"dinheiro não traz felicidade, mas prefiro chorar no Porsche"' maxlength="80">
 
-    <button class="submit-btn" onclick="gerarPix()">Gerar PIX e Obter Diploma →</button>
+    <button class="sbtn" onclick="gPix()">Gerar PIX e Obter Diploma →</button>
 
-    <!-- PIX -->
-    <div class="pix-box" id="pixBox">
-      <div class="pix-title-t">⚡ PIX Gerado</div>
-      <div class="pix-val" id="pixVal">R$ 100</div>
-      <div class="pix-qr">
-        <img id="pixQrImg" src="" alt="QR Code PIX">
-      </div>
-      <div class="pix-chave">diplomadorico@pix.com.br</div>
-      <button class="pix-copy" id="pixCopyBtn" onclick="copiarPix()">📋 Copiar código copia e cola</button>
-      <button class="pix-paid" onclick="mostrarDiploma()">✅ Já paguei — Ver meu Diploma</button>
+    <div class="pbox" id="pbox">
+      <div class="pt">⚡ PIX Gerado</div>
+      <div class="pv" id="pval">R$ 100</div>
+      <div class="pqr"><img id="pqr" src="" alt="QR PIX"></div>
+      <div class="pkey">diplomadorico@pix.com.br</div>
+      <button class="pcopy" id="pcopy" onclick="doCopy()">📋 Copiar código copia e cola</button>
+      <button class="ppaid" onclick="showDip()">✅ Já paguei — Ver meu Diploma</button>
     </div>
   </div>
 </div>
 
-<!-- ===================== DIPLOMA MODAL ===================== -->
-<div class="dip-overlay" id="dipOverlay">
-
-  <div class="diploma" id="diplomaEl">
-    <!-- ornamentos cantos -->
-    <div class="corner corner-tl">✦</div>
-    <div class="corner corner-tr">✦</div>
-    <div class="corner corner-bl">✦</div>
-    <div class="corner corner-br">✦</div>
-
-    <div class="dip-header">Diploma de Rico · Instituto Internacional · Est. MDCCCLXXI</div>
-
-    <div class="dip-inst">
-      Instituto Internacional<br>
-      <em>de Certificação Financeira</em>
+<!-- DIPLOMA -->
+<div class="dov" id="dov">
+  <div class="diploma">
+    <div class="co tl">✦</div><div class="co tr">✦</div>
+    <div class="co bl">✦</div><div class="co br">✦</div>
+    <div class="dh">Diploma de Rico · Instituto Internacional · Est. MDCCCLXXI</div>
+    <div class="di">Instituto Internacional<br><em>de Certificação Financeira</em></div>
+    <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
+    <div class="dc">Esta instituição certifica, com honra e sem vergonha, que</div>
+    <img class="dfoto" id="dfoto" src="" alt="">
+    <div class="dnome" id="dnome">João da Silva</div>
+    <div class="dbody">investiu livremente e por vontade própria a quantia abaixo declarada para provar, de uma vez por todas, que tem dinheiro — e que sabe muito bem o que fazer com ele.</div>
+    <div class="dvb">
+      <div class="dvl">Valor Oficialmente Investido</div>
+      <div class="dvn" id="dval">R$ 100</div>
     </div>
-
-    <div class="dip-line">
-      <div class="dip-line-bar"></div>
-      <div class="dip-line-gem">◆</div>
-      <div class="dip-line-bar"></div>
-    </div>
-
-    <div class="dip-certifica">Esta instituição certifica, com honra e sem vergonha, que</div>
-
-    <img class="dip-foto" id="dipFoto" src="" alt="">
-
-    <div class="dip-nome" id="dipNome">João da Silva</div>
-
-    <div class="dip-body">
-      investiu livremente e por vontade própria a quantia abaixo declarada
-      para provar, de uma vez por todas, que tem dinheiro —
-      e que sabe muito bem o que fazer com ele.
-    </div>
-
-    <div class="dip-valor-box">
-      <div class="dip-valor-label">Valor Oficialmente Investido</div>
-      <div class="dip-valor-num" id="dipValorNum">R$ 100</div>
-    </div>
-
-    <div class="dip-footer">
-      <div class="dip-sig">
-        <div class="dip-sig-name">Prof. Dr. Reginaldo</div>
-        <div class="dip-sig-line"></div>
-        <div class="dip-sig-cargo">Reitor Vitalício</div>
+    <div class="dft">
+      <div class="ds">
+        <div class="dsn">Prof. Dr. Reginaldo</div>
+        <div class="dsl"></div>
+        <div class="dsc">Reitor Vitalício</div>
       </div>
       <div style="text-align:center">
-        <span class="dip-seal-icon">🎓</span>
-        <div class="dip-reg" id="dipReg">Nº 00848</div>
+        <div style="font-size:28px;margin-bottom:4px">🎓</div>
+        <div style="font-family:var(--fm);font-size:7px;color:#8a7040;letter-spacing:0.1em" id="dreg">Nº 00848</div>
       </div>
-      <div class="dip-sig">
-        <div class="dip-sig-name">Dra. Valentina</div>
-        <div class="dip-sig-line"></div>
-        <div class="dip-sig-cargo">Secretária Geral</div>
+      <div class="ds">
+        <div class="dsn">Dra. Valentina</div>
+        <div class="dsl"></div>
+        <div class="dsc">Secretária Geral</div>
       </div>
     </div>
   </div>
-
-  <div class="dip-actions">
-    <button class="dip-act ghost" onclick="closeDiploma()">← Voltar</button>
-    <button class="dip-act primary" onclick="compartilhar()">📤 Compartilhar nos Stories</button>
+  <div class="dacts">
+    <button class="da g" onclick="closeDip()">← Voltar</button>
+    <button class="da p" onclick="doShare()">📤 Compartilhar nos Stories</button>
   </div>
 </div>
 
 <script>
-/* =========== DATA =========== */
-const DATA = [
-  {nome:'Felipe Teixeira',     insta:'@felipeteixeiraa', valor:15000, frase:'"minha ex vai ver isso"',                              foto:'https://i.pravatar.cc/100?img=11', data:'hoje'},
-  {nome:'Bruna Cavalcante',    insta:'@brunacavalcante',  valor:8500,  frase:'"vim do nada. o nada ficou pra trás."',               foto:'https://i.pravatar.cc/100?img=5',  data:'hoje'},
-  {nome:'Ricardo Mendonça',    insta:'@ricardomendonca',  valor:5000,  frase:'"melhor ROI da minha vida"',                          foto:'https://i.pravatar.cc/100?img=15', data:'ontem'},
-  {nome:'Camila Sousa',        insta:'@camilasousa',      valor:3200,  frase:'"primeiro de muitos"',                                foto:'https://i.pravatar.cc/100?img=9',  data:'ontem'},
-  {nome:'Gustavo Pimentel',    insta:'@gustavopimentel',  valor:2500,  frase:'"mamãe, consegui!"',                                  foto:'https://i.pravatar.cc/100?img=20', data:'2 dias'},
-  {nome:'Letícia Borges',      insta:'@leticaborges',     valor:1800,  frase:'"dinheiro não traz felicidade. mentira."',            foto:'https://i.pravatar.cc/100?img=7',  data:'3 dias'},
-  {nome:'André Fonseca',       insta:'@andrefonseca',     valor:1200,  frase:'"só pra mostrar que posso"',                         foto:'https://i.pravatar.cc/100?img=33', data:'4 dias'},
-  {nome:'Marina Alves',        insta:'@marinaalves_',     valor:800,   frase:'"melhor investimento de 2025"',                      foto:'https://i.pravatar.cc/100?img=3',  data:'5 dias'},
-  {nome:'Thiago Drummond',     insta:'@thiagodrummond',   valor:500,   frase:'"fui lá e fiz"',                                     foto:'https://i.pravatar.cc/100?img=25', data:'1 semana'},
-  {nome:'Juliana Costa',       insta:'@julianacostareal', valor:250,   frase:'"só pra entrar no ranking 😂"',                     foto:'https://i.pravatar.cc/100?img=2',  data:'1 semana'},
-  {nome:'Pedro Nascimento',    insta:'@pedronascimento',  valor:200,   frase:'"minha ex também vai ver"',                          foto:'https://i.pravatar.cc/100?img=41', data:'2 semanas'},
-  {nome:'Ana Lima',            insta:'@analimaoficial',   valor:150,   frase:'"começando pequeno"',                                foto:'https://i.pravatar.cc/100?img=6',  data:'2 semanas'},
+const DATA=[
+  {nome:'Felipe Teixeira',   ig:'@felipeteixeiraa',valor:15000,frase:'"minha ex vai ver isso"',                   foto:'https://i.pravatar.cc/100?img=11',data:'hoje'},
+  {nome:'Bruna Cavalcante',  ig:'@brunacavalcante', valor:8500, frase:'"vim do nada. o nada ficou pra trás."',   foto:'https://i.pravatar.cc/100?img=5', data:'hoje'},
+  {nome:'Ricardo Mendonça',  ig:'@ricardomendonca', valor:5000, frase:'"melhor ROI da minha vida"',               foto:'https://i.pravatar.cc/100?img=15',data:'ontem'},
+  {nome:'Camila Sousa',      ig:'@camilasousa',     valor:3200, frase:'"primeiro de muitos"',                     foto:'https://i.pravatar.cc/100?img=9', data:'ontem'},
+  {nome:'Gustavo Pimentel',  ig:'@gustavopimentel', valor:2500, frase:'"mamãe, consegui!"',                       foto:'https://i.pravatar.cc/100?img=20',data:'2 dias'},
+  {nome:'Letícia Borges',    ig:'@leticaborges',    valor:1800, frase:'"dinheiro não traz felicidade. mentira."', foto:'https://i.pravatar.cc/100?img=7', data:'3 dias'},
+  {nome:'André Fonseca',     ig:'@andrefonseca',    valor:1200, frase:'"só pra mostrar que posso"',               foto:'https://i.pravatar.cc/100?img=33',data:'4 dias'},
+  {nome:'Marina Alves',      ig:'@marinaalves_',    valor:800,  frase:'"melhor investimento de 2025"',            foto:'https://i.pravatar.cc/100?img=3', data:'5 dias'},
+  {nome:'Thiago Drummond',   ig:'@thiagodrummond',  valor:500,  frase:'"fui lá e fiz"',                          foto:'https://i.pravatar.cc/100?img=25',data:'1 semana'},
+  {nome:'Juliana Costa',     ig:'@julianacostareal',valor:250,  frase:'"só pra entrar no ranking 😂"',           foto:'https://i.pravatar.cc/100?img=2', data:'1 semana'},
+  {nome:'Pedro Nascimento',  ig:'@pedronascimento', valor:200,  frase:'"minha ex também vai ver"',               foto:'https://i.pravatar.cc/100?img=41',data:'2 semanas'},
+  {nome:'Ana Lima',          ig:'@analimaoficial',  valor:150,  frase:'"começando pequeno"',                     foto:'https://i.pravatar.cc/100?img=6', data:'2 semanas'},
 ];
-const MEDALS = ['🥇','🥈','🥉'];
-let userPhoto = '';
+const M=['🥇','🥈','🥉'];
+let uPhoto='';
+const fR=n=>'R$ '+n.toLocaleString('pt-BR');
 
-/* =========== FORMAT =========== */
-function fmtR(n){ return 'R$ ' + n.toLocaleString('pt-BR'); }
-
-/* =========== RENDER RANKING =========== */
-function renderPreview(){
-  const el = document.getElementById('rankPreview');
-  DATA.slice(0,3).forEach((r,i)=>{
-    const d = document.createElement('div');
-    d.className = 'rp-item';
-    d.innerHTML = `
-      <div class="rp-medal">${MEDALS[i]}</div>
-      <div class="rp-avatar"><img src="${r.foto}" alt="${r.nome[0]}" onerror="this.outerHTML='${r.nome[0]}'"></div>
-      <div class="rp-info">
-        <div class="rp-name">${r.nome} <span style="font-family:var(--fm);font-size:10px;color:var(--gold-dim)">${r.insta}</span></div>
-        <div class="rp-comment">${r.frase}</div>
+function renderHero(){
+  const el=document.getElementById('hrList');
+  DATA.slice(0,5).forEach((r,i)=>{
+    const d=document.createElement('div');
+    d.className='hr-item';
+    d.onclick=openM;
+    d.innerHTML=`
+      <div class="hr-med">${M[i]||i+1}</div>
+      <div class="hr-av"><img src="${r.foto}" alt="${r.nome[0]}"></div>
+      <div class="hr-info">
+        <div class="hr-name">${r.nome}<span class="hr-ig">${r.ig}</span></div>
+        <div class="hr-frase">${r.frase}</div>
       </div>
-      <div class="rp-val">${fmtR(r.valor)}</div>
-    `;
+      <div class="hr-val">${fR(r.valor)}</div>`;
     el.appendChild(d);
   });
-  const more = document.createElement('div');
-  more.className = 'rp-more';
-  more.textContent = `↓ Ver todos os ${DATA.length} diplomados`;
-  more.onclick = ()=>document.querySelector('.rank-section').scrollIntoView({behavior:'smooth'});
-  el.appendChild(more);
 }
 
 function renderFull(){
-  const el = document.getElementById('fullList');
+  const el=document.getElementById('fullList');
   DATA.sort((a,b)=>b.valor-a.valor).forEach((r,i)=>{
-    const d = document.createElement('div');
-    d.className = 'ri';
-    d.innerHTML = `
-      <div class="ri-pos">${i<3?MEDALS[i]:i+1}</div>
-      <div class="ri-avatar"><img src="${r.foto}" alt="${r.nome[0]}" onerror="this.outerHTML='${r.nome[0]}'"></div>
+    const d=document.createElement('div');
+    d.className='ri';
+    d.innerHTML=`
+      <div class="ri-pos">${i<3?M[i]:i+1}</div>
+      <div class="ri-av"><img src="${r.foto}" alt="${r.nome[0]}" onerror="this.outerHTML='${r.nome[0]}'"></div>
       <div class="ri-info">
-        <div class="ri-name">${r.nome} <span class="ri-insta">${r.insta}</span></div>
-        <div class="ri-comment">${r.frase}</div>
+        <div class="ri-name">${r.nome}<span class="ri-ig">${r.ig}</span></div>
+        <div class="ri-frase">${r.frase}</div>
       </div>
-      <div class="ri-right">
-        <div class="ri-valor">${fmtR(r.valor)}</div>
+      <div class="ri-r">
+        <div class="ri-val">${fR(r.valor)}</div>
         <div class="ri-date">${r.data}</div>
-      </div>
-    `;
+      </div>`;
     el.appendChild(d);
   });
 }
 
-/* =========== MODAL =========== */
-function openModal(){
-  document.getElementById('checkoutOverlay').classList.add('on');
-  document.body.style.overflow='hidden';
-}
-function closeModal(){
-  document.getElementById('checkoutOverlay').classList.remove('on');
-  document.body.style.overflow='';
-}
-function closeDiploma(){
-  document.getElementById('dipOverlay').classList.remove('on');
-  document.body.style.overflow='';
-}
+function openM(){document.getElementById('mOv').classList.add('on');document.body.style.overflow='hidden'}
+function closeM(){document.getElementById('mOv').classList.remove('on');document.body.style.overflow=''}
+function closeDip(){document.getElementById('dov').classList.remove('on');document.body.style.overflow=''}
 
-/* =========== FOTO =========== */
-function handleFoto(e){
-  const f = e.target.files[0]; if(!f) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    userPhoto = ev.target.result;
-    const p = document.getElementById('fotoPreview');
-    p.src = userPhoto; p.style.display = 'block';
-    document.getElementById('fotoPh').style.display = 'none';
+function onFoto(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    uPhoto=ev.target.result;
+    const p=document.getElementById('fprev');p.src=uPhoto;p.style.display='block';
+    document.getElementById('fph').style.display='none';
   };
-  reader.readAsDataURL(f);
+  r.readAsDataURL(f);
+}
+document.getElementById('f_val').addEventListener('input',function(e){e.target.value=e.target.value.replace(/\D/g,'')});
+
+function gPix(){
+  const ig=document.getElementById('f_ig').value.trim();
+  const nome=document.getElementById('f_nome').value.trim();
+  const val=parseInt(document.getElementById('f_val').value)||0;
+  if(!ig){alert('Digite seu @Instagram');return}
+  if(!nome){alert('Digite seu nome completo');return}
+  if(!uPhoto){alert('Envie sua foto — ela aparecerá no ranking!');return}
+  if(val<100){alert('Valor mínimo é R$100');return}
+  document.getElementById('pval').textContent=fR(val);
+  document.getElementById('pqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomadorico@pix.com.br');
+  const pb=document.getElementById('pbox');pb.classList.add('on');
+  pb.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
-/* =========== VALOR MASK =========== */
-document.getElementById('f_valor').addEventListener('input', function(e){
-  e.target.value = e.target.value.replace(/\D/g,'');
-});
-
-/* =========== GERAR PIX =========== */
-function gerarPix(){
-  const insta = document.getElementById('f_insta').value.trim();
-  const nome  = document.getElementById('f_nome').value.trim();
-  const valor = parseInt(document.getElementById('f_valor').value) || 0;
-  if(!insta){ alert('Digite seu @Instagram'); return; }
-  if(!nome)  { alert('Digite seu nome completo'); return; }
-  if(!userPhoto){ alert('Envie sua foto — ela aparecerá no ranking!'); return; }
-  if(valor < 100){ alert('Valor mínimo é R$ 100'); return; }
-
-  document.getElementById('pixVal').textContent = fmtR(valor);
-  document.getElementById('pixQrImg').src =
-    'https://api.qrserver.com/v1/create-qr-code/?size=156x156&data=' +
-    encodeURIComponent('00020126330014BR.GOV.BCB.PIX0114diplomadorico@pix.com.br5204000053039865802BR5913Diploma Rico6009SAO PAULO62070503***6304');
-
-  const pb = document.getElementById('pixBox');
-  pb.classList.add('show');
-  pb.scrollIntoView({behavior:'smooth', block:'nearest'});
-}
-
-/* =========== COPIAR PIX =========== */
-function copiarPix(){
-  const k = 'diplomadorico@pix.com.br';
-  const btn = document.getElementById('pixCopyBtn');
-  navigator.clipboard.writeText(k).catch(()=>{
-    const t = document.createElement('textarea');
-    t.value = k; document.body.appendChild(t); t.select();
-    document.execCommand('copy'); document.body.removeChild(t);
+function doCopy(){
+  const btn=document.getElementById('pcopy');
+  navigator.clipboard.writeText('diplomadorico@pix.com.br').catch(()=>{
+    const t=document.createElement('textarea');t.value='diplomadorico@pix.com.br';
+    document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
   });
-  btn.textContent = '✅ Copiado!'; btn.classList.add('ok');
-  setTimeout(()=>{ btn.textContent='📋 Copiar código copia e cola'; btn.classList.remove('ok'); }, 2500);
+  btn.textContent='✅ Copiado!';btn.classList.add('ok');
+  setTimeout(()=>{btn.textContent='📋 Copiar código copia e cola';btn.classList.remove('ok')},2500);
 }
 
-/* =========== MOSTRAR DIPLOMA =========== */
-function mostrarDiploma(){
-  const nome  = document.getElementById('f_nome').value.trim()  || 'João da Silva';
-  const valor = parseInt(document.getElementById('f_valor').value) || 100;
-
-  document.getElementById('dipNome').textContent   = nome;
-  document.getElementById('dipValorNum').textContent = fmtR(valor);
-  document.getElementById('dipReg').textContent    = 'Nº 0' + (DATA.length + 848);
-
-  if(userPhoto){
-    const f = document.getElementById('dipFoto');
-    f.src = userPhoto; f.style.display = 'block';
-  }
-
-  closeModal();
-  document.getElementById('dipOverlay').classList.add('on');
-  document.body.style.overflow = 'hidden';
+function showDip(){
+  const nome=document.getElementById('f_nome').value.trim()||'João da Silva';
+  const val=parseInt(document.getElementById('f_val').value)||100;
+  document.getElementById('dnome').textContent=nome;
+  document.getElementById('dval').textContent=fR(val);
+  document.getElementById('dreg').textContent='Nº 0'+(DATA.length+848);
+  if(uPhoto){const f=document.getElementById('dfoto');f.src=uPhoto;f.style.display='block'}
+  closeM();document.getElementById('dov').classList.add('on');document.body.style.overflow='hidden';
 }
 
-/* =========== COMPARTILHAR =========== */
-function compartilhar(){
+function doShare(){
   if(navigator.share){
-    navigator.share({
-      title: 'Recebi meu Diploma de Rico! 🎓',
-      text:  'Acabei de me certificar oficialmente como rico. diplomadorico.com',
-      url:   'https://diplomadorico.com'
-    }).catch(()=>{});
+    navigator.share({title:'Recebi meu Diploma de Rico! 🎓',text:'Me certifiquei oficialmente como rico.',url:'https://diplomadorico.com'}).catch(()=>{});
   } else {
-    navigator.clipboard.writeText('https://diplomadorico.com').then(()=>{
-      alert('Link copiado! Cole nos seus stories:\ndiplomadorico.com');
-    });
+    navigator.clipboard.writeText('https://diplomadorico.com').then(()=>{alert('Link copiado!\ndiplomadorico.com')});
   }
 }
 
-/* =========== ESC =========== */
-document.addEventListener('keydown', e=>{
-  if(e.key==='Escape'){ closeModal(); closeDiploma(); }
-});
-
-/* =========== INIT =========== */
-renderPreview();
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip()}});
+renderHero();
 renderFull();
 </script>
 </body>
