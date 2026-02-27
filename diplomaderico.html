@@ -33,7 +33,7 @@ html::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .hero::after{content:'';position:absolute;bottom:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 
 /* BRASÃO */
-.seal{width:96px;height:96px;margin:0 auto 24px;animation:lev 6s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(200,168,75,0.3))}
+.seal{width:56px;height:56px;margin:0 auto 20px;animation:lev 6s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(200,168,75,0.25))}
 @keyframes lev{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
 
 .eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:0.24em;color:var(--gd);text-transform:uppercase;margin-bottom:16px;opacity:0;animation:up 0.7s ease 0.1s forwards}
@@ -70,6 +70,10 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .hr-foot-txt{font-family:var(--fm);font-size:9px;letter-spacing:0.1em;color:var(--gd);text-transform:uppercase}
 .hr-foot-btn{padding:10px 22px;background:var(--gold);color:#000;font-family:var(--fp);font-size:14px;font-weight:700;border:none;border-radius:1px;cursor:pointer;transition:all 0.2s;white-space:nowrap}
 .hr-foot-btn:hover{background:var(--gl)}
+.share-mini{background:none;border:1px solid var(--b);color:var(--gd);font-size:11px;border-radius:2px;padding:2px 5px;cursor:pointer;margin-left:7px;line-height:1;transition:all 0.15s;vertical-align:middle;font-family:var(--fm)}
+.share-mini:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,0.08)}
+.topup-mini{background:none;border:1px solid rgba(200,168,75,0.25);color:var(--gd);font-size:11px;border-radius:2px;padding:2px 5px;cursor:pointer;margin-left:4px;line-height:1;transition:all 0.15s;vertical-align:middle;font-family:var(--fm)}
+.topup-mini:hover{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,0.07)}
 
 /* FULL RANKING */
 .rsec{max-width:680px;margin:0 auto;padding:80px 24px}
@@ -215,7 +219,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     </svg>
   </div>
 
-  <p class="eyebrow">Instituição Oficial · Fundada em 1871 · Reconhecida por nós mesmos</p>
+
   <h1>Diploma<em>de Rico</em></h1>
   <p class="hdesc">A única instituição do mundo que certifica, oficialmente, que você tem dinheiro demais — e juízo de menos.</p>
 
@@ -241,23 +245,51 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   </div>
 </section>
 
-<section class="rsec">
-  <p class="sey">Salão da Fama</p>
-  <h2 class="stitle">Ranking Completo</h2>
-  <p class="ssub">Ordenado por quem mais investiu na própria vaidade</p>
-  <div class="rdiv"><div class="rdl"></div><div class="rdg">◆</div><div class="rdl"></div></div>
-  <div class="fl" id="fullList"></div>
-  <div class="rcta">
-    <button class="rcta-btn" onclick="openM()">+ Entrar para o ranking</button>
-  </div>
-</section>
-
 <footer>
   © 2025 Diploma de Rico · Diploma sem valor jurídico · Mas com muito valor social<br>
   Instituto Internacional de Certificação Financeira · Est. MDCCCLXXI
 </footer>
 
-<!-- CHECKOUT -->
+<!-- TOP-UP MODAL -->
+<div class="ov" id="tuOv">
+  <div class="modal" style="max-width:400px">
+    <button class="mcl" onclick="closeTU()">✕</button>
+    <p class="mey">Ranking dos Ricos</p>
+    <h2 class="mtitle" id="tuTitle">Aumentar investimento</h2>
+    <p class="msub" id="tuSub">Suba no ranking pagando mais</p>
+
+    <div style="background:rgba(200,168,75,0.06);border:1px solid var(--b);border-radius:1px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
+      <div>
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:0.14em;color:var(--gd);text-transform:uppercase;margin-bottom:4px">Valor atual</div>
+        <div style="font-family:var(--fp);font-size:22px;font-weight:700;color:var(--gold)" id="tuAtual">R$ 0</div>
+      </div>
+      <div style="color:var(--gd);font-size:20px">→</div>
+      <div>
+        <div style="font-family:var(--fm);font-size:9px;letter-spacing:0.14em;color:var(--gd);text-transform:uppercase;margin-bottom:4px">Novo total</div>
+        <div style="font-family:var(--fp);font-size:22px;font-weight:700;color:#4ade80" id="tuNovo">R$ 0</div>
+      </div>
+    </div>
+
+    <label class="fl2">Quanto quer adicionar? <small>(mínimo R$50)</small></label>
+    <div class="vrow">
+      <div class="vpre">R$</div>
+      <input class="vinp" type="text" id="tu_val" placeholder="50" inputmode="numeric" oninput="updateTuPreview()">
+    </div>
+
+    <button class="sbtn" style="background:#4ade80;color:#000" onclick="gPixTU()">Gerar PIX para subir no ranking →</button>
+
+    <div class="pbox" id="tuPbox">
+      <div class="pt">⚡ PIX Gerado</div>
+      <div class="pv" id="tuPval">R$ 50</div>
+      <div class="pqr"><img id="tuPqr" src="" alt="QR PIX"></div>
+      <div class="pkey">diplomadorico@pix.com.br</div>
+      <button class="pcopy" id="tuPcopy" onclick="doCopyTU()">📋 Copiar código copia e cola</button>
+      <div style="margin-top:12px;font-style:italic;font-size:12px;color:var(--cd)">Após pagamento confirmado, sua posição será atualizada automaticamente</div>
+    </div>
+  </div>
+</div>
+
+
 <div class="ov" id="mOv">
   <div class="modal">
     <button class="mcl" onclick="closeM()">✕</button>
@@ -298,7 +330,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="pt">⚡ PIX Gerado</div>
       <div class="pv" id="pval">R$ 100</div>
       <div class="pqr"><img id="pqr" src="" alt="QR PIX"></div>
-      <div class="pkey">diplomadorico@pix.com.br</div>
+      <div class="pkey"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="57333e273b383a363338253e343817273e2f7934383a793525">[email&#160;protected]</a></div>
       <button class="pcopy" id="pcopy" onclick="doCopy()">📋 Copiar código copia e cola</button>
       <button class="ppaid" onclick="showDip()">✅ Já paguei — Ver meu Diploma</button>
     </div>
@@ -344,7 +376,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const DATA=[
   {nome:'Felipe Teixeira',   ig:'@felipeteixeiraa',valor:15000,frase:'"minha ex vai ver isso"',                   foto:'https://i.pravatar.cc/100?img=11',data:'hoje'},
   {nome:'Bruna Cavalcante',  ig:'@brunacavalcante', valor:8500, frase:'"vim do nada. o nada ficou pra trás."',   foto:'https://i.pravatar.cc/100?img=5', data:'hoje'},
@@ -365,15 +397,17 @@ const fR=n=>'R$ '+n.toLocaleString('pt-BR');
 
 function renderHero(){
   const el=document.getElementById('hrList');
-  DATA.slice(0,5).forEach((r,i)=>{
+  DATA.forEach((r,i)=>{
     const d=document.createElement('div');
     d.className='hr-item';
-    d.onclick=openM;
     d.innerHTML=`
       <div class="hr-med">${M[i]||i+1}</div>
       <div class="hr-av"><img src="${r.foto}" alt="${r.nome[0]}"></div>
       <div class="hr-info">
-        <div class="hr-name">${r.nome}<span class="hr-ig">${r.ig}</span></div>
+        <div class="hr-name">${r.nome}<span class="hr-ig">${r.ig}</span>
+          <button class="share-mini" onclick="sharePerson(event,'${r.nome}','${r.ig}',${r.valor})" title="Compartilhar diploma">↗</button>
+          <button class="topup-mini" onclick="openTopUp(event,${i})" title="Aumentar valor investido">+💰</button>
+        </div>
         <div class="hr-frase">${r.frase}</div>
       </div>
       <div class="hr-val">${fR(r.valor)}</div>`;
@@ -381,24 +415,55 @@ function renderHero(){
   });
 }
 
-function renderFull(){
-  const el=document.getElementById('fullList');
-  DATA.sort((a,b)=>b.valor-a.valor).forEach((r,i)=>{
-    const d=document.createElement('div');
-    d.className='ri';
-    d.innerHTML=`
-      <div class="ri-pos">${i<3?M[i]:i+1}</div>
-      <div class="ri-av"><img src="${r.foto}" alt="${r.nome[0]}" onerror="this.outerHTML='${r.nome[0]}'"></div>
-      <div class="ri-info">
-        <div class="ri-name">${r.nome}<span class="ri-ig">${r.ig}</span></div>
-        <div class="ri-frase">${r.frase}</div>
-      </div>
-      <div class="ri-r">
-        <div class="ri-val">${fR(r.valor)}</div>
-        <div class="ri-date">${r.data}</div>
-      </div>`;
-    el.appendChild(d);
+let tuIdx=-1;
+function openTopUp(e,idx){
+  e.stopPropagation();
+  tuIdx=idx;
+  const r=DATA[idx];
+  document.getElementById('tuTitle').textContent=r.nome;
+  document.getElementById('tuSub').textContent=r.ig+' · posição '+(idx+1)+'º no ranking';
+  document.getElementById('tuAtual').textContent=fR(r.valor);
+  document.getElementById('tuNovo').textContent=fR(r.valor);
+  document.getElementById('tu_val').value='';
+  document.getElementById('tuPbox').classList.remove('on');
+  document.getElementById('tuOv').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeTU(){document.getElementById('tuOv').classList.remove('on');document.body.style.overflow=''}
+function updateTuPreview(){
+  if(tuIdx<0)return;
+  const add=parseInt(document.getElementById('tu_val').value)||0;
+  const novo=DATA[tuIdx].valor+add;
+  document.getElementById('tuNovo').textContent=fR(novo);
+}
+function gPixTU(){
+  const add=parseInt(document.getElementById('tu_val').value)||0;
+  if(add<50){alert('Valor mínimo para top-up é R$50');return}
+  document.getElementById('tuPval').textContent=fR(add);
+  document.getElementById('tuPqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomadorico@pix.com.br');
+  const pb=document.getElementById('tuPbox');pb.classList.add('on');
+  pb.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+function doCopyTU(){
+  const btn=document.getElementById('tuPcopy');
+  navigator.clipboard.writeText('diplomadorico@pix.com.br').catch(()=>{
+    const t=document.createElement('textarea');t.value='diplomadorico@pix.com.br';
+    document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
   });
+  btn.textContent='✅ Copiado!';btn.classList.add('ok');
+  setTimeout(()=>{btn.textContent='📋 Copiar código copia e cola';btn.classList.remove('ok')},2500);
+}
+
+function sharePerson(e,nome,ig,valor){
+  e.stopPropagation();
+  const txt=`${nome} (${ig}) tem ${fR(valor)} de diploma oficial de rico! 🎓 diplomadorico.com`;
+  if(navigator.share){
+    navigator.share({title:'Diploma de Rico',text:txt,url:'https://diplomadorico.com'}).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(txt).then(()=>{
+      const btn=e.target;btn.textContent='✓';setTimeout(()=>{btn.textContent='↗'},1500);
+    });
+  }
 }
 
 function openM(){document.getElementById('mOv').classList.add('on');document.body.style.overflow='hidden'}
@@ -459,9 +524,8 @@ function doShare(){
   }
 }
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip();closeTU()}});
 renderHero();
-renderFull();
 </script>
 </body>
 </html>
