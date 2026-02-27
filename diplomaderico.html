@@ -60,7 +60,7 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .hr-item:nth-child(3)::before{background:#cd7f32}
 .hr-item:hover{border-color:var(--bb);transform:translateX(3px)}
 .hr-med{font-size:15px;width:20px;text-align:center;flex-shrink:0}
-.hr-av{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--bb);flex-shrink:0;overflow:visible;background:rgba(200,168,75,0.08);position:relative;cursor:pointer}
+.hr-av{width:54px;height:54px;border-radius:50%;border:1.5px solid var(--bb);flex-shrink:0;overflow:visible;background:rgba(200,168,75,0.08);position:relative;cursor:pointer}
 .hr-av img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%}
 .hr-av-eye{position:absolute;bottom:-3px;right:-5px;background:rgba(8,6,3,0.9);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;pointer-events:none;color:var(--gold);opacity:0.9;border:1px solid rgba(200,168,75,0.35)}
 .hr-info{flex:1;min-width:0}
@@ -286,6 +286,9 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="dvl">Valor Oficialmente Investido</div>
       <div class="dvn" id="vVal">R$ 0</div>
     </div>
+    <div id="vFraseWrap" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(200,168,75,0.2);display:none">
+      <div id="vFrase" style="font-family:var(--fp);font-style:italic;font-size:15px;color:#7a5c1e;line-height:1.5;text-align:center"></div>
+    </div>
     <div class="dft">
       
       
@@ -365,7 +368,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <p class="vhint">Quanto maior, mais alto no ranking — e mais falado você será.</p>
 
     <label class="fl2">Frase para a posteridade <small>(opcional · máx 80 chars)</small></label>
-    <input class="inp" type="text" id="f_frase" placeholder='"dinheiro não traz felicidade, mas prefiro chorar no Porsche"' maxlength="80">
+    <input class="inp" type="text" id="f_frase" placeholder='"dinheiro não traz felicidade, mas prefiro chorar no Porsche"' maxlength="100">
 
     <button class="sbtn" onclick="gPix()">Gerar PIX e Obter Diploma →</button>
 
@@ -395,6 +398,9 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <div class="dvb">
       <div class="dvl">Valor Oficialmente Investido</div>
       <div class="dvn" id="dval">R$ 100</div>
+    </div>
+    <div id="dFraseWrap" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(200,168,75,0.2);display:none">
+      <div id="dFrase" style="font-family:var(--fp);font-style:italic;font-size:15px;color:#7a5c1e;line-height:1.5;text-align:center"></div>
     </div>
     <div class="dft">
       
@@ -532,6 +538,14 @@ function viewDiploma(e,idx){
   const foto=document.getElementById('vFoto');
   foto.src=r.foto;
   foto.style.display='block';
+  const vfw=document.getElementById('vFraseWrap');
+  const vf=document.getElementById('vFrase');
+  if(r.frase&&r.frase.trim()){
+    vf.textContent=r.frase;
+    vfw.style.display='block';
+  } else {
+    vfw.style.display='none';
+  }
   document.getElementById('viewOv').classList.add('on');
   document.body.style.overflow='hidden';
 }
@@ -704,6 +718,14 @@ function showDip(){
   document.getElementById('dnome').textContent=ig;
   document.getElementById('dval').textContent=fR(val);
   if(igPhotoUrl){const f=document.getElementById('dfoto');f.src=igPhotoUrl;f.style.display='block'}
+  const dfw=document.getElementById('dFraseWrap');
+  const df=document.getElementById('dFrase');
+  if(frase){
+    df.textContent='"'+frase+'"';
+    dfw.style.display='block';
+  } else {
+    dfw.style.display='none';
+  }
   closeM();document.getElementById('dov').classList.add('on');document.body.style.overflow='hidden';
 }
 
