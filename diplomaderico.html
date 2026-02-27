@@ -242,6 +242,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 
   <h1>Diploma<em>de Rico</em></h1>
   <p class="hdesc">A única instituição do Brasil que certifica, oficialmente, que você tem dinheiro demais — e juízo de menos.</p>
+  <p style="font-size:15px;color:var(--go);font-style:italic;margin-top:12px;opacity:0.85;letter-spacing:0.02em;">Você escolhe o valor. O valor escolhe sua posição.</p>
 
   <div class="stats">
     <div class="stat">
@@ -446,7 +447,7 @@ const fR=n=>'R$ '+n.toLocaleString('pt-BR');
 // ordena por valor desc — sempre que DATA mudar, chamar renderHero() de novo
 DATA.sort((a,b)=>b.valor-a.valor);
 
-let hrShown=15;
+let hrShown=30;
 function renderHero(){
   const el=document.getElementById('hrList');
   const start=el.querySelectorAll('.hr-item').length;
@@ -477,7 +478,7 @@ function renderHero(){
     btn.id='verMaisBtn';
     btn.className='ver-mais-btn';
     btn.innerHTML=`Ver mais <span>${rest} diplomados</span>`;
-    btn.onclick=()=>{hrShown+=15;renderHero();};
+    btn.onclick=()=>{hrShown+=30;renderHero();};
     el.after(btn);
   }
 }
