@@ -182,7 +182,7 @@ footer a{color:var(--text-muted);text-decoration:none;margin:0 10px}
 <div class="cpf-step" id="cpfStep2">
 <div class="cpf-step-icon">🔍</div>
 <h2>Analisando CPF</h2>
-<div class="cpf-loading-cpf">CPF: <span id="cpfDisplay"></span></div>
+
 <div class="cpf-checks">
 
 <div class="cpf-check-item" id="check2"><div class="cpf-check-icon"></div><div class="cpf-check-text">Consultando 91 tribunais do Brasil...</div></div>
@@ -223,7 +223,7 @@ footer a{color:var(--text-muted);text-decoration:none;margin:0 10px}
     <li>Monitoramento automático 24h</li>
     <li>Alerta imediato no WhatsApp</li>
     <li>Qualquer tipo de processo</li>
-    <li>Todos os Tribunais do Brasil</li>
+
   </ul>
   <a id="checkoutBtn" href="https://pay.cakto.com.br/3a8uz4m" class="cpf-result-btn" style="margin-top:20px;">Teste por 7 dias</a>
 </div>
@@ -310,7 +310,7 @@ function startAnalysis(){
     return;
   }
   showStep(2);
-  document.getElementById('cpfDisplay').textContent=cpfInput.value;
+
   document.querySelectorAll('.cpf-check-item').forEach(el=>el.classList.remove('active','done'));
   const checks=[
     {id:'check2',activeDelay:300,doneDelay:3000,doneText:'91 tribunais consultados ✓'},
