@@ -202,6 +202,19 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   .dacts{flex-direction:column}
   .hr-frase{max-width:180px}
 }
+/* ig auto-fetch */
+.ig-fetch-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.ig-preview-wrap{width:52px;height:52px;border-radius:50%;flex-shrink:0;border:2px solid var(--b);overflow:hidden;position:relative;background:rgba(200,168,75,0.06);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s}
+.ig-preview-wrap.loaded{border-color:var(--bb)}
+.ig-avatar-ph{font-family:var(--fp);font-size:20px;font-weight:700;color:var(--gd)}
+.ig-avatar-img{width:100%;height:100%;object-fit:cover;display:block}
+.ig-fetch-spin{font-size:16px;animation:spin 1s linear infinite;position:absolute}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ig-inp{flex:1;margin-bottom:0!important}
+.ig-status{font-family:var(--fm);font-size:10px;letter-spacing:0.08em;margin-bottom:18px;margin-top:6px;min-height:14px}
+.ig-status.ok{color:#4ade80}
+.ig-status.err{color:#f87171}
+.ig-status.loading{color:var(--gd)}
 </style>
 </head>
 <body>
@@ -292,21 +305,15 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <p class="msub">Preencha para entrar para a história</p>
 
     <label class="fl2">@ Instagram <small>(aparecerá no ranking público)</small></label>
-    <input class="inp" type="text" id="f_ig" placeholder="@seunome" autocomplete="off">
-
-    <label class="fl2">Nome completo <small>(como aparecerá no diploma)</small></label>
-    <input class="inp" type="text" id="f_nome" placeholder="João da Silva Milionário">
-
-    <label class="fl2">Sua foto <small>(obrigatório · aparecerá no ranking)</small></label>
-    <div class="fz" id="fz">
-      <input type="file" id="fi" accept="image/*" onchange="onFoto(event)">
-      <img class="fprev" id="fprev" alt="">
-      <div id="fph">
-        <div style="font-size:26px;margin-bottom:6px">📸</div>
-        <div class="fph">Clique para enviar sua foto</div>
-        <div class="fphs">JPG ou PNG · Será exibida no ranking</div>
+    <div class="ig-fetch-row">
+      <div class="ig-preview-wrap" id="igPreviewWrap">
+        <div class="ig-avatar-ph" id="igAvatarPh">?</div>
+        <img class="ig-avatar-img" id="igAvatarImg" src="" alt="" style="display:none">
+        <div class="ig-fetch-spin" id="igSpin" style="display:none">⏳</div>
       </div>
+      <input class="inp ig-inp" type="text" id="f_ig" placeholder="@seunome" autocomplete="off" oninput="onIgInput(this.value)">
     </div>
+    <div class="ig-status" id="igStatus"></div>
 
     <label class="fl2">Valor do investimento <small>(mínimo R$100)</small></label>
     <div class="vrow">
@@ -499,26 +506,86 @@ function openM(){document.getElementById('mOv').classList.add('on');document.bod
 function closeM(){document.getElementById('mOv').classList.remove('on');document.body.style.overflow=''}
 function closeDip(){document.getElementById('dov').classList.remove('on');document.body.style.overflow=''}
 
-function onFoto(e){
-  const f=e.target.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    uPhoto=ev.target.result;
-    const p=document.getElementById('fprev');p.src=uPhoto;p.style.display='block';
-    document.getElementById('fph').style.display='none';
-  };
-  r.readAsDataURL(f);
+// ---- INSTAGRAM PHOTO AUTO-FETCH ----
+let igPhotoUrl='';
+let igFetchTimer=null;
+
+function onIgInput(val){
+  const username=val.replace('@','').trim();
+  const wrap=document.getElementById('igPreviewWrap');
+  const ph=document.getElementById('igAvatarPh');
+  const img=document.getElementById('igAvatarImg');
+  const spin=document.getElementById('igSpin');
+  const status=document.getElementById('igStatus');
+
+  clearTimeout(igFetchTimer);
+  igPhotoUrl='';
+  wrap.classList.remove('loaded');
+  img.style.display='none';
+  spin.style.display='none';
+  ph.style.display='flex';
+  ph.textContent=username?username[0].toUpperCase():'?';
+
+  if(username.length<2){status.textContent='';status.className='ig-status';return}
+
+  status.textContent='Buscando foto do Instagram...';
+  status.className='ig-status loading';
+  spin.style.display='flex';
+  ph.style.display='none';
+
+  igFetchTimer=setTimeout(()=>fetchIgPhoto(username),800);
+}
+
+async function fetchIgPhoto(username){
+  const img=document.getElementById('igAvatarImg');
+  const ph=document.getElementById('igAvatarPh');
+  const spin=document.getElementById('igSpin');
+  const wrap=document.getElementById('igPreviewWrap');
+  const status=document.getElementById('igStatus');
+
+  try{
+    // PRODUÇÃO: trocar pela sua Vercel serverless function que chama SearchAPI.io
+    // GET /api/ig-photo?username=felipeteixeiraa
+    // que retorna { avatar: "https://..." }
+    //
+    // Para o MVP, simulamos com a API do SearchAPI diretamente:
+    const SEARCHAPI_KEY='SUA_CHAVE_AQUI'; // ← substituir pela chave real
+    const res=await fetch(
+      `https://www.searchapi.io/api/v1/search?engine=instagram_profile&username=${username}&api_key=${SEARCHAPI_KEY}`
+    );
+
+    if(!res.ok) throw new Error('not found');
+    const data=await res.json();
+    const avatarUrl=data?.profile?.avatar;
+    if(!avatarUrl) throw new Error('no avatar');
+
+    igPhotoUrl=avatarUrl;
+    img.src=avatarUrl;
+    img.style.display='block';
+    spin.style.display='none';
+    wrap.classList.add('loaded');
+    status.textContent='✓ Foto encontrada';
+    status.className='ig-status ok';
+
+  }catch(e){
+    // fallback: iniciais + avatar genérico
+    spin.style.display='none';
+    ph.style.display='flex';
+    ph.textContent=username[0].toUpperCase();
+    igPhotoUrl=`https://i.pravatar.cc/100?u=${username}`;
+    wrap.classList.add('loaded');
+    status.textContent='Perfil privado ou não encontrado — usaremos suas iniciais';
+    status.className='ig-status err';
+  }
 }
 document.getElementById('f_val').addEventListener('input',function(e){e.target.value=e.target.value.replace(/\D/g,'')});
 
 function gPix(){
   const ig=document.getElementById('f_ig').value.trim();
-  const nome=document.getElementById('f_nome').value.trim();
   const val=parseInt(document.getElementById('f_val').value)||0;
   if(!ig){alert('Digite seu @Instagram');return}
-  if(!nome){alert('Digite seu nome completo');return}
-  if(!uPhoto){alert('Envie sua foto — ela aparecerá no ranking!');return}
   if(val<100){alert('Valor mínimo é R$100');return}
+  if(!igPhotoUrl) igPhotoUrl=`https://i.pravatar.cc/100?u=${ig.replace('@','')}`;
   document.getElementById('pval').textContent=fR(val);
   document.getElementById('pqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomadorico@pix.com.br');
   const pb=document.getElementById('pbox');pb.classList.add('on');
@@ -536,12 +603,12 @@ function doCopy(){
 }
 
 function showDip(){
-  const nome=document.getElementById('f_nome').value.trim()||'João da Silva';
+  const ig=document.getElementById('f_ig').value.trim()||'@você';
   const val=parseInt(document.getElementById('f_val').value)||100;
-  document.getElementById('dnome').textContent=nome;
+  document.getElementById('dnome').textContent=ig;
   document.getElementById('dval').textContent=fR(val);
   document.getElementById('dreg').textContent='Nº 0'+(DATA.length+848);
-  if(uPhoto){const f=document.getElementById('dfoto');f.src=uPhoto;f.style.display='block'}
+  if(igPhotoUrl){const f=document.getElementById('dfoto');f.src=igPhotoUrl;f.style.display='block'}
   closeM();document.getElementById('dov').classList.add('on');document.body.style.overflow='hidden';
 }
 
