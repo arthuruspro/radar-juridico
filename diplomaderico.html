@@ -63,7 +63,7 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .hr-info{flex:1;min-width:0}
 .hr-name{font-family:var(--fp);font-size:14px;font-weight:700;color:var(--cream)}
 .hr-ig{font-family:var(--fm);font-size:10px;color:var(--gd);margin-left:6px}
-.ig-link{font-family:var(--fm);font-size:10px;color:var(--gd);margin-left:6px;text-decoration:none;transition:color 0.15s;border-bottom:1px solid transparent}
+.ig-link{font-family:var(--fp);font-size:15px;font-weight:700;color:var(--cream);text-decoration:none;transition:color 0.15s;border-bottom:1px solid transparent}
 .ig-link:hover{color:var(--gold);border-bottom-color:var(--gold)}
 .hr-frase{font-style:italic;font-size:14px;color:var(--cream-d, #c8bfa8);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}
 .hr-val{font-family:var(--fp);font-size:16px;font-weight:700;color:var(--gold);flex-shrink:0}
@@ -422,7 +422,7 @@ function renderHero(){
       <div class="hr-med">${M[i]||i+1}</div>
       <div class="hr-av"><img src="${r.foto}" alt="${r.nome[0]}"></div>
       <div class="hr-info">
-        <div class="hr-name">${r.nome}<a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig} ↗</a>
+        <div class="hr-name"><a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig} ↗</a>
           <button class="share-mini" onclick="sharePerson(event,'${r.nome}','${r.ig}',${r.valor})" title="Compartilhar diploma">↗</button>
           <button class="topup-mini" onclick="openTopUp(event,${i})" title="Aumentar valor investido">+💰</button>
         </div>
