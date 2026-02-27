@@ -10,8 +10,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'CPF e WhatsApp são obrigatórios' });
   }
 
-const ASAAS_KEY  = 'aact_prod_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjM4YjQ2MTM0LWUwZDctNDVmOS05YjBjLThlMWFmZDMzMDQ2MTo6JGFhY2hfNGI1YWMzNzgtNTU0YS00YjdlLTg1M2MtMjY2NWY3NTI0Mzg3';  const ASAAS_BASE = 'https://www.asaas.com/api/v3';
-  const HEADERS    = {
+const ASAAS_KEY = '$aact_prod_000MzkwODA2MWY2OGM3MWRlMDU2NWM3MzJlNzZmNGZhZGY6OjM4YjQ2MTM0LWUwZDctNDVmOS05YjBjLThlMWFmZDMzMDQ2MTo6JGFhY2hfNGI1YWMzNzgtNTU0YS00YjdlLTg1M2MtMjY2NWY3NTI0Mzg3';  const HEADERS    = {
     'Content-Type': 'application/json',
     'access_token': ASAAS_KEY
   };
