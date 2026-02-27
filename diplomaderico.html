@@ -174,7 +174,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .co.tr{top:22px;right:22px;transform:scaleX(-1)}
 .co.bl{bottom:22px;left:22px;transform:scaleY(-1)}
 .co.br{bottom:22px;right:22px;transform:scale(-1)}
-.dh{font-family:var(--fm);font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#8a6f2e;margin-bottom:14px}
+.dh{font-family:var(--fm);font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:#8a6f2e;margin-bottom:14px}
 .di-brand{font-family:var(--fp);font-size:clamp(28px,7vw,48px);font-weight:900;line-height:0.95;letter-spacing:-0.02em;color:#7a5c1e;margin-bottom:10px;text-align:center}
 .di-brand .line1{display:block}
 .di-brand .line2{display:flex;align-items:baseline;justify-content:center;gap:3px}
@@ -183,18 +183,18 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .dline{display:flex;align-items:center;gap:8px;margin:16px auto;width:fit-content}
 .dlb{width:60px;height:1.5px;background:#c8a84b}
 .dlg{color:#c8a84b;font-size:10px}
-.dc{font-family:var(--fb);font-size:14px;font-style:italic;color:#5a4010}
+.dc{font-family:var(--fb);font-size:18px;font-style:italic;color:#5a4010}
 .dfoto{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid #c8a84b;display:none;margin:14px auto 6px}
 .dnome{font-family:var(--fp);font-size:clamp(26px,6vw,46px);font-weight:700;font-style:italic;color:#1a1004;line-height:1.1;margin:12px 0}
-.dbody{font-family:var(--fb);font-size:13px;font-style:italic;color:#5a4010;line-height:1.8;max-width:420px;margin:0 auto 20px}
+.dbody{font-family:var(--fb);font-size:16px;font-style:italic;color:#5a4010;line-height:1.8;max-width:420px;margin:0 auto 20px}
 .dvb{display:inline-block;border:1.5px solid #c8a84b;padding:12px 32px;margin-bottom:20px}
-.dvl{font-family:var(--fm);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:#8a6f2e;margin-bottom:4px}
+.dvl{font-family:var(--fm);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#8a6f2e;margin-bottom:4px}
 .dvn{font-family:var(--fp);font-size:clamp(28px,6vw,44px);font-weight:900;color:#7a5c1e}
 .dft{display:flex;justify-content:space-between;align-items:flex-end;margin-top:28px;padding-top:0}
 .ds{text-align:center}
 .dsn{font-style:italic;font-size:16px;color:#1a1004;margin-bottom:2px}
 .dsl{width:100px;height:1px;background:#1a1004;margin:6px auto 4px}
-.dsc{font-family:var(--fm);font-size:7px;letter-spacing:0.12em;text-transform:uppercase;color:#5a4010}
+.dsc{font-family:var(--fm);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#5a4010}
 .dacts{display:flex;gap:10px;width:100%;max-width:640px}
 .da{flex:1;padding:14px;font-family:var(--fp);font-size:14px;font-weight:700;border-radius:1px;cursor:pointer;transition:all 0.2s;border:none}
 .da.p{background:var(--gold);color:#000}
@@ -507,14 +507,14 @@ function gPixTU(){
   const add=parseInt(document.getElementById('tu_val').value)||0;
   if(add<50){alert('Valor mínimo para top-up é R$50');return}
   document.getElementById('tuPval').textContent=fR(add);
-  document.getElementById('tuPqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomadorico@pix.com.br');
+  document.getElementById('tuPqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomaderico@pix.com.br');
   const pb=document.getElementById('tuPbox');pb.classList.add('on');
   pb.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 function doCopyTU(){
   const btn=document.getElementById('tuPcopy');
-  navigator.clipboard.writeText('diplomadorico@pix.com.br').catch(()=>{
-    const t=document.createElement('textarea');t.value='diplomadorico@pix.com.br';
+  navigator.clipboard.writeText('diplomaderico@pix.com.br').catch(()=>{
+    const t=document.createElement('textarea');t.value='diplomaderico@pix.com.br';
     document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
   });
   btn.textContent='✅ Copiado!';btn.classList.add('ok');
@@ -540,7 +540,7 @@ function closeView(){
 }
 function shareToIg(){
   const r=DATA[viewingIdx];
-  const url='https://diplomadorico.com';
+  const url='https://diplomaderico.com';
   const txt=`${r.ig} tem um Diploma de Rico oficial 🎓 — investiu ${fR(r.valor)} em vaidade certificada.\n\n${url}`;
   if(navigator.share){
     navigator.share({title:'Diploma de Rico',text:txt,url}).catch(()=>fallbackShareIg(txt,url));
@@ -559,9 +559,9 @@ function fallbackShareIg(txt,url){
 
 function sharePerson(e,nome,ig,valor){
   e.stopPropagation();
-  const txt=`${nome} (${ig}) tem ${fR(valor)} de diploma oficial de rico! 🎓 diplomadorico.com`;
+  const txt=`${nome} (${ig}) tem ${fR(valor)} de diploma oficial de rico! 🎓 diplomaderico.com`;
   if(navigator.share){
-    navigator.share({title:'Diploma de Rico',text:txt,url:'https://diplomadorico.com'}).catch(()=>{});
+    navigator.share({title:'Diploma de Rico',text:txt,url:'https://diplomaderico.com'}).catch(()=>{});
   } else {
     navigator.clipboard.writeText(txt).then(()=>{
       const btn=e.target;btn.textContent='✓';setTimeout(()=>{btn.textContent='↗'},1500);
@@ -659,15 +659,15 @@ function gPix(){
   if(!ig.startsWith('@')) ig='@'+ig;
   if(!igPhotoUrl) igPhotoUrl=`https://i.pravatar.cc/100?u=${ig.replace('@','')}`;
   document.getElementById('pval').textContent=fR(val);
-  document.getElementById('pqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomadorico@pix.com.br');
+  document.getElementById('pqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomaderico@pix.com.br');
   const pb=document.getElementById('pbox');pb.classList.add('on');
   pb.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function doCopy(){
   const btn=document.getElementById('pcopy');
-  navigator.clipboard.writeText('diplomadorico@pix.com.br').catch(()=>{
-    const t=document.createElement('textarea');t.value='diplomadorico@pix.com.br';
+  navigator.clipboard.writeText('diplomaderico@pix.com.br').catch(()=>{
+    const t=document.createElement('textarea');t.value='diplomaderico@pix.com.br';
     document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
   });
   btn.textContent='✅ Copiado!';btn.classList.add('ok');
@@ -686,9 +686,9 @@ function showDip(){
 
 function doShare(){
   if(navigator.share){
-    navigator.share({title:'Recebi meu Diploma de Rico! 🎓',text:'Me certifiquei oficialmente como rico.',url:'https://diplomadorico.com'}).catch(()=>{});
+    navigator.share({title:'Recebi meu Diploma de Rico! 🎓',text:'Me certifiquei oficialmente como rico.',url:'https://diplomaderico.com'}).catch(()=>{});
   } else {
-    navigator.clipboard.wText('https://diplomadorico.com').then(()=>{alert('Link copiado!\ndiplomadorico.com')});
+    navigator.clipboard.wText('https://diplomaderico.com').then(()=>{alert('Link copiado!\ndiplomaderico.com')});
   }
 }
 
