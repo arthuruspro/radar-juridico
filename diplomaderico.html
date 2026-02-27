@@ -446,6 +446,9 @@ const M=['🥇','🥈','🥉'];
 let uPhoto='';
 const fR=n=>'R$ '+n.toLocaleString('pt-BR');
 
+// ordena por valor desc — sempre que DATA mudar, chamar renderHero() de novo
+DATA.sort((a,b)=>b.valor-a.valor);
+
 let hrShown=15;
 function renderHero(){
   const el=document.getElementById('hrList');
@@ -678,6 +681,23 @@ function showDip(){
   let ig=document.getElementById('f_ig').value.trim()||'você';
   if(!ig.startsWith('@')) ig='@'+ig;
   const val=parseInt(document.getElementById('f_val').value)||100;
+  const frase=document.getElementById('f_frase').value.trim();
+
+  // insere no DATA na posição correta por valor
+  const novoEntry={
+    ig, nome:ig, valor:val,
+    frase: frase ? `"${frase}"` : '"recém diplomado 🎓"',
+    foto: igPhotoUrl||`https://i.pravatar.cc/100?u=${ig.replace('@','')}`,
+    data:'agora'
+  };
+  DATA.push(novoEntry);
+  DATA.sort((a,b)=>b.valor-a.valor);
+  // re-renderiza o ranking com a nova posição
+  document.getElementById('hrList').innerHTML='';
+  hrShown=Math.max(hrShown, DATA.indexOf(novoEntry)+1);
+  renderHero();
+  renderStats();
+
   document.getElementById('dnome').textContent=ig;
   document.getElementById('dval').textContent=fR(val);
   if(igPhotoUrl){const f=document.getElementById('dfoto');f.src=igPhotoUrl;f.style.display='block'}
