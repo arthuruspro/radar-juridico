@@ -78,13 +78,17 @@ export default async function handler(req, res) {
     const authData = await authRes.json();
     if (!authRes.ok) throw new Error(authData.errors?.[0]?.description || 'Erro ao criar autorização PIX Automático');
 
-    const qrCode = authData.immediateQrCode;
-    if (!qrCode) throw new Error('QR Code não retornado pela Asaas');
+    // Retorna tudo para debug
+    const qrCode = authData.immediateQrCode || authData.qrCode || authData.pixQrCode || {};
+    const payload = qrCode.payload || qrCode.encodedText || qrCode.copyAndPaste || authData.payload || '';
+    const encodedImage = qrCode.encodedImage || qrCode.image || authData.encodedImage || '';
 
     return res.status(200).json({
       authorizationId: authData.id,
-      encodedImage:    qrCode.encodedImage || null,
-      payload:         qrCode.payload      || null,
+      encodedImage,
+      payload,
+      // manda tudo para debug
+      _debug: authData
     });
 
   } catch (err) {
