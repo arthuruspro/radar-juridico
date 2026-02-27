@@ -22,8 +22,10 @@ html::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 /* TOPBAR */
 .tb{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(8,6,3,0.98) 60%,transparent);backdrop-filter:blur(4px)}
+.tl-wrap{display:flex;flex-direction:column;gap:2px}
 .tl{font-family:var(--fm);font-size:11px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:8px}
-.tl::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 2s infinite}
+.tl::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;animation:blink 2s infinite}
+.tl-spy{font-family:var(--fm);font-size:9px;letter-spacing:0.14em;color:var(--gd);text-transform:uppercase;padding-left:15px}
 @keyframes blink{0%,100%{box-shadow:0 0 0 0 rgba(200,168,75,0.5)}50%{box-shadow:0 0 0 5px rgba(200,168,75,0)}}
 .tcta{padding:8px 20px;background:var(--gold);color:#000;font-family:var(--fp);font-size:12px;font-weight:700;border:none;border-radius:1px;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;transition:all 0.2s}
 .tcta:hover{background:var(--gl)}
@@ -58,8 +60,9 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .hr-item:nth-child(3)::before{background:#cd7f32}
 .hr-item:hover{border-color:var(--bb);transform:translateX(3px)}
 .hr-med{font-size:15px;width:20px;text-align:center;flex-shrink:0}
-.hr-av{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--bb);flex-shrink:0;overflow:hidden;background:rgba(200,168,75,0.08)}
-.hr-av img{width:100%;height:100%;object-fit:cover;display:block}
+.hr-av{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--bb);flex-shrink:0;overflow:visible;background:rgba(200,168,75,0.08);position:relative;cursor:pointer}
+.hr-av img{width:100%;height:100%;object-fit:cover;display:block;border-radius:50%}
+.hr-av-eye{position:absolute;bottom:-3px;right:-5px;background:rgba(8,6,3,0.9);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;pointer-events:none;color:var(--gold);opacity:0.9;border:1px solid rgba(200,168,75,0.35)}
 .hr-info{flex:1;min-width:0}
 .hr-name{font-family:var(--fp);font-size:14px;font-weight:700;color:var(--cream)}
 .hr-ig{font-family:var(--fm);font-size:10px;color:var(--gd);margin-left:6px}
@@ -217,7 +220,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .ig-status.ok{color:#4ade80}
 .ig-status.err{color:#f87171}
 .ig-status.loading{color:var(--gd)}
-.ig-at-wrap{flex:1;display:flex;align-items:stretch;background:rgba(200,168,75,0.04);border:1px solid var(--b);border-radius:1px;transition:border-color 0.2s}
+.live-count{color:var(--gold);opacity:0.7;font-size:10px;letter-spacing:0.1em}flex:1;display:flex;align-items:stretch;background:rgba(200,168,75,0.04);border:1px solid var(--b);border-radius:1px;transition:border-color 0.2s}
 .ig-at-wrap:focus-within{border-color:var(--gold)}
 .ig-at-pre{font-family:var(--fp);font-size:22px;font-weight:700;color:var(--gold);padding:0 4px 0 13px;display:flex;align-items:center;line-height:1;flex-shrink:0}
 .ig-at-inp{flex:1;background:transparent!important;border:none!important;outline:none!important;padding:13px 13px 13px 2px;font-family:var(--fb);font-size:16px;color:var(--cream);margin-bottom:0!important}
@@ -227,7 +230,10 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 <body>
 
 <div class="tb">
-  <span class="tl">EM TEMPO REAL</span>
+  <div class="tl-wrap">
+    <span class="tl">EM TEMPO REAL</span>
+    <span class="tl-spy" id="liveCount">47 espiando agora</span>
+  </div>
   <button class="tcta" onclick="openM()">Obter Diploma</button>
 </div>
 
@@ -452,7 +458,7 @@ function renderHero(){
     d.className='hr-item';
     d.innerHTML=`
       <div class="hr-med">${M[i]||i+1}</div>
-      <div class="hr-av" onclick="viewDiploma(event,${i})" style="cursor:pointer" title="Ver diploma"><img src="${r.foto}" alt="${r.nome[0]}"></div>
+      <div class="hr-av" onclick="viewDiploma(event,${i})" style="cursor:pointer" title="Ver diploma"><img src="${r.foto}" alt="${r.nome[0]}"><div class="hr-av-eye"><svg width="13" height="9" viewBox="0 0 9 6" fill="none"><path d="M4.5 0.5C2.5 0.5 0.8 2 0.5 3C0.8 4 2.5 5.5 4.5 5.5C6.5 5.5 8.2 4 8.5 3C8.2 2 6.5 0.5 4.5 0.5Z" stroke="#c8a84b" stroke-width="0.8"/><circle cx="4.5" cy="3" r="1.2" fill="#c8a84b"/></svg></div></div>
       <div class="hr-info">
         <div class="hr-name"><a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig} <span class="ig-link-arrow">↗</span></a>
         </div>
@@ -697,6 +703,17 @@ function renderStats(){
   document.getElementById('statCount').textContent=DATA.length;
   document.getElementById('statTotal').textContent=fmtCompact(total);
 }
+
+// contador ao vivo — base 40-80, flutua naturalmente
+let liveBase=Math.floor(Math.random()*40)+40;
+function updateLive(){
+  liveBase+=Math.floor(Math.random()*5)-2;
+  if(liveBase<38)liveBase=38;
+  if(liveBase>95)liveBase=95;
+  document.getElementById('liveCount').textContent=liveBase+' espiando agora';
+}
+updateLive();
+setInterval(updateLive,4000);
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip();closeTU();closeView()}});
 renderStats();
