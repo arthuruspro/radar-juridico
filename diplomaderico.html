@@ -452,10 +452,9 @@ function renderHero(){
     d.className='hr-item';
     d.innerHTML=`
       <div class="hr-med">${M[i]||i+1}</div>
-      <div class="hr-av"><img src="${r.foto}" alt="${r.nome[0]}"></div>
+      <div class="hr-av" onclick="viewDiploma(event,${i})" style="cursor:pointer" title="Ver diploma"><img src="${r.foto}" alt="${r.nome[0]}"></div>
       <div class="hr-info">
         <div class="hr-name"><a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig} <span class="ig-link-arrow">↗</span></a>
-          <button class="share-mini" onclick="viewDiploma(event,${i})" title="Ver diploma">👁</button>
         </div>
         <div class="hr-frase">${r.frase}</div>
       </div>
