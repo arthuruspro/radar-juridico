@@ -264,7 +264,8 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   <div class="diploma">
     <div class="co tl">✦</div><div class="co tr">✦</div>
     <div class="co bl">✦</div><div class="co br">✦</div>
-    <div class="dh">Diploma de Rico · Instituto Internacional · Est. MDCCCLXXI</div>
+    <div class="dh">diplomadorico.com</div>
+    <div style="font-size:36px;margin-bottom:8px;filter:sepia(1) brightness(0.7)">🎓</div>
     <div class="di">Instituto Internacional<br><em>de Certificação Financeira</em></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
     <div class="dc">Esta instituição certifica, com honra e sem vergonha, que</div>
@@ -276,12 +277,9 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="dvn" id="vVal">R$ 0</div>
     </div>
     <div class="dft">
-      <div class="ds"></div>
-      <div style="text-align:center">
-        <div style="font-size:28px;margin-bottom:4px">🎓</div>
-        <div style="font-family:var(--fm);font-size:7px;color:#8a7040;letter-spacing:0.1em" id="vReg">Nº 00848</div>
-      </div>
-      <div class="ds"></div>
+      
+      
+      
     </div>
   </div>
   <div class="dacts">
@@ -377,7 +375,8 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   <div class="diploma">
     <div class="co tl">✦</div><div class="co tr">✦</div>
     <div class="co bl">✦</div><div class="co br">✦</div>
-    <div class="dh">Diploma de Rico · Instituto Internacional · Est. MDCCCLXXI</div>
+    <div class="dh">diplomadorico.com</div>
+    <div style="font-size:36px;margin-bottom:8px;filter:sepia(1) brightness(0.7)">🎓</div>
     <div class="di">Instituto Internacional<br><em>de Certificação Financeira</em></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
     <div class="dc">Esta instituição certifica, com honra e sem vergonha, que</div>
@@ -389,10 +388,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="dvn" id="dval">R$ 100</div>
     </div>
     <div class="dft">
-      <div style="text-align:center">
-        <div style="font-size:28px;margin-bottom:4px">🎓</div>
-        <div style="font-family:var(--fm);font-size:7px;color:#8a7040;letter-spacing:0.1em" id="dreg">Nº 00848</div>
-      </div>
+      
     </div>
   </div>
   <div class="dacts">
@@ -523,7 +519,6 @@ function viewDiploma(e,idx){
   const r=DATA[idx];
   document.getElementById('vNome').textContent=r.ig;
   document.getElementById('vVal').textContent=fR(r.valor);
-  document.getElementById('vReg').textContent='Nº 0'+(idx+848);
   const foto=document.getElementById('vFoto');
   foto.src=r.foto;
   foto.style.display='block';
@@ -670,7 +665,6 @@ function showDip(){
   const val=parseInt(document.getElementById('f_val').value)||100;
   document.getElementById('dnome').textContent=ig;
   document.getElementById('dval').textContent=fR(val);
-  document.getElementById('dreg').textContent='Nº 0'+(DATA.length+848);
   if(igPhotoUrl){const f=document.getElementById('dfoto');f.src=igPhotoUrl;f.style.display='block'}
   closeM();document.getElementById('dov').classList.add('on');document.body.style.overflow='hidden';
 }
