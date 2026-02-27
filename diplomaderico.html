@@ -73,10 +73,10 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .hr-foot-txt{font-family:var(--fm);font-size:9px;letter-spacing:0.1em;color:var(--gd);text-transform:uppercase}
 .hr-foot-btn{padding:10px 22px;background:var(--gold);color:#000;font-family:var(--fp);font-size:14px;font-weight:700;border:none;border-radius:1px;cursor:pointer;transition:all 0.2s;white-space:nowrap}
 .hr-foot-btn:hover{background:var(--gl)}
-.share-mini{background:none;border:1px solid var(--b);color:var(--gd);font-size:11px;border-radius:2px;padding:2px 5px;cursor:pointer;margin-left:7px;line-height:1;transition:all 0.15s;vertical-align:middle;font-family:var(--fm)}
-.share-mini:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,168,75,0.08)}
-.topup-mini{background:none;border:1px solid rgba(200,168,75,0.25);color:var(--gd);font-size:10px;border-radius:2px;padding:2px 6px;cursor:pointer;line-height:1;transition:all 0.15s;font-family:var(--fm)}
-.topup-mini:hover{border-color:#4ade80;color:#4ade80;background:rgba(74,222,128,0.07)}
+.share-mini{background:none;border:none;font-size:11px;padding:2px 4px;cursor:pointer;margin-left:6px;line-height:1;transition:opacity 0.15s;vertical-align:middle;opacity:0.45;filter:sepia(1) saturate(3) hue-rotate(5deg) brightness(0.8)}
+.share-mini:hover{opacity:1}
+.topup-mini{background:none;border:none;font-size:10px;padding:2px 4px;cursor:pointer;line-height:1;transition:opacity 0.15s;opacity:0.4;filter:sepia(1) saturate(2) hue-rotate(5deg) brightness(0.75)}
+.topup-mini:hover{opacity:1}
 .ver-mais-btn{width:100%;margin-top:12px;padding:13px;background:transparent;border:1px solid var(--b);border-radius:1px;color:var(--cd);font-family:var(--fp);font-size:15px;cursor:pointer;transition:all 0.2s;letter-spacing:0.01em}
 .ver-mais-btn span{font-family:var(--fm);font-size:11px;color:var(--gd);margin-left:8px;letter-spacing:0.1em}
 .ver-mais-btn:hover{border-color:var(--bb);color:var(--cream);background:rgba(200,168,75,0.05)}
@@ -184,7 +184,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .dvb{display:inline-block;border:1.5px solid #c8a84b;padding:12px 32px;margin-bottom:20px}
 .dvl{font-family:var(--fm);font-size:8px;letter-spacing:0.22em;text-transform:uppercase;color:#8a6f2e;margin-bottom:4px}
 .dvn{font-family:var(--fp);font-size:clamp(28px,6vw,44px);font-weight:900;color:#7a5c1e}
-.dft{display:flex;justify-content:space-between;align-items:flex-end;margin-top:28px;padding-top:18px;border-top:1px solid rgba(200,168,75,0.35)}
+.dft{display:flex;justify-content:space-between;align-items:flex-end;margin-top:28px;padding-top:0}
 .ds{text-align:center}
 .dsn{font-style:italic;font-size:16px;color:#1a1004;margin-bottom:2px}
 .dsl{width:100px;height:1px;background:#1a1004;margin:6px auto 4px}
@@ -217,6 +217,11 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .ig-status.ok{color:#4ade80}
 .ig-status.err{color:#f87171}
 .ig-status.loading{color:var(--gd)}
+.ig-at-wrap{flex:1;display:flex;align-items:stretch;background:rgba(200,168,75,0.04);border:1px solid var(--b);border-radius:1px;transition:border-color 0.2s}
+.ig-at-wrap:focus-within{border-color:var(--gold)}
+.ig-at-pre{font-family:var(--fp);font-size:22px;font-weight:700;color:var(--gold);padding:0 4px 0 13px;display:flex;align-items:center;line-height:1;flex-shrink:0}
+.ig-at-inp{flex:1;background:transparent!important;border:none!important;outline:none!important;padding:13px 13px 13px 2px;font-family:var(--fb);font-size:16px;color:var(--cream);margin-bottom:0!important}
+.ig-at-inp::placeholder{color:rgba(162,152,112,0.3)}
 </style>
 </head>
 <body>
@@ -256,7 +261,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 
 <footer>
   © 2025 Diploma de Rico · Diploma sem valor jurídico · Mas com muito valor social<br>
-  Instituto Internacional de Certificação Financeira · Est. MDCCCLXXI
+  Instituto Nacional de Certificação Financeira · Est. MDCCCLXXI
 </footer>
 
 <!-- DIPLOMA VIEWER (espia diploma de outro) -->
@@ -266,7 +271,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <div class="co bl">✦</div><div class="co br">✦</div>
     <div class="dh">diplomadorico.com</div>
     <div style="font-size:36px;margin-bottom:8px;filter:sepia(1) brightness(0.7)">🎓</div>
-    <div class="di">Instituto Internacional<br><em>de Certificação Financeira</em></div>
+    <div class="di">Instituto Nacional<br><em>de Certificação Financeira</em></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
     <div class="dc">Esta instituição certifica, com honra e sem vergonha, que</div>
     <img class="dfoto" id="vFoto" src="" alt="">
@@ -332,7 +337,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 <div class="ov" id="mOv">
   <div class="modal">
     <button class="mcl" onclick="closeM()">✕</button>
-    <p class="mey">Instituto Internacional de Certificação Financeira</p>
+    <p class="mey">Instituto Nacional de Certificação Financeira</p>
     <h2 class="mtitle">Obtenha seu Diploma</h2>
     <p class="msub">Preencha para entrar para a história</p>
 
@@ -343,7 +348,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
         <img class="ig-avatar-img" id="igAvatarImg" src="" alt="" style="display:none">
         <div class="ig-fetch-spin" id="igSpin" style="display:none">⏳</div>
       </div>
-      <input class="inp ig-inp" type="text" id="f_ig" placeholder="@seunome" autocomplete="off" oninput="onIgInput(this.value)">
+      <div class="ig-at-wrap"><span class="ig-at-pre">@</span><input class="inp ig-inp ig-at-inp" type="text" id="f_ig" placeholder="seunome" autocomplete="off" oninput="onIgInput(this.value)"></div>
     </div>
     <div class="ig-status" id="igStatus"></div>
 
@@ -377,7 +382,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <div class="co bl">✦</div><div class="co br">✦</div>
     <div class="dh">diplomadorico.com</div>
     <div style="font-size:36px;margin-bottom:8px;filter:sepia(1) brightness(0.7)">🎓</div>
-    <div class="di">Instituto Internacional<br><em>de Certificação Financeira</em></div>
+    <div class="di">Instituto Nacional<br><em>de Certificação Financeira</em></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
     <div class="dc">Esta instituição certifica, com honra e sem vergonha, que</div>
     <img class="dfoto" id="dfoto" src="" alt="">
@@ -569,7 +574,11 @@ let igPhotoUrl='';
 let igFetchTimer=null;
 
 function onIgInput(val){
-  const username=val.replace('@','').trim();
+  // remove qualquer @ que o usuário tente digitar
+  const clean=val.replace(/@/g,'');
+  const input=document.getElementById('f_ig');
+  if(clean!==val){input.value=clean;}
+  const username=clean.trim();
   const wrap=document.getElementById('igPreviewWrap');
   const ph=document.getElementById('igAvatarPh');
   const img=document.getElementById('igAvatarImg');
@@ -643,6 +652,7 @@ function gPix(){
   const val=parseInt(document.getElementById('f_val').value)||0;
   if(!ig){alert('Digite seu @Instagram');return}
   if(val<100){alert('Valor mínimo é R$100');return}
+  if(!ig.startsWith('@')) ig='@'+ig;
   if(!igPhotoUrl) igPhotoUrl=`https://i.pravatar.cc/100?u=${ig.replace('@','')}`;
   document.getElementById('pval').textContent=fR(val);
   document.getElementById('pqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomadorico@pix.com.br');
@@ -661,7 +671,8 @@ function doCopy(){
 }
 
 function showDip(){
-  const ig=document.getElementById('f_ig').value.trim()||'@você';
+  let ig=document.getElementById('f_ig').value.trim()||'você';
+  if(!ig.startsWith('@')) ig='@'+ig;
   const val=parseInt(document.getElementById('f_val').value)||100;
   document.getElementById('dnome').textContent=ig;
   document.getElementById('dval').textContent=fR(val);
