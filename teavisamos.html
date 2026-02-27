@@ -54,7 +54,7 @@ nav{width:100%;padding:16px 24px;display:flex;align-items:center;justify-content
 .cta-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:20px 48px;background:var(--accent);color:#fff;font-family:var(--font-body);font-size:19px;font-weight:700;border:none;border-radius:16px;cursor:pointer;text-decoration:none;transition:all 0.2s;width:100%;max-width:400px}
 .cta-btn:hover{background:var(--accent-dark);transform:translateY(-2px);box-shadow:0 8px 32px rgba(26,86,219,0.3)}
 .cta-sub{font-size:13px;color:var(--text-muted);margin-top:8px}
-footer{padding:24px;text-align:center;font-size:13px;color:var(--text-dim);border-top:1px solid var(--border);width:100%}
+footer{display:none}
 footer a{color:var(--text-muted);text-decoration:none;margin:0 10px}
 .cpf-modal{position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.35s ease;padding:20px}
 .cpf-modal.active{opacity:1;pointer-events:auto}
@@ -153,7 +153,7 @@ footer a{color:var(--text-muted);text-decoration:none;margin:0 10px}
   <img src="/radar.webp" alt="Exemplo de alerta do Radar Jurídico no WhatsApp" loading="eager">
   <div>
     <button class="cta-btn" onclick="openCpfModal()">
-      Monitorar meu CPF
+      Monitorar CPF
     </button>
 
   </div>
@@ -169,23 +169,22 @@ footer a{color:var(--text-muted);text-decoration:none;margin:0 10px}
 <button class="cpf-modal-close" onclick="closeCpfModal()" aria-label="Fechar">✕</button>
 
 <div class="cpf-step" id="cpfStep1">
-<div class="cpf-step-icon">🛡️</div>
-<h2>Seu CPF está seguro?</h2>
-<p class="cpf-desc">Descubra em segundos se o seu CPF está exposto a novos processos judiciais em todo o Brasil.</p>
+
+<h2>Digite o CPF:</h2>
 <div class="cpf-input-wrap">
 <input type="text" class="cpf-input" id="cpfInput" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" autocomplete="off">
 <p class="cpf-error-msg" id="cpfError">Digite um CPF válido com 11 dígitos</p>
 </div>
-<button class="cpf-submit" id="cpfSubmitBtn" onclick="startAnalysis()">Verificar Gratuitamente</button>
+<button class="cpf-submit" id="cpfSubmitBtn" onclick="startAnalysis()">Continuar</button>
 
 </div>
 
 <div class="cpf-step" id="cpfStep2">
 <div class="cpf-step-icon">🔍</div>
-<h2>Analisando seu CPF...</h2>
+<h2>Analisando CPF</h2>
 <div class="cpf-loading-cpf">CPF: <span id="cpfDisplay"></span></div>
 <div class="cpf-checks">
-<div class="cpf-check-item" id="check1"><div class="cpf-check-icon"></div><div class="cpf-check-text">Validando CPF...</div></div>
+
 <div class="cpf-check-item" id="check2"><div class="cpf-check-icon"></div><div class="cpf-check-text">Consultando 91 tribunais do Brasil...</div></div>
 <div id="problemAlert" style="display:none;align-items:center;gap:10px;margin:6px 0 2px 0;padding:10px 14px;background:#fef2f2;border:1px solid rgba(220,38,38,0.18);border-radius:10px;opacity:0;transition:opacity 0.5s ease;">
   <span style="font-size:17px;">⚠️</span>
@@ -199,7 +198,7 @@ footer a{color:var(--text-muted);text-decoration:none;margin:0 10px}
 
 <div class="cpf-step" id="cpfStep5">
 <div class="cpf-result-status danger"><div class="status-dot"></div> DESPROTEGIDO </div>
-<div class="cpf-result-cpf" id="cpfMasked"></div>
+
 <p class="cpf-result-msg">Seu CPF <strong>não possui monitoramento ativo</strong>.<br><br>Se alguém abrir um processo contra você agora, você só vai descobrir quando for tarde demais — com <strong style="color:#df0101">conta bloqueada, nome sujo, multas ou até risco de prisão</strong>.</p>
 <button class="cpf-result-btn" onclick="showStep(6)" style="background:var(--danger);">Ver como se proteger</button>
 </div>
@@ -314,10 +313,9 @@ function startAnalysis(){
   document.getElementById('cpfDisplay').textContent=cpfInput.value;
   document.querySelectorAll('.cpf-check-item').forEach(el=>el.classList.remove('active','done'));
   const checks=[
-    {id:'check1',activeDelay:300,doneDelay:2000,doneText:'CPF válido ✓'},
-    {id:'check2',activeDelay:2200,doneDelay:5000,doneText:'91 tribunais consultados ✓'},
-    {id:'check3',activeDelay:5200,doneDelay:8000,doneText:'Análise concluída ✓'},
-    {id:'check4',activeDelay:8200,doneDelay:10500,doneText:'Relatório pronto ✓'},
+    {id:'check2',activeDelay:300,doneDelay:3000,doneText:'91 tribunais consultados ✓'},
+    {id:'check3',activeDelay:3200,doneDelay:6000,doneText:'Análise concluída ✓'},
+    {id:'check4',activeDelay:6200,doneDelay:8500,doneText:'Relatório pronto ✓'},
   ];
   checks.forEach(c=>{
     setTimeout(()=>{document.getElementById(c.id).classList.add('active')},c.activeDelay);
@@ -333,7 +331,7 @@ function startAnalysis(){
       }
     },c.doneDelay);
   });
-  setTimeout(()=>{document.getElementById('cpfMasked').textContent=maskCpf(rawCpf);showStep(5)},11500);
+  setTimeout(()=>{showStep(5)},9000);
 }
 
 document.getElementById('checkoutBtn').addEventListener('click',function(e){
