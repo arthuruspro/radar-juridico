@@ -230,11 +230,11 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 
   <div class="stats">
     <div class="stat">
-      <span class="sn">847</span>
+      <span class="sn" id="statCount">—</span>
       <span class="sl">Diplomados</span>
     </div>
     <div class="stat">
-      <span class="sn">R$312K</span>
+      <span class="sn" id="statTotal">—</span>
       <span class="sl">Investido em vaidade</span>
     </div>
   </div>
@@ -287,7 +287,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="pt">⚡ PIX Gerado</div>
       <div class="pv" id="tuPval">R$ 50</div>
       <div class="pqr"><img id="tuPqr" src="" alt="QR PIX"></div>
-      <div class="pkey">diplomadorico@pix.com.br</div>
+      <div class="pkey"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6d2dfc6dad9dbd7d2d9c4dfd5d9f6c6dfce98d5d9db98d4c4">[email&#160;protected]</a></div>
       <button class="pcopy" id="tuPcopy" onclick="doCopyTU()">📋 Copiar código copia e cola</button>
       <div style="margin-top:12px;font-style:italic;font-size:12px;color:var(--cd)">Após pagamento confirmado, sua posição será atualizada automaticamente</div>
     </div>
@@ -381,7 +381,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const DATA=[
   {nome:'Felipe Teixeira',   ig:'@felipeteixeiraa',valor:15000,frase:'"minha ex vai ver isso"',                   foto:'https://i.pravatar.cc/100?img=11',data:'hoje'},
   {nome:'Bruna Cavalcante',  ig:'@brunacavalcante', valor:8500, frase:'"vim do nada. o nada ficou pra trás."',   foto:'https://i.pravatar.cc/100?img=5', data:'hoje'},
@@ -560,11 +560,23 @@ function doShare(){
   if(navigator.share){
     navigator.share({title:'Recebi meu Diploma de Rico! 🎓',text:'Me certifiquei oficialmente como rico.',url:'https://diplomadorico.com'}).catch(()=>{});
   } else {
-    navigator.clipboard.writeText('https://diplomadorico.com').then(()=>{alert('Link copiado!\ndiplomadorico.com')});
+    navigator.clipboard.wText('https://diplomadorico.com').then(()=>{alert('Link copiado!\ndiplomadorico.com')});
   }
 }
 
+function fmtCompact(n){
+  if(n>=1000000) return 'R$'+(n/1000000).toFixed(1).replace('.',',')+'M';
+  if(n>=1000) return 'R$'+(n/1000).toFixed(0)+'K';
+  return fR(n);
+}
+function renderStats(){
+  const total=DATA.reduce((s,r)=>s+r.valor,0);
+  document.getElementById('statCount').textContent=DATA.length;
+  document.getElementById('statTotal').textContent=fmtCompact(total);
+}
+
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip();closeTU()}});
+renderStats();
 renderHero();
 </script>
 </body>
