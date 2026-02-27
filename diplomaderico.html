@@ -70,7 +70,7 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .ig-link:hover{color:var(--gold)}
 .ig-link-arrow{font-size:9px;opacity:0.7}
 .hr-frase{font-style:italic;font-size:14px;color:var(--cream-d, #c8bfa8);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}
-.hr-val{font-family:var(--fp);font-size:16px;font-weight:700;color:var(--gold);flex-shrink:0}
+.hr-val{font-family:var(--fp);font-size:20px;font-weight:700;color:var(--gold);flex-shrink:0}
 .hr-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
 .hr-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--b)}
 .hr-foot-txt{font-family:var(--fm);font-size:9px;letter-spacing:0.1em;color:var(--gd);text-transform:uppercase}
@@ -242,7 +242,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 
   <h1>Diploma<em>de Rico</em></h1>
   <p class="hdesc">A única instituição do Brasil que certifica, oficialmente, que você tem dinheiro demais — e juízo de menos.</p>
-  <p style="font-size:15px;color:var(--go);font-style:italic;margin-top:12px;opacity:0.85;letter-spacing:0.02em;">Quanto mais alto você pagar, mais rico você é.</p>
+  <p style="font-size:15px;color:var(--go);font-style:italic;margin-top:12px;opacity:0;letter-spacing:0.02em;animation:up 0.7s ease 0.4s forwards;">Quanto mais alto você pagar, mais rico você é.</p>
 
   <div class="stats">
     <div class="stat">
@@ -294,6 +294,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   </div>
   <div class="dacts">
     <button class="da g" onclick="closeView()">← Voltar</button>
+    <button class="da" onclick="boostFromView()" style="background:linear-gradient(135deg,#7a5c1e,#c8a84b);color:#fff;border:none;font-family:var(--fm);font-size:11px;letter-spacing:0.1em;padding:13px 20px;cursor:pointer;border-radius:1px;flex:1">↑ SUBIR RANKING DESTE RICO</button>
     <button class="da p" id="vShareBtn" onclick="shareToIg()">📤 Compartilhar no Instagram</button>
   </div>
   <p style="font-family:var(--fm);font-size:9px;color:var(--gd);letter-spacing:0.1em;text-align:center;margin-top:-6px">Abre o Instagram para você compartilhar nos stories</p>
@@ -466,7 +467,6 @@ function renderHero(){
       </div>
       <div class="hr-right">
         <div class="hr-val">${fR(r.valor)}</div>
-        <button class="topup-mini" onclick="openTopUp(event,${i})" title="Aumentar valor investido">+💰</button>
       </div>`;
     el.appendChild(d);
   }
@@ -484,12 +484,12 @@ function renderHero(){
 }
 
 let tuIdx=-1;
-function openTopUp(e,idx){
+function openTopUp(e,idx,fromBoost){
   e.stopPropagation();
   tuIdx=idx;
   const r=DATA[idx];
-  document.getElementById('tuTitle').textContent=r.nome;
-  document.getElementById('tuSub').textContent=r.ig+' · posição '+(idx+1)+'º no ranking';
+  document.getElementById('tuTitle').textContent=fromBoost?'Subir '+r.ig+' no ranking':r.nome;
+  document.getElementById('tuSub').textContent=fromBoost?'Você paga, o valor vai pro diploma dele — e ele sobe':r.ig+' · posição '+(idx+1)+'º no ranking';
   document.getElementById('tuAtual').textContent=fR(r.valor);
   document.getElementById('tuNovo').textContent=fR(r.valor);
   document.getElementById('tu_val').value='';
@@ -538,6 +538,11 @@ function viewDiploma(e,idx){
 function closeView(){
   document.getElementById('viewOv').classList.remove('on');
   document.body.style.overflow='';
+}
+function boostFromView(){
+  const idx=viewingIdx;
+  closeView();
+  setTimeout(()=>openTopUp({stopPropagation:()=>{}},idx,true),120);
 }
 function shareToIg(){
   const r=DATA[viewingIdx];
