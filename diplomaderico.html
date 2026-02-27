@@ -175,8 +175,11 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .co.bl{bottom:22px;left:22px;transform:scaleY(-1)}
 .co.br{bottom:22px;right:22px;transform:scale(-1)}
 .dh{font-family:var(--fm);font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:#8a6f2e;margin-bottom:14px}
-.di{font-family:var(--fp);font-size:clamp(16px,3vw,24px);font-weight:900;color:#1a1004;line-height:1.15;margin-bottom:4px}
-.di em{color:#7a5c1e;font-style:italic}
+.di-brand{font-family:var(--fp);font-size:clamp(28px,7vw,48px);font-weight:900;line-height:0.95;letter-spacing:-0.02em;color:#7a5c1e;margin-bottom:10px;text-align:center}
+.di-brand .line1{display:block}
+.di-brand .line2{display:flex;align-items:baseline;justify-content:center;gap:3px}
+.di-brand em{font-style:italic;color:#1a1004}
+.di-com{font-family:var(--fm);font-size:0.45em;font-weight:400;font-style:normal;color:#8a6f2e;letter-spacing:0.05em}
 .dline{display:flex;align-items:center;gap:8px;margin:16px auto;width:fit-content}
 .dlb{width:60px;height:1.5px;background:#c8a84b}
 .dlg{color:#c8a84b;font-size:10px}
@@ -266,8 +269,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 </section>
 
 <footer>
-  © 2025 Diploma de Rico · Diploma sem valor jurídico · Mas com muito valor social<br>
-  Instituto Nacional de Certificação Financeira · Est. MDCCCLXXI
+  © 2026 Diploma de Rico · Diploma sem valor jurídico · Mas com muito valor social
 </footer>
 
 <!-- DIPLOMA VIEWER (espia diploma de outro) -->
@@ -275,9 +277,8 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   <div class="diploma">
     <div class="co tl">✦</div><div class="co tr">✦</div>
     <div class="co bl">✦</div><div class="co br">✦</div>
-    <div class="dh">diplomadorico.com</div>
     <div style="font-size:36px;margin-bottom:8px;filter:sepia(1) brightness(0.7)">🎓</div>
-    <div class="di">Instituto Nacional<br><em>de Certificação Financeira</em></div>
+    <div class="di-brand"><span class="line1">Diploma</span><span class="line2"><em>de Rico</em><span class="di-com">.com</span></span></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
     <div class="dc">Esta instituição certifica, com honra e sem vergonha, que</div>
     <img class="dfoto" id="vFoto" src="" alt="">
@@ -386,9 +387,8 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   <div class="diploma">
     <div class="co tl">✦</div><div class="co tr">✦</div>
     <div class="co bl">✦</div><div class="co br">✦</div>
-    <div class="dh">diplomadorico.com</div>
     <div style="font-size:36px;margin-bottom:8px;filter:sepia(1) brightness(0.7)">🎓</div>
-    <div class="di">Instituto Nacional<br><em>de Certificação Financeira</em></div>
+    <div class="di-brand"><span class="line1">Diploma</span><span class="line2"><em>de Rico</em><span class="di-com">.com</span></span></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
     <div class="dc">Esta instituição certifica, com honra e sem vergonha, que</div>
     <img class="dfoto" id="dfoto" src="" alt="">
@@ -704,12 +704,12 @@ function renderStats(){
   document.getElementById('statTotal').textContent=fmtCompact(total);
 }
 
-// contador ao vivo — base 40-80, flutua naturalmente
-let liveBase=Math.floor(Math.random()*40)+40;
+// contador ao vivo — base pós-viral 5 influencers 100k
+let liveBase=Math.floor(Math.random()*80)+300;
 function updateLive(){
-  liveBase+=Math.floor(Math.random()*5)-2;
-  if(liveBase<38)liveBase=38;
-  if(liveBase>95)liveBase=95;
+  liveBase+=Math.floor(Math.random()*11)-5;
+  if(liveBase<280)liveBase=280;
+  if(liveBase>420)liveBase=420;
   document.getElementById('liveCount').textContent=liveBase+' espiando agora';
 }
 updateLive();
