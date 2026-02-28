@@ -242,7 +242,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 
   <h1>Diploma<em>de Rico</em></h1>
   <p class="hdesc">A única instituição do Brasil que certifica, oficialmente, que você tem dinheiro demais — e juízo de menos.</p>
-  <p style="font-size:15px;color:var(--go);font-style:italic;margin-top:12px;opacity:0;letter-spacing:0.02em;animation:up 0.7s ease 0.4s forwards;">Quanto mais alto você pagar, mais rico você é.</p>
+  <p style="font-size:15px;color:var(--go);font-style:italic;margin-top:12px;opacity:0;letter-spacing:0.02em;animation:up 0.7s ease 0.4s forwards;">Quanto mais alto você paga, mais rico você é.</p>
 
   <div class="stats">
     <div class="stat">
@@ -766,24 +766,23 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip()
 let myDiplomaHandle = '';
 
 function copyDiplomaLink(){
-  const url = `https://diplomaderico.com/?diploma=${encodeURIComponent(myDiplomaHandle)}`;
+  const handle = myDiplomaHandle.replace('@','');
+  const url = `https://radar-juridico.com/diplomaderico?diploma=${handle}`;
   navigator.clipboard.writeText(url).then(()=>{
     const btn = document.getElementById('copyLinkBtn');
     btn.textContent = '✓ Link copiado!';
     setTimeout(()=>{ btn.innerHTML = '🔗 Copiar link do diploma'; }, 2000);
   }).catch(()=>{
-    prompt('Copie seu link:', `https://diplomaderico.com/?diploma=${encodeURIComponent(myDiplomaHandle)}`);
+    prompt('Copie seu link:', url);
   });
 }
 
 function checkDiplomaParam(){
   const params = new URLSearchParams(window.location.search);
-  const handle = params.get('diploma');
+  const handle = (params.get('diploma') || '').replace('@','').toLowerCase();
   if(!handle) return;
-  // aguarda DATA estar pronto e renderizado
-  const idx = DATA.findIndex(r => r.ig.replace('@','').toLowerCase() === handle.replace('@','').toLowerCase());
+  const idx = DATA.findIndex(r => r.ig.replace('@','').toLowerCase() === handle);
   if(idx >= 0){
-    // garante que o card esteja visível no ranking
     if(hrShown <= idx){ hrShown = idx+1; renderHero(); }
     setTimeout(()=>{ viewDiploma({stopPropagation:()=>{}}, idx); }, 400);
   }
