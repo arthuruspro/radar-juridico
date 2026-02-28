@@ -707,7 +707,7 @@ async function gPix(){
   btn.disabled = true;
 
   try {
-    const res = await fetch('/api/diplomapix', {
+    const res = await fetch('/api/diploma-pix', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ig, valor: val, cpf })
