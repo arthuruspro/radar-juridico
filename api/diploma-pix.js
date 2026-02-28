@@ -3,9 +3,9 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { ig, valor } = req.body;
-  if (!ig || !valor) {
-    return res.status(400).json({ error: 'ig e valor são obrigatórios' });
+  const { ig, valor, cpf } = req.body;
+  if (!ig || !valor || !cpf) {
+    return res.status(400).json({ error: 'ig, valor e cpf são obrigatórios' });
   }
   if (valor < 30) {
     return res.status(400).json({ error: 'Valor mínimo é R$30' });
@@ -25,6 +25,7 @@ export default async function handler(req, res) {
       method: 'POST', headers: HEADERS,
       body: JSON.stringify({
         name:                ig,
+        cpfCnpj:             cpf,
         email:               `${username}@diplomaderico.com`,
         notificationDisabled: true
       })
