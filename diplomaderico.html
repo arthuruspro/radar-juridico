@@ -408,6 +408,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   </div>
   <div class="dacts">
     <button class="da g" onclick="closeDip()">← Voltar</button>
+    <button class="da" id="copyLinkBtn" onclick="copyDiplomaLink()" style="background:linear-gradient(135deg,#7a5c1e,#c8a84b);color:#fff;border:none;">🔗 Copiar link do diploma</button>
     <button class="da p" onclick="doShare()">📤 Compartilhar nos Stories</button>
   </div>
 </div>
@@ -697,6 +698,7 @@ function doCopy(){
 function showDip(){
   let ig=document.getElementById('f_ig').value.trim()||'você';
   if(!ig.startsWith('@')) ig='@'+ig;
+  myDiplomaHandle = ig;
   const val=parseInt(document.getElementById('f_val').value)||100;
   const frase=document.getElementById('f_frase').value.trim();
 
@@ -760,8 +762,36 @@ updateLive();
 setInterval(updateLive,4000);
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip();closeTU();closeView()}});
+// ---- LINK COMPARTILHÁVEL ----
+let myDiplomaHandle = '';
+
+function copyDiplomaLink(){
+  const url = `https://diplomaderico.com/?diploma=${encodeURIComponent(myDiplomaHandle)}`;
+  navigator.clipboard.writeText(url).then(()=>{
+    const btn = document.getElementById('copyLinkBtn');
+    btn.textContent = '✓ Link copiado!';
+    setTimeout(()=>{ btn.innerHTML = '🔗 Copiar link do diploma'; }, 2000);
+  }).catch(()=>{
+    prompt('Copie seu link:', `https://diplomaderico.com/?diploma=${encodeURIComponent(myDiplomaHandle)}`);
+  });
+}
+
+function checkDiplomaParam(){
+  const params = new URLSearchParams(window.location.search);
+  const handle = params.get('diploma');
+  if(!handle) return;
+  // aguarda DATA estar pronto e renderizado
+  const idx = DATA.findIndex(r => r.ig.replace('@','').toLowerCase() === handle.replace('@','').toLowerCase());
+  if(idx >= 0){
+    // garante que o card esteja visível no ranking
+    if(hrShown <= idx){ hrShown = idx+1; renderHero(); }
+    setTimeout(()=>{ viewDiploma({stopPropagation:()=>{}}, idx); }, 400);
+  }
+}
+
 renderStats();
 renderHero();
+checkDiplomaParam();
 </script>
 </body>
 </html>
