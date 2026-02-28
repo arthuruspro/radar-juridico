@@ -782,10 +782,28 @@ function checkDiplomaParam(){
   const handle = (params.get('diploma') || '').replace('@','').toLowerCase();
   if(!handle) return;
   const idx = DATA.findIndex(r => r.ig.replace('@','').toLowerCase() === handle);
-  if(idx >= 0){
-    if(hrShown <= idx){ hrShown = idx+1; renderHero(); }
-    setTimeout(()=>{ viewDiploma({stopPropagation:()=>{}}, idx); }, 400);
-  }
+  if(idx < 0) return;
+  if(hrShown <= idx){ hrShown = idx+1; renderHero(); }
+  // pequeno delay pra garantir que o DOM do modal está pronto
+  setTimeout(()=>{
+    viewingIdx = idx;
+    const r = DATA[idx];
+    document.getElementById('vNome').textContent = r.ig;
+    document.getElementById('vVal').textContent = fR(r.valor);
+    const foto = document.getElementById('vFoto');
+    foto.src = r.foto;
+    foto.style.display = 'block';
+    const vfw = document.getElementById('vFraseWrap');
+    const vf = document.getElementById('vFrase');
+    if(r.frase && r.frase.trim()){
+      vf.textContent = r.frase;
+      vfw.style.display = 'block';
+    } else {
+      vfw.style.display = 'none';
+    }
+    document.getElementById('viewOv').classList.add('on');
+    document.body.style.overflow = 'hidden';
+  }, 600);
 }
 
 renderStats();
