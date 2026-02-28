@@ -18,18 +18,27 @@ export default async function handler(req, res) {
   if (valor < 30) return res.status(400).json({ error: 'Valor mínimo é R$30' });
 
   try {
-    // 1. Criar customer no Asaas
-    const username = ig.replace('@', '');
-    const custRes  = await fetch(`${ASAAS_BASE}/customers`, {
-      method: 'POST', headers: ASAAS_HDR,
-      body: JSON.stringify({
-        name: ig, cpfCnpj: cpf,
-        email: `${username}@diplomaderico.com`,
-        notificationDisabled: true
-      })
-    });
-    const custData = await custRes.json();
-    if (!custRes.ok) throw new Error(custData.errors?.[0]?.description || 'Erro ao criar cliente');
+    // 1. Busca customer existente ou cria novo
+    let customerId;
+    const searchRes = await fetch(`${ASAAS_BASE}/customers?cpfCnpj=${cpf}`, { headers: ASAAS_HDR });
+    const searchData = await searchRes.json();
+
+    if (searchData.data && searchData.data.length > 0) {
+      customerId = searchData.data[0].id;
+    } else {
+      const username = ig.replace('@', '');
+      const custRes  = await fetch(`${ASAAS_BASE}/customers`, {
+        method: 'POST', headers: ASAAS_HDR,
+        body: JSON.stringify({
+          name: ig, cpfCnpj: cpf,
+          email: `${username}@diplomaderico.com`,
+          notificationDisabled: true
+        })
+      });
+      const custData = await custRes.json();
+      if (!custRes.ok) throw new Error(custData.errors?.[0]?.description || 'Erro ao criar cliente');
+      customerId = custData.id;
+    }
 
     // 2. Criar cobrança PIX
     const due = new Date();
@@ -39,7 +48,7 @@ export default async function handler(req, res) {
     const payRes  = await fetch(`${ASAAS_BASE}/payments`, {
       method: 'POST', headers: ASAAS_HDR,
       body: JSON.stringify({
-        customer: custData.id,
+        customer: customerId,
         billingType: 'PIX',
         value: Number(valor),
         dueDate,
@@ -55,12 +64,13 @@ export default async function handler(req, res) {
     if (!qrRes.ok) throw new Error(qrData.errors?.[0]?.description || 'Erro ao buscar QR Code');
 
     // 4. Salvar pedido pendente no Supabase
+    const fraseVal = (typeof frase === 'string' && frase.trim().length > 0) ? frase.trim() : null;
     await fetch(`${SUPA_URL}/rest/v1/diplomas`, {
       method: 'POST', headers: SUPA_HDR,
       body: JSON.stringify({
         ig, cpf,
         valor: Number(valor),
-        frase: frase || null,
+        frase: fraseVal,
         payment_id: payData.id,
         status: 'pending'
       })
