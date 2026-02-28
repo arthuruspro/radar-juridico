@@ -41,7 +41,8 @@ html::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 h1{font-family:var(--fp);font-size:clamp(48px,9vw,96px);font-weight:900;line-height:0.95;letter-spacing:-0.025em;color:var(--gl);opacity:0;animation:up 0.7s ease 0.2s forwards}
 h1 em{font-style:italic;color:var(--cream);display:block}
 @keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-.hdesc{font-size:clamp(18px,2.5vw,24px);font-style:italic;color:var(--cd);margin-top:16px;max-width:480px;line-height:1.7;opacity:0;animation:up 0.7s ease 0.3s forwards}
+/* ALTERADO: line-height de 1.7 → 1.85 pra Cormorant respirar melhor */
+.hdesc{font-size:clamp(18px,2.5vw,24px);font-style:italic;color:var(--cd);margin-top:16px;max-width:480px;line-height:1.85;opacity:0;animation:up 0.7s ease 0.3s forwards}
 
 /* STATS */
 .stats{display:flex;border:1px solid var(--b);border-radius:1px;overflow:hidden;margin:28px auto;width:fit-content;opacity:0;animation:up 0.7s ease 0.35s forwards}
@@ -209,6 +210,12 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   .dft{flex-direction:column;gap:14px;align-items:center}
   .dacts{flex-direction:column}
   .hr-frase{max-width:180px}
+  /* Cormorant mais respirado em mobile — legibilidade sem perder o charme */
+  .hdesc{font-size:20px;line-height:1.95}
+  .msub{font-size:15px;line-height:1.8}
+  .vhint{font-size:14px;line-height:1.75}
+  .inp{font-size:17px;line-height:1.7}
+  .hr-frase{font-size:13px;line-height:1.5}
 }
 /* ig auto-fetch */
 .ig-fetch-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
@@ -277,7 +284,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <div class="co tl">✦</div><div class="co tr">✦</div>
     <div class="co bl">✦</div><div class="co br">✦</div>
     <div style="font-size:24px;margin-bottom:4px;filter:sepia(1) brightness(0.7)">🎓</div>
-    <div class="di-brand" style="transform:scale(0.75);transform-origin:center;margin:-8px 0 -4px"><span class="line1">Diploma</span><span class="line2"><em>de Rico</em><span class="di-com">.com</span></span></div>
+    <div style="font-family:var(--fp);font-size:28px;font-weight:900;line-height:1;letter-spacing:-0.02em;color:#7a5c1e;text-align:center;white-space:nowrap;margin-bottom:6px">Diploma <em style="font-style:italic;color:#1a1004">de Rico</em><span style="font-family:var(--fm);font-size:13px;font-weight:400;font-style:normal;color:#8a6f2e;letter-spacing:0.05em"> .com</span></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
     <div class="dc" style="display:none"></div>
     <img class="dfoto" id="vFoto" src="" alt="" style="width:64px;height:64px;margin:10px auto 6px">
@@ -286,7 +293,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="dvl" style="font-size:9px">Valor Oficialmente Investido</div>
       <div class="dvn" id="vVal" style="font-size:26px">R$ 0</div>
     </div>
-    <div id="vFraseWrap" style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(200,168,75,0.2);display:none">
+    <div id="vFraseWrap" style="margin-top:10px;padding-top:10px;display:none">
       <div id="vFrase" style="font-family:var(--fp);font-style:italic;font-size:13px;color:#7a5c1e;line-height:1.5;text-align:center"></div>
     </div>
     <div class="dft"></div>
@@ -330,7 +337,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="pt">⚡ PIX Gerado</div>
       <div class="pv" id="tuPval">R$ 50</div>
       <div class="pqr"><img id="tuPqr" src="" alt="QR PIX"></div>
-      <div class="pkey"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6d2dfc6dad9dbd7d2d9c4dfd5d9f6c6dfce98d5d9db98d4c4">[email&#160;protected]</a></div>
+      <div class="pkey">diplomaderico@pix.com.br</div>
       <button class="pcopy" id="tuPcopy" onclick="doCopyTU()">📋 Copiar código copia e cola</button>
       <div style="margin-top:12px;font-style:italic;font-size:12px;color:var(--cd)">Após pagamento confirmado, sua posição será atualizada automaticamente</div>
     </div>
@@ -372,7 +379,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="pt">⚡ PIX Gerado</div>
       <div class="pv" id="pval">R$ 100</div>
       <div class="pqr"><img id="pqr" src="" alt="QR PIX"></div>
-      <div class="pkey"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="57333e273b383a363338253e343817273e2f7934383a793525">[email&#160;protected]</a></div>
+      <div class="pkey">diplomaderico@pix.com.br</div>
       <button class="pcopy" id="pcopy" onclick="doCopy()">📋 Copiar código copia e cola</button>
       <button class="ppaid" onclick="showDip()">✅ Já paguei — Ver meu Diploma</button>
     </div>
@@ -407,7 +414,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const DATA=[
   {nome:'Felipe Teixeira',   ig:'@felipeteixeiraa',valor:15000,frase:'"minha ex vai ver isso"',                   foto:'https://i.pravatar.cc/100?img=11',data:'hoje'},
   {nome:'Bruna Cavalcante',  ig:'@brunacavalcante', valor:8500, frase:'"vim do nada. o nada ficou pra trás."',   foto:'https://i.pravatar.cc/100?img=5', data:'hoje'},
@@ -446,7 +453,6 @@ const M=['🥇','🥈','🥉'];
 let uPhoto='';
 const fR=n=>'R$ '+n.toLocaleString('pt-BR');
 
-// ordena por valor desc — sempre que DATA mudar, chamar renderHero() de novo
 DATA.sort((a,b)=>b.valor-a.valor);
 
 let hrShown=30;
@@ -588,12 +594,10 @@ function openM(){document.getElementById('mOv').classList.add('on');document.bod
 function closeM(){document.getElementById('mOv').classList.remove('on');document.body.style.overflow=''}
 function closeDip(){document.getElementById('dov').classList.remove('on');document.body.style.overflow=''}
 
-// ---- INSTAGRAM PHOTO AUTO-FETCH ----
 let igPhotoUrl='';
 let igFetchTimer=null;
 
 function onIgInput(val){
-  // remove qualquer @ que o usuário tente digitar
   const clean=val.replace(/@/g,'');
   const input=document.getElementById('f_ig');
   if(clean!==val){input.value=clean;}
@@ -630,12 +634,7 @@ async function fetchIgPhoto(username){
   const status=document.getElementById('igStatus');
 
   try{
-    // PRODUÇÃO: trocar pela sua Vercel serverless function que chama SearchAPI.io
-    // GET /api/ig-photo?username=felipeteixeiraa
-    // que retorna { avatar: "https://..." }
-    //
-    // Para o MVP, simulamos com a API do SearchAPI diretamente:
-    const SEARCHAPI_KEY='SUA_CHAVE_AQUI'; // ← substituir pela chave real
+    const SEARCHAPI_KEY='SUA_CHAVE_AQUI';
     const res=await fetch(
       `https://www.searchapi.io/api/v1/search?engine=instagram_profile&username=${username}&api_key=${SEARCHAPI_KEY}`
     );
@@ -654,7 +653,6 @@ async function fetchIgPhoto(username){
     status.className='ig-status ok';
 
   }catch(e){
-    // fallback: iniciais + avatar genérico
     spin.style.display='none';
     ph.style.display='flex';
     ph.textContent=username[0].toUpperCase();
@@ -708,7 +706,6 @@ function showDip(){
   const val=parseInt(document.getElementById('f_val').value)||100;
   const frase=document.getElementById('f_frase').value.trim();
 
-  // insere no DATA na posição correta por valor
   const novoEntry={
     ig, nome:ig, valor:val,
     frase: frase ? `"${frase}"` : '"recém diplomado 🎓"',
@@ -717,7 +714,6 @@ function showDip(){
   };
   DATA.push(novoEntry);
   DATA.sort((a,b)=>b.valor-a.valor);
-  // re-renderiza o ranking com a nova posição
   document.getElementById('hrList').innerHTML='';
   hrShown=Math.max(hrShown, DATA.indexOf(novoEntry)+1);
   renderHero();
@@ -741,7 +737,7 @@ function doShare(){
   if(navigator.share){
     navigator.share({title:'Recebi meu Diploma de Rico! 🎓',text:'Me certifiquei oficialmente como rico.',url:'https://diplomaderico.com'}).catch(()=>{});
   } else {
-    navigator.clipboard.wText('https://diplomaderico.com').then(()=>{alert('Link copiado!\ndiplomaderico.com')});
+    navigator.clipboard.writeText('https://diplomaderico.com').then(()=>{alert('Link copiado!\ndiplomaderico.com')});
   }
 }
 
@@ -756,7 +752,6 @@ function renderStats(){
   document.getElementById('statTotal').textContent=fmtCompact(total);
 }
 
-// contador ao vivo — base pós-viral 5 influencers 100k
 let liveBase=Math.floor(Math.random()*80)+300;
 function updateLive(){
   liveBase+=Math.floor(Math.random()*11)-5;
@@ -768,7 +763,7 @@ updateLive();
 setInterval(updateLive,4000);
 
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip();closeTU();closeView()}});
-// ---- LINK COMPARTILHÁVEL ----
+
 let myDiplomaHandle = '';
 
 function copyDiplomaLink(){
@@ -790,7 +785,6 @@ function checkDiplomaParam(){
   const idx = DATA.findIndex(r => r.ig.replace('@','').toLowerCase() === handle);
   if(idx < 0) return;
   if(hrShown <= idx){ hrShown = idx+1; renderHero(); }
-  // pequeno delay pra garantir que o DOM do modal está pronto
   setTimeout(()=>{
     viewingIdx = idx;
     const r = DATA[idx];
