@@ -38,8 +38,8 @@ export default async function handler(req, res) {
     if (!imgRes.ok) throw new Error('Erro ao buscar imagem');
     const buffer = await imgRes.arrayBuffer();
 
-    // 4. Salva no Supabase Storage
-    await fetch(
+   // 4. Salva no Supabase Storage
+    const uploadRes = await fetch(
       `${SUPA_URL}/storage/v1/object/fotos/${username}.jpg`,
       {
         method: 'POST',
@@ -51,6 +51,7 @@ export default async function handler(req, res) {
         body: buffer
       }
     );
+    console.log('[storage upload]', uploadRes.status, await uploadRes.text());
 
     // 5. Serve a imagem pro browser
     const contentType = imgRes.headers.get('content-type') || 'image/jpeg';
