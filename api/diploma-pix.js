@@ -14,6 +14,7 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const { ig, valor, cpf, frase } = req.body;
+  console.log('[diploma-pix] body recebido:', JSON.stringify({ ig, valor, cpf, frase }));
   if (!ig || !valor || !cpf) return res.status(400).json({ error: 'ig, valor e cpf são obrigatórios' });
   if (valor < 30) return res.status(400).json({ error: 'Valor mínimo é R$30' });
 
