@@ -272,35 +272,30 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 
 <!-- DIPLOMA VIEWER (espia diploma de outro) -->
 <div class="dov" id="viewOv">
-  <div class="diploma">
+  <div class="diploma" style="max-width:380px;padding:28px 28px 22px;">
     <div class="co tl">✦</div><div class="co tr">✦</div>
     <div class="co bl">✦</div><div class="co br">✦</div>
-    <div style="font-size:36px;margin-bottom:8px;filter:sepia(1) brightness(0.7)">🎓</div>
-    <div class="di-brand"><span class="line1">Diploma</span><span class="line2"><em>de Rico</em><span class="di-com">.com</span></span></div>
+    <div style="font-size:24px;margin-bottom:4px;filter:sepia(1) brightness(0.7)">🎓</div>
+    <div class="di-brand" style="transform:scale(0.75);transform-origin:center;margin:-8px 0 -4px"><span class="line1">Diploma</span><span class="line2"><em>de Rico</em><span class="di-com">.com</span></span></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
-    <div class="dc">Esta instituição certifica, com honra e sem vergonha, que</div>
-    <img class="dfoto" id="vFoto" src="" alt="">
-    <div class="dnome" id="vNome">@alguem</div>
-    <div class="dbody">investiu livremente e por vontade própria a quantia abaixo declarada para provar, de uma vez por todas, que tem dinheiro — e que sabe muito bem o que fazer com ele.</div>
-    <div class="dvb">
-      <div class="dvl">Valor Oficialmente Investido</div>
-      <div class="dvn" id="vVal">R$ 0</div>
+    <div class="dc" style="font-size:11px">Esta instituição certifica, com honra e sem vergonha, que</div>
+    <img class="dfoto" id="vFoto" src="" alt="" style="width:64px;height:64px;margin:10px auto 6px">
+    <div class="dnome" id="vNome" style="font-size:28px;margin:4px 0">@alguem</div>
+    <div class="dbody" style="font-size:11px;margin:6px 0">investiu livremente e por vontade própria a quantia abaixo declarada para provar, de uma vez por todas, que tem dinheiro — e que sabe muito bem o que fazer com ele.</div>
+    <div class="dvb" style="margin-top:10px;padding-top:10px">
+      <div class="dvl" style="font-size:9px">Valor Oficialmente Investido</div>
+      <div class="dvn" id="vVal" style="font-size:26px">R$ 0</div>
     </div>
-    <div id="vFraseWrap" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(200,168,75,0.2);display:none">
-      <div id="vFrase" style="font-family:var(--fp);font-style:italic;font-size:15px;color:#7a5c1e;line-height:1.5;text-align:center"></div>
+    <div id="vFraseWrap" style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(200,168,75,0.2);display:none">
+      <div id="vFrase" style="font-family:var(--fp);font-style:italic;font-size:13px;color:#7a5c1e;line-height:1.5;text-align:center"></div>
     </div>
-    <div class="dft">
-      
-      
-      
-    </div>
+    <div class="dft"></div>
   </div>
   <div class="dacts">
     <button class="da g" onclick="closeView()">← Voltar</button>
     <button class="da" onclick="boostFromView()" style="background:linear-gradient(135deg,#7a5c1e,#c8a84b);color:#fff;border:none;font-family:var(--fm);font-size:11px;letter-spacing:0.1em;padding:13px 20px;cursor:pointer;border-radius:1px;flex:1">↑ SUBIR RANKING DESTE RICO</button>
     <button class="da p" id="vShareBtn" onclick="shareToIg()">📤 Compartilhar no Instagram</button>
   </div>
-  <p style="font-family:var(--fm);font-size:9px;color:var(--gd);letter-spacing:0.1em;text-align:center;margin-top:-6px">Abre o Instagram para você compartilhar nos stories</p>
 </div>
 
 <!-- TOP-UP MODAL -->
