@@ -852,15 +852,17 @@ async function loadRanking(){
     const rows = await res.json();
     if(!Array.isArray(rows)) return;
 
-    // Substitui DATA completamente com dados reais do banco
     DATA.length = 0;
     rows.forEach(r => {
+      const username = r.ig.replace('@','');
+      // Usa foto salva no banco se disponível, senão chama o proxy
+      const foto = r.foto_url || `/api/ig-photo?username=${encodeURIComponent(username)}`;
       DATA.push({
         ig: r.ig,
         nome: r.ig,
         valor: r.valor,
         frase: r.frase ? `"${r.frase}"` : '',
-        foto: `https://i.pravatar.cc/100?u=${r.ig.replace('@','')}`,
+        foto,
         data: 'recente'
       });
     });
