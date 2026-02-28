@@ -633,18 +633,20 @@ async function fetchIgPhoto(username){
   const status=document.getElementById('igStatus');
 
   try{
-    const res = await fetch(`/api/ig-photo?username=${encodeURIComponent(username)}`);
-    const data = await res.json();
-    if(!res.ok || !data.avatar) throw new Error('não encontrado');
-
-    igPhotoUrl = data.avatar;
-    img.src = data.avatar;
+    const proxyUrl=`/api/ig-photo?username=${encodeURIComponent(username)}`;
+    await new Promise((resolve,reject)=>{
+      const t=new Image();
+      t.onload=resolve;
+      t.onerror=reject;
+      t.src=proxyUrl;
+    });
+    igPhotoUrl=proxyUrl;
+    img.src=proxyUrl;
     img.style.display='block';
     spin.style.display='none';
     wrap.classList.add('loaded');
     status.textContent='✓ Foto encontrada';
     status.className='ig-status ok';
-
   }catch(e){
     spin.style.display='none';
     ph.style.display='flex';
