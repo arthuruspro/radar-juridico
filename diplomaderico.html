@@ -223,7 +223,8 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .ig-status.ok{color:#4ade80}
 .ig-status.err{color:#f87171}
 .ig-status.loading{color:var(--gd)}
-.live-count{color:var(--gold);opacity:0.7;font-size:10px;letter-spacing:0.1em}flex:1;display:flex;align-items:stretch;background:rgba(200,168,75,0.04);border:1px solid var(--b);border-radius:1px;transition:border-color 0.2s}
+.live-count{color:var(--gold);opacity:0.7;font-size:10px;letter-spacing:0.1em}
+.ig-at-wrap{display:flex;align-items:center;flex:1;background:var(--ci);border:1px solid var(--bb);border-radius:1px}
 .ig-at-wrap:focus-within{border-color:var(--gold)}
 .ig-at-pre{font-family:var(--fp);font-size:22px;font-weight:700;color:var(--gold);padding:0 4px 0 13px;display:flex;align-items:center;line-height:1;flex-shrink:0}
 .ig-at-inp{flex:1;background:transparent!important;border:none!important;outline:none!important;padding:13px 13px 13px 2px;font-family:var(--fb);font-size:16px;color:var(--cream);margin-bottom:0!important}
@@ -260,7 +261,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <div class="hr-label">🏆 Os mais ricos do momento</div>
     <div id="hrList"></div>
     <div class="hr-foot">
-      <span class="hr-foot-txt">PIX Mínimo R$100 · Diploma na hora</span>
+      <span class="hr-foot-txt">PIX Mínimo R$30 · Diploma na hora</span>
       <button class="hr-foot-btn" onclick="openM()">🎓 Entrar no ranking</button>
     </div>
   </div>
@@ -344,26 +345,27 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <h2 class="mtitle">Obtenha seu Diploma</h2>
     <p class="msub">Preencha para entrar para a história</p>
 
-    <label class="fl2">@ Instagram <small>(aparecerá no ranking público)</small></label>
+    <label class="fl2" style="font-size:11px">@ Instagram <small style="font-size:11px">(aparecerá no ranking público)</small></label>
     <div class="ig-fetch-row">
       <div class="ig-preview-wrap" id="igPreviewWrap">
         <div class="ig-avatar-ph" id="igAvatarPh">?</div>
         <img class="ig-avatar-img" id="igAvatarImg" src="" alt="" style="display:none">
         <div class="ig-fetch-spin" id="igSpin" style="display:none">⏳</div>
       </div>
-      <div class="ig-at-wrap"><span class="ig-at-pre">@</span><input class="inp ig-inp ig-at-inp" type="text" id="f_ig" placeholder="seunome" autocomplete="off" oninput="onIgInput(this.value)"></div>
+      <div class="ig-at-wrap"><span class="ig-at-pre">@</span><input class="ig-inp ig-at-inp" type="text" id="f_ig" placeholder="seunome" autocomplete="off" oninput="onIgInput(this.value)"></div>
     </div>
     <div class="ig-status" id="igStatus"></div>
 
-    <label class="fl2">Valor do investimento <small>(mínimo R$100)</small></label>
+    <label class="fl2" style="font-size:11px">Valor do investimento</label>
     <div class="vrow">
       <div class="vpre">R$</div>
-      <input class="vinp" type="text" id="f_val" placeholder="100" inputmode="numeric">
+      <input class="vinp" type="text" id="f_val" placeholder="30" inputmode="numeric" oninput="onValInput(this.value)">
     </div>
-    <p class="vhint">Quanto maior, mais alto no ranking — e mais falado você será.</p>
+    <p class="vhint" style="font-size:13px">Quanto maior, mais alto no ranking — e mais falado você será.</p>
+    <p id="valErr" style="display:none;color:#f87171;font-size:12px;font-family:var(--fm);letter-spacing:0.06em;margin-top:-14px;margin-bottom:14px">⚠ Valor mínimo é R$30</p>
 
-    <label class="fl2">Frase para a posteridade <small>(opcional · máx 80 chars)</small></label>
-    <input class="inp" type="text" id="f_frase" placeholder='"dinheiro não traz felicidade, mas prefiro chorar no Porsche"' maxlength="100">
+    <label class="fl2" style="font-size:11px">Frase para a posteridade <small id="fraseHint" style="font-size:11px;display:none">· máx 80 chars</small></label>
+    <input class="inp" type="text" id="f_frase" placeholder='"dinheiro não traz felicidade, mas prefiro chorar no Porsche"' maxlength="100" oninput="onFraseInput(this.value)">
 
     <button class="sbtn" onclick="gPix()">Gerar PIX e Obter Diploma →</button>
 
@@ -667,11 +669,23 @@ async function fetchIgPhoto(username){
 }
 document.getElementById('f_val').addEventListener('input',function(e){e.target.value=e.target.value.replace(/\D/g,'')});
 
+function onValInput(v){
+  const val=parseInt(v)||0;
+  const err=document.getElementById('valErr');
+  if(v.length>0 && val<30){ err.style.display='block'; } else { err.style.display='none'; }
+}
+
+function onFraseInput(v){
+  const hint=document.getElementById('fraseHint');
+  hint.style.display = v.length>60 ? 'inline' : 'none';
+  hint.style.color = v.length>=80 ? '#f87171' : 'var(--cd)';
+}
+
 function gPix(){
   let ig=document.getElementById('f_ig').value.trim();
   const val=parseInt(document.getElementById('f_val').value)||0;
   if(!ig){alert('Digite seu @Instagram');return}
-  if(val<100){alert('Valor mínimo é R$100');return}
+  if(val<30){alert('Valor mínimo é R$30');return}
   if(!ig.startsWith('@')) ig='@'+ig;
   if(!igPhotoUrl) igPhotoUrl=`https://i.pravatar.cc/100?u=${ig.replace('@','')}`;
   document.getElementById('pval').textContent=fR(val);
