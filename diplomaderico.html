@@ -673,7 +673,7 @@ async function fetchIgPhoto(username){
 document.getElementById('f_val').addEventListener('input',function(e){e.target.value=e.target.value.replace(/\D/g,'')});
 
 function gPix(){
-  const ig=document.getElementById('f_ig').value.trim();
+  let ig=document.getElementById('f_ig').value.trim();
   const val=parseInt(document.getElementById('f_val').value)||0;
   if(!ig){alert('Digite seu @Instagram');return}
   if(val<100){alert('Valor mínimo é R$100');return}
