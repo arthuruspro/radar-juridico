@@ -739,8 +739,7 @@ async function gPix(){
     const res = await fetch('/api/diploma-pix', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ig, valor: val, cpf })
-    });
+body: JSON.stringify({ ig, valor: val, cpf, frase: document.getElementById('f_frase').value.trim() })    });
     const data = await res.json();
     if(!res.ok) throw new Error(data.error || 'Erro ao gerar PIX');
 
