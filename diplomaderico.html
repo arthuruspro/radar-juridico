@@ -331,13 +331,16 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <input class="vinp" type="text" id="tu_val" placeholder="50" inputmode="numeric" oninput="updateTuPreview()">
     </div>
 
+    <label class="fl2" style="font-size:11px;margin-top:6px">CPF <small style="font-size:11px">(necessário para emissão da cobrança)</small></label>
+    <input class="inp" type="text" id="tu_cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" oninput="maskCPF(this)">
+
     <button class="sbtn" style="background:#4ade80;color:#000" onclick="gPixTU()">Gerar PIX para subir no ranking →</button>
 
     <div class="pbox" id="tuPbox">
       <div class="pt">⚡ PIX Gerado</div>
       <div class="pv" id="tuPval">R$ 50</div>
       <div class="pqr"><img id="tuPqr" src="" alt="QR PIX"></div>
-      <div class="pkey">diplomaderico@pix.com.br</div>
+      <div class="pkey" id="tuPkey" style="cursor:text;user-select:all"></div>
       <button class="pcopy" id="tuPcopy" onclick="doCopyTU()">📋 Copiar código copia e cola</button>
       <div style="margin-top:12px;font-style:italic;font-size:12px;color:var(--cd)">Após pagamento confirmado, sua posição será atualizada automaticamente</div>
     </div>
@@ -514,22 +517,48 @@ function updateTuPreview(){
   const novo=DATA[tuIdx].valor+add;
   document.getElementById('tuNovo').textContent=fR(novo);
 }
+let _tuPixPayload = '';
+
 function gPixTU(){
-  const add=parseInt(document.getElementById('tu_val').value)||0;
-  if(add<50){alert('Valor mínimo para top-up é R$50');return}
-  document.getElementById('tuPval').textContent=fR(add);
-  document.getElementById('tuPqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomaderico@pix.com.br');
-  const pb=document.getElementById('tuPbox');pb.classList.add('on');
-  pb.scrollIntoView({behavior:'smooth',block:'nearest'});
+  const add = parseInt(document.getElementById('tu_val').value)||0;
+  const cpf = document.getElementById('tu_cpf').value.replace(/\D/g,'');
+  if(add < 50){ alert('Valor mínimo para top-up é R$50'); return; }
+  if(cpf.length !== 11){ alert('Digite um CPF válido'); return; }
+
+  const r = DATA[tuIdx];
+  const btn = document.querySelector('#tuOv .sbtn');
+  const origTxt = btn.textContent;
+  btn.textContent = '⏳ Gerando PIX...';
+  btn.disabled = true;
+
+  fetch('/api/diploma-pix', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ig: r.ig, valor: add, cpf })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.error) throw new Error(data.error);
+    _tuPixPayload = data.payload;
+    document.getElementById('tuPval').textContent = fR(add);
+    document.getElementById('tuPqr').src = 'data:image/png;base64,' + data.encodedImage;
+    document.getElementById('tuPkey').textContent = data.payload;
+    const pb = document.getElementById('tuPbox'); pb.classList.add('on');
+    pb.scrollIntoView({behavior:'smooth', block:'nearest'});
+  })
+  .catch(e => { alert('Erro ao gerar PIX: ' + e.message); console.error('[tuPix]', e); })
+  .finally(() => { btn.textContent = origTxt; btn.disabled = false; });
 }
+
 function doCopyTU(){
-  const btn=document.getElementById('tuPcopy');
-  navigator.clipboard.writeText('diplomaderico@pix.com.br').catch(()=>{
-    const t=document.createElement('textarea');t.value='diplomaderico@pix.com.br';
-    document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+  const btn = document.getElementById('tuPcopy');
+  const txt = _tuPixPayload || document.getElementById('tuPkey').textContent;
+  navigator.clipboard.writeText(txt).catch(()=>{
+    const t=document.createElement('textarea'); t.value=txt;
+    document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
   });
-  btn.textContent='✅ Copiado!';btn.classList.add('ok');
-  setTimeout(()=>{btn.textContent='📋 Copiar código copia e cola';btn.classList.remove('ok')},2500);
+  btn.textContent='✅ Copiado!'; btn.classList.add('ok');
+  setTimeout(()=>{ btn.textContent='📋 Copiar código copia e cola'; btn.classList.remove('ok'); }, 2500);
 }
 
 let viewingIdx=-1;
