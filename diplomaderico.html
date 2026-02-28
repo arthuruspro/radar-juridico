@@ -362,6 +362,9 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     </div>
     <div class="ig-status" id="igStatus"></div>
 
+    <label class="fl2" style="font-size:11px">CPF <small style="font-size:11px">(necessário para emissão da cobrança)</small></label>
+    <input class="inp" type="text" id="f_cpf" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" oninput="maskCPF(this)">
+
     <label class="fl2" style="font-size:11px">Valor do investimento</label>
     <div class="vrow">
       <div class="vpre">R$</div>
@@ -676,6 +679,14 @@ function onFraseInput(v){
   hint.style.color = v.length>=80 ? '#f87171' : 'var(--cd)';
 }
 
+function maskCPF(el){
+  let v = el.value.replace(/\D/g,'').slice(0,11);
+  if(v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/,'$1.$2.$3-$4');
+  else if(v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/,'$1.$2.$3');
+  else if(v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/,'$1.$2');
+  el.value = v;
+}
+
 // ─── ASAAS PIX (via proxy /api/diploma-pix) ──────────────────────────────────
 let _pixPayload = '';
 let _currentPaymentId = '';
@@ -683,7 +694,9 @@ let _currentPaymentId = '';
 async function gPix(){
   let ig = document.getElementById('f_ig').value.trim();
   const val = parseInt(document.getElementById('f_val').value)||0;
+  const cpf = document.getElementById('f_cpf').value.replace(/\D/g,'');
   if(!ig){ alert('Digite seu @Instagram'); return; }
+  if(cpf.length !== 11){ alert('Digite um CPF válido'); return; }
   if(val < 30){ alert('Valor mínimo é R$30'); return; }
   if(!ig.startsWith('@')) ig = '@'+ig;
   if(!igPhotoUrl) igPhotoUrl = `https://i.pravatar.cc/100?u=${ig.replace('@','')}`;
@@ -694,10 +707,10 @@ async function gPix(){
   btn.disabled = true;
 
   try {
-    const res = await fetch('/api/diploma-pix', {
+    const res = await fetch('/api/diplomapix', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ig, valor: val })
+      body: JSON.stringify({ ig, valor: val, cpf })
     });
     const data = await res.json();
     if(!res.ok) throw new Error(data.error || 'Erro ao gerar PIX');
