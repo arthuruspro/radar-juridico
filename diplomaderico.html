@@ -6,6 +6,8 @@
 <title>Diploma de Rico — Instituição Oficial desde 1871</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- html2canvas: renderiza o diploma como imagem para compartilhar -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -22,10 +24,8 @@ html::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
 /* TOPBAR */
 .tb{position:fixed;top:0;left:0;right:0;z-index:200;padding:0 28px;height:54px;display:flex;align-items:center;justify-content:space-between;background:linear-gradient(to bottom,rgba(8,6,3,0.98) 60%,transparent);backdrop-filter:blur(4px)}
-.tl-wrap{display:flex;flex-direction:column;gap:2px}
 .tl{font-family:var(--fm);font-size:11px;letter-spacing:0.2em;color:var(--gold);text-transform:uppercase;display:flex;align-items:center;gap:8px}
 .tl::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gold);flex-shrink:0;animation:blink 2s infinite}
-.tl-spy{font-family:var(--fm);font-size:9px;letter-spacing:0.14em;color:var(--gd);text-transform:uppercase;padding-left:15px}
 @keyframes blink{0%,100%{box-shadow:0 0 0 0 rgba(200,168,75,0.5)}50%{box-shadow:0 0 0 5px rgba(200,168,75,0)}}
 .tcta{padding:8px 20px;background:var(--gold);color:#000;font-family:var(--fp);font-size:12px;font-weight:700;border:none;border-radius:1px;cursor:pointer;letter-spacing:0.05em;text-transform:uppercase;transition:all 0.2s}
 .tcta:hover{background:var(--gl)}
@@ -33,11 +33,6 @@ html::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 /* HERO */
 .hero{display:flex;flex-direction:column;align-items:center;padding:90px 24px 60px;text-align:center;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(200,168,75,0.12),transparent 70%);position:relative}
 .hero::after{content:'';position:absolute;bottom:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
-
-/* BRASÃO */
-
-
-.eyebrow{font-family:var(--fm);font-size:10px;letter-spacing:0.24em;color:var(--gd);text-transform:uppercase;margin-bottom:16px;opacity:0;animation:up 0.7s ease 0.1s forwards}
 h1{font-family:var(--fp);font-size:clamp(48px,9vw,96px);font-weight:900;line-height:0.95;letter-spacing:-0.025em;color:var(--gl);opacity:0;animation:up 0.7s ease 0.2s forwards}
 h1 em{font-style:italic;color:var(--cream);display:block}
 @keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
@@ -50,7 +45,7 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .sn{font-family:var(--fp);font-size:24px;font-weight:700;color:var(--gold);display:block;line-height:1}
 .sl{font-family:var(--fm);font-size:9px;letter-spacing:0.12em;color:var(--cd);text-transform:uppercase;display:block;margin-top:4px}
 
-/* RANKING NO HERO */
+/* RANKING */
 .hrank{width:100%;max-width:600px;opacity:0;animation:up 0.7s ease 0.45s forwards}
 .hr-label{font-family:var(--fm);font-size:9px;letter-spacing:0.22em;color:var(--gd);text-transform:uppercase;margin-bottom:12px;text-align:left;padding-left:2px}
 .hr-item{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(110deg,rgba(200,168,75,0.08),rgba(200,168,75,0.02));border:1px solid var(--b);border-radius:1px;margin-bottom:7px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;text-align:left}
@@ -65,56 +60,18 @@ h1 em{font-style:italic;color:var(--cream);display:block}
 .hr-av-eye{position:absolute;bottom:-3px;right:-5px;background:rgba(8,6,3,0.9);border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;pointer-events:none;color:var(--gold);opacity:0.9;border:1px solid rgba(200,168,75,0.35)}
 .hr-info{flex:1;min-width:0}
 .hr-name{font-family:var(--fp);font-size:14px;font-weight:700;color:var(--cream)}
-.hr-ig{font-family:var(--fm);font-size:13px;color:var(--gd);margin-left:6px}
 .ig-link{font-family:var(--fm);font-size:14px;font-weight:400;color:var(--gd);text-decoration:none;transition:color 0.15s;letter-spacing:0.05em}
 .ig-link:hover{color:var(--gold)}
-.ig-link-arrow{font-size:9px;opacity:0.7}
-.hr-frase{font-style:italic;font-size:14px;color:var(--cream-d, #c8bfa8);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}
+.hr-frase{font-style:italic;font-size:14px;color:#c8bfa8;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:360px}
 .hr-val{font-family:var(--fp);font-size:20px;font-weight:700;color:var(--gold);flex-shrink:0}
 .hr-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
 .hr-foot{display:flex;align-items:center;justify-content:space-between;margin-top:12px;padding-top:12px;border-top:1px solid var(--b)}
 .hr-foot-txt{font-family:var(--fm);font-size:9px;letter-spacing:0.1em;color:var(--gd);text-transform:uppercase}
 .hr-foot-btn{padding:10px 22px;background:var(--gold);color:#000;font-family:var(--fp);font-size:14px;font-weight:700;border:none;border-radius:1px;cursor:pointer;transition:all 0.2s;white-space:nowrap}
 .hr-foot-btn:hover{background:var(--gl)}
-.share-mini{background:none;border:none;font-size:11px;padding:2px 4px;cursor:pointer;margin-left:6px;line-height:1;transition:opacity 0.15s;vertical-align:middle;opacity:0.45;filter:sepia(1) saturate(3) hue-rotate(5deg) brightness(0.8)}
-.share-mini:hover{opacity:1}
-.topup-mini{background:none;border:none;font-size:10px;padding:2px 4px;cursor:pointer;line-height:1;transition:opacity 0.15s;opacity:0.4;filter:sepia(1) saturate(2) hue-rotate(5deg) brightness(0.75)}
-.topup-mini:hover{opacity:1}
 .ver-mais-btn{width:100%;margin-top:12px;padding:13px;background:transparent;border:1px solid var(--b);border-radius:1px;color:var(--cd);font-family:var(--fp);font-size:15px;cursor:pointer;transition:all 0.2s;letter-spacing:0.01em}
 .ver-mais-btn span{font-family:var(--fm);font-size:11px;color:var(--gd);margin-left:8px;letter-spacing:0.1em}
 .ver-mais-btn:hover{border-color:var(--bb);color:var(--cream);background:rgba(200,168,75,0.05)}
-
-/* FULL RANKING */
-.rsec{max-width:680px;margin:0 auto;padding:80px 24px}
-.sey{text-align:center;font-family:var(--fm);font-size:10px;letter-spacing:0.22em;color:var(--gd);text-transform:uppercase;margin-bottom:10px}
-.stitle{text-align:center;font-family:var(--fp);font-size:clamp(26px,5vw,42px);font-weight:700;color:var(--gold);margin-bottom:8px}
-.ssub{text-align:center;font-style:italic;color:var(--cd);font-size:16px;margin-bottom:44px}
-.rdiv{display:flex;align-items:center;gap:12px;margin-bottom:44px}
-.rdl{flex:1;height:1px;background:var(--b)}
-.rdg{color:var(--gold);font-size:11px}
-.fl{display:flex;flex-direction:column;gap:8px}
-.ri{display:flex;align-items:center;gap:14px;padding:14px 18px;background:linear-gradient(110deg,rgba(200,168,75,0.07),rgba(200,168,75,0.02));border:1px solid var(--b);border-radius:1px;transition:all 0.22s;position:relative;overflow:hidden}
-.ri::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2.5px;background:var(--gd)}
-.ri:nth-child(1)::before{background:var(--gl);box-shadow:0 0 10px var(--gold)}
-.ri:nth-child(2)::before{background:#c0c0c0}
-.ri:nth-child(3)::before{background:#cd7f32}
-.ri:hover{border-color:var(--bb);transform:translateX(3px)}
-.ri-pos{font-family:var(--fm);font-size:11px;color:var(--gd);width:22px;text-align:center;flex-shrink:0}
-.ri:nth-child(1) .ri-pos{font-size:18px;color:var(--gl)}
-.ri:nth-child(2) .ri-pos{font-size:16px;color:#c0c0c0}
-.ri:nth-child(3) .ri-pos{font-size:15px;color:#cd7f32}
-.ri-av{width:46px;height:46px;border-radius:50%;border:2px solid var(--b);flex-shrink:0;overflow:hidden;background:rgba(200,168,75,0.06);display:flex;align-items:center;justify-content:center;font-family:var(--fp);font-size:19px;font-weight:700;color:var(--gold)}
-.ri-av img{width:100%;height:100%;object-fit:cover}
-.ri-info{flex:1;min-width:0}
-.ri-name{font-family:var(--fp);font-size:15px;font-weight:700;color:var(--cream)}
-.ri-ig{font-family:var(--fm);font-size:10px;color:var(--gd);margin-left:6px}
-.ri-frase{font-style:italic;font-size:13px;color:var(--cd);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:300px}
-.ri-r{text-align:right;flex-shrink:0}
-.ri-val{font-family:var(--fp);font-size:18px;font-weight:700;color:var(--gold)}
-.ri-date{font-family:var(--fm);font-size:9px;color:var(--gd);margin-top:2px}
-.rcta{text-align:center;margin-top:36px}
-.rcta-btn{padding:14px 40px;background:transparent;border:1px solid var(--bb);color:var(--gold);font-family:var(--fp);font-size:16px;font-weight:700;border-radius:1px;cursor:pointer;transition:all 0.2s}
-.rcta-btn:hover{background:rgba(200,168,75,0.07)}
 
 footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-family:var(--fm);font-size:9px;letter-spacing:0.14em;color:var(--gd);text-transform:uppercase;line-height:2}
 
@@ -139,12 +96,6 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .vinp:focus{border-color:var(--gold)}
 .vinp::placeholder{color:rgba(200,168,75,0.15)}
 .vhint{font-size:12px;font-style:italic;color:var(--cd);margin-bottom:20px;margin-top:4px}
-.fz{border:1.5px dashed var(--b);border-radius:2px;padding:26px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:20px;position:relative;overflow:hidden}
-.fz:hover{border-color:var(--gold);background:rgba(200,168,75,0.03)}
-.fz input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.fprev{width:68px;height:68px;border-radius:50%;object-fit:cover;border:2.5px solid var(--gold);margin:0 auto 8px;display:none}
-.fph{font-style:italic;color:var(--cd);font-size:14px}
-.fphs{font-family:var(--fm);font-size:9px;color:var(--gd);margin-top:4px}
 .sbtn{width:100%;padding:17px;background:var(--gold);color:#000;font-family:var(--fp);font-size:17px;font-weight:700;border:none;border-radius:1px;cursor:pointer;transition:all 0.2s;margin-top:6px}
 .sbtn:hover{background:var(--gl);transform:translateY(-1px)}
 
@@ -174,7 +125,6 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .co.tr{top:22px;right:22px;transform:scaleX(-1)}
 .co.bl{bottom:22px;left:22px;transform:scaleY(-1)}
 .co.br{bottom:22px;right:22px;transform:scale(-1)}
-.dh{font-family:var(--fm);font-size:13px;letter-spacing:0.22em;text-transform:uppercase;color:#8a6f2e;margin-bottom:14px}
 .di-brand{font-family:var(--fp);font-size:clamp(28px,7vw,48px);font-weight:900;line-height:0.95;letter-spacing:-0.02em;color:#7a5c1e;margin-bottom:10px;text-align:center}
 .di-brand .line1{display:block}
 .di-brand .line2{display:flex;align-items:baseline;justify-content:center;gap:3px}
@@ -183,24 +133,55 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 .dline{display:flex;align-items:center;gap:8px;margin:16px auto;width:fit-content}
 .dlb{width:60px;height:1.5px;background:#c8a84b}
 .dlg{color:#c8a84b;font-size:10px}
-.dc{font-family:var(--fb);font-size:18px;font-style:italic;color:#5a4010}
 .dfoto{width:72px;height:72px;border-radius:50%;object-fit:cover;border:3px solid #c8a84b;display:none;margin:14px auto 6px}
 .dnome{font-family:var(--fp);font-size:clamp(26px,6vw,46px);font-weight:700;font-style:italic;color:#1a1004;line-height:1.1;margin:12px 0}
-.dbody{font-family:var(--fb);font-size:16px;font-style:italic;color:#5a4010;line-height:1.8;max-width:420px;margin:0 auto 20px}
 .dvb{display:inline-block;border:1.5px solid #c8a84b;padding:12px 32px;margin-bottom:20px}
 .dvl{font-family:var(--fm);font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#8a6f2e;margin-bottom:4px}
 .dvn{font-family:var(--fp);font-size:clamp(28px,6vw,44px);font-weight:900;color:#7a5c1e}
-.dft{display:flex;justify-content:space-between;align-items:flex-end;margin-top:28px;padding-top:0}
-.ds{text-align:center}
-.dsn{font-style:italic;font-size:16px;color:#1a1004;margin-bottom:2px}
-.dsl{width:100px;height:1px;background:#1a1004;margin:6px auto 4px}
-.dsc{font-family:var(--fm);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#5a4010}
+.dft{display:flex;justify-content:space-between;align-items:flex-end;margin-top:28px}
 .dacts{display:flex;gap:10px;width:100%;max-width:640px}
 .da{flex:1;padding:14px;font-family:var(--fp);font-size:14px;font-weight:700;border-radius:1px;cursor:pointer;transition:all 0.2s;border:none}
 .da.p{background:var(--gold);color:#000}
 .da.p:hover{background:var(--gl)}
 .da.g{background:transparent;border:1px solid var(--b);color:var(--cream)}
 .da.g:hover{border-color:var(--gold)}
+
+/* ── BOTÃO SHARE: LOADING STATE ──────────────────────────────────────── */
+.da.p.loading{
+  background:var(--gd);
+  cursor:wait;
+  pointer-events:none;
+  opacity:0.85;
+}
+/* spinner inline via ::after */
+.da.p.loading::after{
+  content:'';
+  display:inline-block;
+  width:11px;height:11px;
+  border:2px solid rgba(0,0,0,0.25);
+  border-top-color:#000;
+  border-radius:50%;
+  animation:btnSpin 0.7s linear infinite;
+  margin-left:8px;
+  vertical-align:middle;
+}
+@keyframes btnSpin{to{transform:rotate(360deg)}}
+
+/* ── TOAST ───────────────────────────────────────────────────────────── */
+#toast{
+  position:fixed;bottom:28px;left:50%;
+  transform:translateX(-50%) translateY(16px);
+  background:#130f04;
+  border:1px solid var(--bb);
+  border-radius:2px;
+  padding:11px 22px;
+  font-family:var(--fm);font-size:11px;letter-spacing:0.12em;
+  color:var(--gold);text-transform:uppercase;
+  z-index:9999;opacity:0;
+  transition:opacity 0.25s, transform 0.25s;
+  pointer-events:none;white-space:nowrap;
+}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 @media(max-width:580px){
   h1{font-size:52px}
@@ -210,21 +191,20 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   .dacts{flex-direction:column}
   .hr-frase{max-width:180px}
 }
-/* ig auto-fetch */
+
+/* IG fetch */
 .ig-fetch-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
 .ig-preview-wrap{width:52px;height:52px;border-radius:50%;flex-shrink:0;border:2px solid var(--b);overflow:hidden;position:relative;background:rgba(200,168,75,0.06);display:flex;align-items:center;justify-content:center;transition:border-color 0.2s}
 .ig-preview-wrap.loaded{border-color:var(--bb)}
 .ig-avatar-ph{font-family:var(--fp);font-size:20px;font-weight:700;color:var(--gd)}
 .ig-avatar-img{width:100%;height:100%;object-fit:cover;display:block}
-.ig-fetch-spin{font-size:16px;animation:spin 1s linear infinite;position:absolute}
-@keyframes spin{to{transform:rotate(360deg)}}
+.ig-fetch-spin{font-size:16px;animation:btnSpin 1s linear infinite;position:absolute}
 .ig-inp{flex:1;margin-bottom:0!important}
 .ig-status{font-family:var(--fm);font-size:10px;letter-spacing:0.08em;margin-bottom:18px;margin-top:6px;min-height:14px}
 .ig-status.ok{color:#4ade80}
 .ig-status.err{color:#f87171}
 .ig-status.loading{color:var(--gd)}
-.live-count{color:var(--gold);opacity:0.7;font-size:10px;letter-spacing:0.1em}
-.ig-at-wrap{display:flex;align-items:center;flex:1;background:var(--ci);border:1px solid var(--bb);border-radius:1px}
+.ig-at-wrap{display:flex;align-items:center;flex:1;border:1px solid var(--bb);border-radius:1px}
 .ig-at-wrap:focus-within{border-color:var(--gold)}
 .ig-at-pre{font-family:var(--fp);font-size:22px;font-weight:700;color:var(--gold);padding:0 4px 0 13px;display:flex;align-items:center;line-height:1;flex-shrink:0}
 .ig-at-inp{flex:1;background:transparent!important;border:none!important;outline:none!important;padding:13px 13px 13px 2px;font-family:var(--fb);font-size:16px;color:var(--cream);margin-bottom:0!important}
@@ -233,30 +213,23 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
 </head>
 <body>
 
+<div id="toast"></div>
+
 <div class="tb">
   <span class="tl" id="liveCount">300 espiando agora</span>
   <button class="tcta" onclick="openM()">Obter Diploma</button>
 </div>
 
 <section class="hero">
-
-
   <h1>Diploma<em>de Rico</em></h1>
   <p class="hdesc">A única instituição do Brasil que certifica, oficialmente, que você tem dinheiro demais — e juízo de menos.</p>
-  <p style="font-size:15px;color:var(--go);font-style:italic;margin-top:12px;opacity:0;letter-spacing:0.02em;animation:up 0.7s ease 0.4s forwards;">Quanto mais alto você paga, mais rico você é.</p>
+  <p style="font-size:15px;color:var(--cd);font-style:italic;margin-top:12px;opacity:0;letter-spacing:0.02em;animation:up 0.7s ease 0.4s forwards;">Quanto mais alto você paga, mais rico você é.</p>
 
   <div class="stats">
-    <div class="stat">
-      <span class="sn" id="statCount">—</span>
-      <span class="sl">Diplomados</span>
-    </div>
-    <div class="stat">
-      <span class="sn" id="statTotal">—</span>
-      <span class="sl">Investido em vaidade</span>
-    </div>
+    <div class="stat"><span class="sn" id="statCount">—</span><span class="sl">Diplomados</span></div>
+    <div class="stat"><span class="sn" id="statTotal">—</span><span class="sl">Investido em vaidade</span></div>
   </div>
 
-  <!-- RANKING NO HERO — sem botão acima dele -->
   <div class="hrank">
     <div class="hr-label">🏆 Os mais ricos do momento</div>
     <div id="hrList"></div>
@@ -271,7 +244,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
   © 2026 Diploma de Rico · Diploma sem valor jurídico · Mas com muito valor social
 </footer>
 
-<!-- DIPLOMA VIEWER (espia diploma de outro) -->
+<!-- VIEW overlay (diploma de outro) -->
 <div class="dov" id="viewOv">
   <div class="diploma" style="max-width:380px;padding:28px 28px 22px;">
     <div class="co tl">✦</div><div class="co tr">✦</div>
@@ -279,7 +252,6 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <div style="font-size:24px;margin-bottom:4px;filter:sepia(1) brightness(0.7)">🎓</div>
     <div class="di-brand" style="transform:scale(0.75);transform-origin:center;margin:-8px 0 -4px"><span class="line1">Diploma</span><span class="line2"><em>de Rico</em><span class="di-com">.com</span></span></div>
     <div class="dline"><div class="dlb"></div><div class="dlg">◆</div><div class="dlb"></div></div>
-    <div class="dc" style="display:none"></div>
     <img class="dfoto" id="vFoto" src="" alt="" style="width:64px;height:64px;margin:10px auto 6px">
     <div class="dnome" id="vNome" style="font-size:28px;margin:4px 0">@alguem</div>
     <div class="dvb" style="margin-top:10px;padding-top:10px">
@@ -292,9 +264,9 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <div class="dft"></div>
   </div>
   <div class="dacts">
-    <button class="da g" onclick="closeView()">← Espiar outros ricos</button>
-    <button class="da" onclick="boostFromView()" style="background:linear-gradient(135deg,#7a5c1e,#c8a84b);color:#fff;border:none;font-family:var(--fm);font-size:11px;letter-spacing:0.1em;padding:13px 20px;cursor:pointer;border-radius:1px;flex:1">↑ SUBIR RANKING DESTE RICO</button>
-    <button class="da p" id="vShareBtn" onclick="shareToIg()">📤 Compartilhar no Instagram</button>
+    <button class="da g" onclick="closeView()">← Espiar outros</button>
+    <button class="da" onclick="boostFromView()" style="background:linear-gradient(135deg,#7a5c1e,#c8a84b);color:#fff;border:none;font-family:var(--fm);font-size:11px;letter-spacing:0.1em;padding:13px 20px;cursor:pointer;border-radius:1px;flex:1">↑ SUBIR ESTE RICO</button>
+    <button class="da p" onclick="shareToIg()">📤 Compartilhar</button>
   </div>
 </div>
 
@@ -305,7 +277,6 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <p class="mey">Ranking dos Ricos</p>
     <h2 class="mtitle" id="tuTitle">Aumentar investimento</h2>
     <p class="msub" id="tuSub">Suba no ranking pagando mais</p>
-
     <div style="background:rgba(200,168,75,0.06);border:1px solid var(--b);border-radius:1px;padding:14px 16px;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between">
       <div>
         <div style="font-family:var(--fm);font-size:9px;letter-spacing:0.14em;color:var(--gd);text-transform:uppercase;margin-bottom:4px">Valor atual</div>
@@ -317,27 +288,23 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
         <div style="font-family:var(--fp);font-size:22px;font-weight:700;color:#4ade80" id="tuNovo">R$ 0</div>
       </div>
     </div>
-
     <label class="fl2">Quanto quer adicionar? <small>(mínimo R$50)</small></label>
     <div class="vrow">
       <div class="vpre">R$</div>
       <input class="vinp" type="text" id="tu_val" placeholder="50" inputmode="numeric" oninput="updateTuPreview()">
     </div>
-
-    <button class="sbtn" style="background:#4ade80;color:#000" onclick="gPixTU()">Gerar PIX para subir no ranking →</button>
-
+    <button class="sbtn" style="background:#4ade80;color:#000" onclick="gPixTU()">Gerar PIX →</button>
     <div class="pbox" id="tuPbox">
       <div class="pt">⚡ PIX Gerado</div>
       <div class="pv" id="tuPval">R$ 50</div>
       <div class="pqr"><img id="tuPqr" src="" alt="QR PIX"></div>
-      <div class="pkey"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6d2dfc6dad9dbd7d2d9c4dfd5d9f6c6dfce98d5d9db98d4c4">[email&#160;protected]</a></div>
+      <div class="pkey">diplomaderico@pix.com.br</div>
       <button class="pcopy" id="tuPcopy" onclick="doCopyTU()">📋 Copiar código copia e cola</button>
-      <div style="margin-top:12px;font-style:italic;font-size:12px;color:var(--cd)">Após pagamento confirmado, sua posição será atualizada automaticamente</div>
     </div>
   </div>
 </div>
 
-
+<!-- MODAL COMPRA -->
 <div class="ov" id="mOv">
   <div class="modal">
     <button class="mcl" onclick="closeM()">✕</button>
@@ -367,21 +334,20 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <input class="inp" type="text" id="f_frase" placeholder='"dinheiro não traz felicidade, mas prefiro chorar no Porsche"' maxlength="100" oninput="onFraseInput(this.value)">
 
     <button class="sbtn" onclick="gPix()">Gerar PIX e Obter Diploma →</button>
-
     <div class="pbox" id="pbox">
       <div class="pt">⚡ PIX Gerado</div>
       <div class="pv" id="pval">R$ 100</div>
       <div class="pqr"><img id="pqr" src="" alt="QR PIX"></div>
-      <div class="pkey"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="57333e273b383a363338253e343817273e2f7934383a793525">[email&#160;protected]</a></div>
+      <div class="pkey">diplomaderico@pix.com.br</div>
       <button class="pcopy" id="pcopy" onclick="doCopy()">📋 Copiar código copia e cola</button>
       <button class="ppaid" onclick="showDip()">✅ Já paguei — Ver meu Diploma</button>
     </div>
   </div>
 </div>
 
-<!-- DIPLOMA -->
+<!-- DIPLOMA PRÓPRIO -->
 <div class="dov" id="dov">
-  <div class="diploma">
+  <div class="diploma" id="diplomaCard">
     <div class="co tl">✦</div><div class="co tr">✦</div>
     <div class="co bl">✦</div><div class="co br">✦</div>
     <div style="font-size:36px;margin-bottom:8px;filter:sepia(1) brightness(0.7)">🎓</div>
@@ -396,18 +362,19 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <div id="dFraseWrap" style="margin-top:18px;padding-top:16px;border-top:1px solid rgba(200,168,75,0.2);display:none">
       <div id="dFrase" style="font-family:var(--fp);font-style:italic;font-size:15px;color:#7a5c1e;line-height:1.5;text-align:center"></div>
     </div>
-    <div class="dft">
-      
-    </div>
+    <div class="dft"></div>
   </div>
   <div class="dacts">
-    <button class="da g" onclick="closeDip()">← Espiar outros ricos</button>
-    <button class="da" id="copyLinkBtn" onclick="copyDiplomaLink()" style="background:linear-gradient(135deg,#7a5c1e,#c8a84b);color:#fff;border:none;">🔗 Copiar link do diploma</button>
-    <button class="da p" onclick="doShare()">📤 Compartilhar nos Stories</button>
+    <button class="da g" onclick="closeDip()">← Ver ranking</button>
+    <button class="da" id="copyLinkBtn" onclick="copyDiplomaLink()" style="background:linear-gradient(135deg,#7a5c1e,#c8a84b);color:#fff;border:none;">🔗 Copiar link</button>
+    <button class="da p" id="shareImgBtn" onclick="doShareImage()">📤 Compartilhar nos Stories</button>
   </div>
 </div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
+// ─────────────────────────────────────────────────────────────────────────────
+// DADOS
+// ─────────────────────────────────────────────────────────────────────────────
 const DATA=[
   {nome:'Felipe Teixeira',   ig:'@felipeteixeiraa',valor:15000,frase:'"minha ex vai ver isso"',                   foto:'https://i.pravatar.cc/100?img=11',data:'hoje'},
   {nome:'Bruna Cavalcante',  ig:'@brunacavalcante', valor:8500, frase:'"vim do nada. o nada ficou pra trás."',   foto:'https://i.pravatar.cc/100?img=5', data:'hoje'},
@@ -442,379 +409,394 @@ const DATA=[
   {nome:'Enzo Ramos',        ig:'@enzoramos',       valor:120,  frase:'"entrei no ranking antes de ser famoso"',  foto:'https://i.pravatar.cc/100?img=35',data:'1 mês'},
   {nome:'Amanda Soares',     ig:'@amandasoares',    valor:110,  frase:'"R$110 bem investidos"',                   foto:'https://i.pravatar.cc/100?img=50',data:'1 mês'},
 ];
-const M=['🥇','🥈','🥉'];
-let uPhoto='';
-const fR=n=>'R$ '+n.toLocaleString('pt-BR');
 
-// ordena por valor desc — sempre que DATA mudar, chamar renderHero() de novo
+const M=['🥇','🥈','🥉'];
+const fR=n=>'R$ '+n.toLocaleString('pt-BR');
 DATA.sort((a,b)=>b.valor-a.valor);
 
-let hrShown=30;
+// ─────────────────────────────────────────────────────────────────────────────
+// TOAST
+// ─────────────────────────────────────────────────────────────────────────────
+let _toastTimer;
+function showToast(msg, ms=2800){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove('show'), ms);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// html2canvas — EXPORT DIPLOMA COMO IMAGEM
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Captura #diplomaCard como PNG.
+ *
+ * Estratégia para as 3 pegadinhas:
+ *  1. CORS: useCORS:true — pravatar.cc suporta. Se falhar, allowTaint:false omite a imagem
+ *     sem travar (tainted canvas lançaria erro no toBlob).
+ *  2. Pseudo-elementos ::before/::after: o html2canvas 1.4 captura normalmente.
+ *     No onclone garantimos overflow:visible para as bordas internas aparecerem.
+ *  3. Fontes: aguardamos document.fonts.ready antes de chamar html2canvas.
+ */
+async function captureDiploma(){
+  // Garante que Playfair Display / Cormorant Garamond estão carregadas
+  await document.fonts.ready;
+
+  const el = document.getElementById('diplomaCard');
+
+  // Pré-aguarda load das imagens dentro do diploma
+  const imgs = [...el.querySelectorAll('img')];
+  await Promise.all(imgs.map(img => new Promise(res => {
+    if(img.complete && img.naturalWidth > 0){ res(); return; }
+    img.onload = img.onerror = res;
+  })));
+
+  const canvas = await html2canvas(el, {
+    useCORS:       true,   // tenta buscar imgs c/ CORS (pravatar suporta)
+    allowTaint:    false,  // se CORS falhar, omite a img em vez de quebrar
+    scale:         2,      // 2× → nítido em retina e nos stories
+    backgroundColor: null, // usa o fundo do próprio elemento
+    logging:       false,
+    onclone: (_doc, clone) => {
+      // overflow:visible para as bordas internas (::before/::after) não cortarem
+      const card = clone.getElementById('diplomaCard');
+      if(card) card.style.overflow = 'visible';
+    }
+  });
+
+  return new Promise(res => canvas.toBlob(blob => res(blob), 'image/png'));
+}
+
+/**
+ * Tenta Web Share API com files (iOS 15+ / Android Chrome).
+ * Fallback: download direto do PNG no desktop/browsers sem suporte.
+ */
+async function doShareImage(){
+  const btn = document.getElementById('shareImgBtn');
+  const original = btn.textContent;
+  btn.classList.add('loading');
+  btn.textContent = 'Gerando imagem…';
+
+  try {
+    const blob = await captureDiploma();
+    const file = new File([blob], 'diploma-de-rico.png', { type: 'image/png' });
+
+    const canShareFile = navigator.canShare && navigator.canShare({ files: [file] });
+
+    if(canShareFile){
+      // Abre share sheet nativo — no iOS/Android permite "Adicionar ao Instagram Stories" direto
+      await navigator.share({
+        title: 'Meu Diploma de Rico 🎓',
+        text:  'Me certifiquei oficialmente. diplomaderico.com',
+        files: [file]
+      });
+      showToast('✓ Compartilhado com sucesso!');
+
+    } else if(navigator.share){
+      // Dispositivo suporta share mas não share de files — compartilha só URL
+      await navigator.share({
+        title: 'Meu Diploma de Rico 🎓',
+        url:   'https://diplomaderico.com'
+      });
+      // E também baixa a imagem como bônus
+      _downloadBlob(blob, 'diploma-de-rico.png');
+      showToast('🔗 Link compartilhado + imagem salva!');
+
+    } else {
+      // Desktop sem Web Share API — download direto
+      _downloadBlob(blob, 'diploma-de-rico.png');
+      showToast('📥 Imagem salva! Poste nos stories.', 3500);
+    }
+
+  } catch(err){
+    // AbortError = usuário fechou o share sheet — não é erro real
+    if(err.name !== 'AbortError'){
+      console.error('[doShareImage]', err);
+      showToast('⚠ Não foi possível gerar a imagem');
+    }
+  } finally {
+    btn.classList.remove('loading');
+    btn.textContent = original;
+  }
+}
+
+function _downloadBlob(blob, filename){
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 8000);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RANKING
+// ─────────────────────────────────────────────────────────────────────────────
+let hrShown = 30;
 function renderHero(){
-  const el=document.getElementById('hrList');
-  const start=el.querySelectorAll('.hr-item').length;
-  const end=Math.min(hrShown,DATA.length);
-  for(let i=start;i<end;i++){
-    const r=DATA[i];
-    const d=document.createElement('div');
-    d.className='hr-item';
-    d.innerHTML=`
+  const el = document.getElementById('hrList');
+  const start = el.querySelectorAll('.hr-item').length;
+  const end = Math.min(hrShown, DATA.length);
+  for(let i=start; i<end; i++){
+    const r = DATA[i];
+    const d = document.createElement('div');
+    d.className = 'hr-item';
+    d.innerHTML = `
       <div class="hr-med">${M[i]||i+1}</div>
-      <div class="hr-av" onclick="viewDiploma(event,${i})" style="cursor:pointer" title="Ver diploma"><img src="${r.foto}" alt="${r.nome[0]}"><div class="hr-av-eye"><svg width="13" height="9" viewBox="0 0 9 6" fill="none"><path d="M4.5 0.5C2.5 0.5 0.8 2 0.5 3C0.8 4 2.5 5.5 4.5 5.5C6.5 5.5 8.2 4 8.5 3C8.2 2 6.5 0.5 4.5 0.5Z" stroke="#c8a84b" stroke-width="0.8"/><circle cx="4.5" cy="3" r="1.2" fill="#c8a84b"/></svg></div></div>
+      <div class="hr-av" onclick="viewDiploma(event,${i})" title="Ver diploma">
+        <img src="${r.foto}" alt="${r.nome[0]}">
+        <div class="hr-av-eye"><svg width="13" height="9" viewBox="0 0 9 6" fill="none"><path d="M4.5 0.5C2.5 0.5 0.8 2 0.5 3C0.8 4 2.5 5.5 4.5 5.5C6.5 5.5 8.2 4 8.5 3C8.2 2 6.5 0.5 4.5 0.5Z" stroke="#c8a84b" stroke-width="0.8"/><circle cx="4.5" cy="3" r="1.2" fill="#c8a84b"/></svg></div>
+      </div>
       <div class="hr-info">
-        <div class="hr-name"><a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig}</a>
-        </div>
+        <div class="hr-name"><a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig}</a></div>
         <div class="hr-frase">${r.frase}</div>
       </div>
-      <div class="hr-right">
-        <div class="hr-val">${fR(r.valor)}</div>
-      </div>`;
+      <div class="hr-right"><div class="hr-val">${fR(r.valor)}</div></div>`;
     el.appendChild(d);
   }
-  const old=document.getElementById('verMaisBtn');
-  if(old)old.remove();
-  if(hrShown<DATA.length){
-    const rest=DATA.length-hrShown;
-    const btn=document.createElement('button');
-    btn.id='verMaisBtn';
-    btn.className='ver-mais-btn';
-    btn.innerHTML=`Ver mais <span>${rest} diplomados</span>`;
-    btn.onclick=()=>{hrShown+=30;renderHero();};
+  const old = document.getElementById('verMaisBtn');
+  if(old) old.remove();
+  if(hrShown < DATA.length){
+    const rest = DATA.length - hrShown;
+    const btn = document.createElement('button');
+    btn.id = 'verMaisBtn'; btn.className = 'ver-mais-btn';
+    btn.innerHTML = `Ver mais <span>${rest} diplomados</span>`;
+    btn.onclick = () => { hrShown += 30; renderHero(); };
     el.after(btn);
   }
 }
 
-let tuIdx=-1;
-function openTopUp(e,idx,fromBoost){
+// ─────────────────────────────────────────────────────────────────────────────
+// TOP-UP
+// ─────────────────────────────────────────────────────────────────────────────
+let tuIdx = -1;
+function openTopUp(e, idx, fromBoost){
   e.stopPropagation();
-  tuIdx=idx;
-  const r=DATA[idx];
-  document.getElementById('tuTitle').textContent=fromBoost?'Subir '+r.ig+' no ranking':r.nome;
-  document.getElementById('tuSub').textContent=fromBoost?'Você paga, o valor vai pro diploma dele — e ele sobe':r.ig+' · posição '+(idx+1)+'º no ranking';
-  document.getElementById('tuAtual').textContent=fR(r.valor);
-  document.getElementById('tuNovo').textContent=fR(r.valor);
-  document.getElementById('tu_val').value='';
+  tuIdx = idx;
+  const r = DATA[idx];
+  document.getElementById('tuTitle').textContent = fromBoost ? 'Subir '+r.ig+' no ranking' : r.nome;
+  document.getElementById('tuSub').textContent = fromBoost ? 'Você paga, o valor vai pro diploma dele — e ele sobe' : r.ig+' · posição '+(idx+1)+'º';
+  document.getElementById('tuAtual').textContent = fR(r.valor);
+  document.getElementById('tuNovo').textContent = fR(r.valor);
+  document.getElementById('tu_val').value = '';
   document.getElementById('tuPbox').classList.remove('on');
   document.getElementById('tuOv').classList.add('on');
-  document.body.style.overflow='hidden';
+  document.body.style.overflow = 'hidden';
 }
-function closeTU(){document.getElementById('tuOv').classList.remove('on');document.body.style.overflow=''}
+function closeTU(){ document.getElementById('tuOv').classList.remove('on'); document.body.style.overflow=''; }
 function updateTuPreview(){
-  if(tuIdx<0)return;
-  const add=parseInt(document.getElementById('tu_val').value)||0;
-  const novo=DATA[tuIdx].valor+add;
-  document.getElementById('tuNovo').textContent=fR(novo);
+  if(tuIdx<0) return;
+  const add = parseInt(document.getElementById('tu_val').value)||0;
+  document.getElementById('tuNovo').textContent = fR(DATA[tuIdx].valor + add);
 }
 function gPixTU(){
-  const add=parseInt(document.getElementById('tu_val').value)||0;
-  if(add<50){alert('Valor mínimo para top-up é R$50');return}
-  document.getElementById('tuPval').textContent=fR(add);
-  document.getElementById('tuPqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomaderico@pix.com.br');
-  const pb=document.getElementById('tuPbox');pb.classList.add('on');
-  pb.scrollIntoView({behavior:'smooth',block:'nearest'});
+  const add = parseInt(document.getElementById('tu_val').value)||0;
+  if(add<50){ alert('Valor mínimo para top-up é R$50'); return; }
+  document.getElementById('tuPval').textContent = fR(add);
+  document.getElementById('tuPqr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomaderico@pix.com.br');
+  const pb = document.getElementById('tuPbox'); pb.classList.add('on');
+  pb.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 function doCopyTU(){
-  const btn=document.getElementById('tuPcopy');
+  const btn = document.getElementById('tuPcopy');
   navigator.clipboard.writeText('diplomaderico@pix.com.br').catch(()=>{
-    const t=document.createElement('textarea');t.value='diplomaderico@pix.com.br';
-    document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+    const t=document.createElement('textarea'); t.value='diplomaderico@pix.com.br';
+    document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
   });
-  btn.textContent='✅ Copiado!';btn.classList.add('ok');
-  setTimeout(()=>{btn.textContent='📋 Copiar código copia e cola';btn.classList.remove('ok')},2500);
+  btn.textContent='✅ Copiado!'; btn.classList.add('ok');
+  setTimeout(()=>{ btn.textContent='📋 Copiar código copia e cola'; btn.classList.remove('ok'); }, 2500);
 }
 
-let viewingIdx=-1;
-function viewDiploma(e,idx){
+// ─────────────────────────────────────────────────────────────────────────────
+// VIEWER (diploma alheio)
+// ─────────────────────────────────────────────────────────────────────────────
+let viewingIdx = -1;
+function viewDiploma(e, idx){
   e.stopPropagation();
-  viewingIdx=idx;
-  const r=DATA[idx];
-  document.getElementById('vNome').textContent=r.ig;
-  document.getElementById('vVal').textContent=fR(r.valor);
-  const foto=document.getElementById('vFoto');
-  foto.src=r.foto;
-  foto.style.display='block';
-  const vfw=document.getElementById('vFraseWrap');
-  const vf=document.getElementById('vFrase');
-  if(r.frase&&r.frase.trim()){
-    vf.textContent=r.frase;
-    vfw.style.display='block';
-  } else {
-    vfw.style.display='none';
-  }
+  viewingIdx = idx;
+  const r = DATA[idx];
+  document.getElementById('vNome').textContent = r.ig;
+  document.getElementById('vVal').textContent = fR(r.valor);
+  const foto = document.getElementById('vFoto');
+  foto.src = r.foto; foto.style.display = 'block';
+  const vfw = document.getElementById('vFraseWrap');
+  const vf = document.getElementById('vFrase');
+  if(r.frase && r.frase.trim()){ vf.textContent = r.frase; vfw.style.display='block'; }
+  else { vfw.style.display='none'; }
   document.getElementById('viewOv').classList.add('on');
-  document.body.style.overflow='hidden';
+  document.body.style.overflow = 'hidden';
 }
-function closeView(){
-  document.getElementById('viewOv').classList.remove('on');
-  document.body.style.overflow='';
-}
+function closeView(){ document.getElementById('viewOv').classList.remove('on'); document.body.style.overflow=''; }
 function boostFromView(){
-  const idx=viewingIdx;
-  closeView();
-  setTimeout(()=>openTopUp({stopPropagation:()=>{}},idx,true),120);
+  const idx = viewingIdx; closeView();
+  setTimeout(() => openTopUp({stopPropagation:()=>{}}, idx, true), 120);
 }
 function shareToIg(){
-  const r=DATA[viewingIdx];
-  const url='https://diplomaderico.com';
-  const txt=`${r.ig} tem um Diploma de Rico oficial 🎓 — investiu ${fR(r.valor)} em vaidade certificada.\n\n${url}`;
-  if(navigator.share){
-    navigator.share({title:'Diploma de Rico',text:txt,url}).catch(()=>fallbackShareIg(txt,url));
-  } else {
-    fallbackShareIg(txt,url);
-  }
-}
-function fallbackShareIg(txt,url){
-  navigator.clipboard.writeText(txt).then(()=>{
-    alert('Texto copiado! 📋\n\nCole nos stories do Instagram:\n\n'+txt);
-    window.open('https://www.instagram.com','_blank');
-  }).catch(()=>{
-    window.open('https://www.instagram.com','_blank');
-  });
+  const r = DATA[viewingIdx];
+  const txt = `${r.ig} tem um Diploma de Rico oficial 🎓 — investiu ${fR(r.valor)} em vaidade certificada.\n\nhttps://diplomaderico.com`;
+  if(navigator.share){ navigator.share({title:'Diploma de Rico', text:txt, url:'https://diplomaderico.com'}).catch(()=>{}); }
+  else { navigator.clipboard.writeText(txt).then(()=>{ alert('Texto copiado! Cole nos stories:\n\n'+txt); window.open('https://www.instagram.com','_blank'); }); }
 }
 
-function sharePerson(e,nome,ig,valor){
-  e.stopPropagation();
-  const txt=`${nome} (${ig}) tem ${fR(valor)} de diploma oficial de rico! 🎓 diplomaderico.com`;
-  if(navigator.share){
-    navigator.share({title:'Diploma de Rico',text:txt,url:'https://diplomaderico.com'}).catch(()=>{});
-  } else {
-    navigator.clipboard.writeText(txt).then(()=>{
-      const btn=e.target;btn.textContent='✓';setTimeout(()=>{btn.textContent='↗'},1500);
-    });
-  }
-}
+// ─────────────────────────────────────────────────────────────────────────────
+// MODAL COMPRA
+// ─────────────────────────────────────────────────────────────────────────────
+function openM(){ document.getElementById('mOv').classList.add('on'); document.body.style.overflow='hidden'; }
+function closeM(){ document.getElementById('mOv').classList.remove('on'); document.body.style.overflow=''; }
+function closeDip(){ document.getElementById('dov').classList.remove('on'); document.body.style.overflow=''; }
 
-function openM(){document.getElementById('mOv').classList.add('on');document.body.style.overflow='hidden'}
-function closeM(){document.getElementById('mOv').classList.remove('on');document.body.style.overflow=''}
-function closeDip(){document.getElementById('dov').classList.remove('on');document.body.style.overflow=''}
-
-// ---- INSTAGRAM PHOTO AUTO-FETCH ----
-let igPhotoUrl='';
-let igFetchTimer=null;
-
+let igPhotoUrl = '', igFetchTimer = null;
 function onIgInput(val){
-  // remove qualquer @ que o usuário tente digitar
-  const clean=val.replace(/@/g,'');
-  const input=document.getElementById('f_ig');
-  if(clean!==val){input.value=clean;}
-  const username=clean.trim();
-  const wrap=document.getElementById('igPreviewWrap');
-  const ph=document.getElementById('igAvatarPh');
-  const img=document.getElementById('igAvatarImg');
-  const spin=document.getElementById('igSpin');
+  const clean = val.replace(/@/g,'');
+  const input = document.getElementById('f_ig');
+  if(clean !== val) input.value = clean;
+  const username = clean.trim();
+  const wrap=document.getElementById('igPreviewWrap'), ph=document.getElementById('igAvatarPh');
+  const img=document.getElementById('igAvatarImg'), spin=document.getElementById('igSpin');
   const status=document.getElementById('igStatus');
-
-  clearTimeout(igFetchTimer);
-  igPhotoUrl='';
-  wrap.classList.remove('loaded');
-  img.style.display='none';
-  spin.style.display='none';
-  ph.style.display='flex';
-  ph.textContent=username?username[0].toUpperCase():'?';
-
-  if(username.length<2){status.textContent='';status.className='ig-status';return}
-
-  status.textContent='Buscando foto do Instagram...';
-  status.className='ig-status loading';
-  spin.style.display='flex';
-  ph.style.display='none';
-
-  igFetchTimer=setTimeout(()=>fetchIgPhoto(username),800);
+  clearTimeout(igFetchTimer); igPhotoUrl='';
+  wrap.classList.remove('loaded'); img.style.display='none'; spin.style.display='none';
+  ph.style.display='flex'; ph.textContent = username ? username[0].toUpperCase() : '?';
+  if(username.length < 2){ status.textContent=''; status.className='ig-status'; return; }
+  status.textContent='Buscando foto do Instagram...'; status.className='ig-status loading';
+  spin.style.display='flex'; ph.style.display='none';
+  igFetchTimer = setTimeout(() => fetchIgPhoto(username), 800);
 }
-
 async function fetchIgPhoto(username){
-  const img=document.getElementById('igAvatarImg');
-  const ph=document.getElementById('igAvatarPh');
-  const spin=document.getElementById('igSpin');
-  const wrap=document.getElementById('igPreviewWrap');
+  const img=document.getElementById('igAvatarImg'), ph=document.getElementById('igAvatarPh');
+  const spin=document.getElementById('igSpin'), wrap=document.getElementById('igPreviewWrap');
   const status=document.getElementById('igStatus');
-
   try{
-    // PRODUÇÃO: trocar pela sua Vercel serverless function que chama SearchAPI.io
-    // GET /api/ig-photo?username=felipeteixeiraa
-    // que retorna { avatar: "https://..." }
-    //
-    // Para o MVP, simulamos com a API do SearchAPI diretamente:
-    const SEARCHAPI_KEY='SUA_CHAVE_AQUI'; // ← substituir pela chave real
-    const res=await fetch(
-      `https://www.searchapi.io/api/v1/search?engine=instagram_profile&username=${username}&api_key=${SEARCHAPI_KEY}`
-    );
-
+    const SEARCHAPI_KEY='SUA_CHAVE_AQUI';
+    const res = await fetch(`https://www.searchapi.io/api/v1/search?engine=instagram_profile&username=${username}&api_key=${SEARCHAPI_KEY}`);
     if(!res.ok) throw new Error('not found');
-    const data=await res.json();
-    const avatarUrl=data?.profile?.avatar;
+    const data = await res.json();
+    const avatarUrl = data?.profile?.avatar;
     if(!avatarUrl) throw new Error('no avatar');
-
-    igPhotoUrl=avatarUrl;
-    img.src=avatarUrl;
-    img.style.display='block';
-    spin.style.display='none';
-    wrap.classList.add('loaded');
-    status.textContent='✓ Foto encontrada';
-    status.className='ig-status ok';
-
+    igPhotoUrl=avatarUrl; img.src=avatarUrl; img.style.display='block';
+    spin.style.display='none'; wrap.classList.add('loaded');
+    status.textContent='✓ Foto encontrada'; status.className='ig-status ok';
   }catch(e){
-    // fallback: iniciais + avatar genérico
-    spin.style.display='none';
-    ph.style.display='flex';
-    ph.textContent=username[0].toUpperCase();
-    igPhotoUrl=`https://i.pravatar.cc/100?u=${username}`;
-    wrap.classList.add('loaded');
-    status.textContent='Perfil privado ou não encontrado — usaremos suas iniciais';
-    status.className='ig-status err';
+    spin.style.display='none'; ph.style.display='flex'; ph.textContent=username[0].toUpperCase();
+    igPhotoUrl=`https://i.pravatar.cc/100?u=${username}`; wrap.classList.add('loaded');
+    status.textContent='Perfil privado ou não encontrado — usaremos suas iniciais'; status.className='ig-status err';
   }
 }
-document.getElementById('f_val').addEventListener('input',function(e){e.target.value=e.target.value.replace(/\D/g,'')});
-
+document.getElementById('f_val').addEventListener('input', e => e.target.value = e.target.value.replace(/\D/g,''));
 function onValInput(v){
-  const val=parseInt(v)||0;
   const err=document.getElementById('valErr');
-  if(v.length>0 && val<30){ err.style.display='block'; } else { err.style.display='none'; }
+  err.style.display = (v.length>0 && (parseInt(v)||0)<30) ? 'block' : 'none';
 }
-
 function onFraseInput(v){
   const hint=document.getElementById('fraseHint');
   hint.style.display = v.length>60 ? 'inline' : 'none';
   hint.style.color = v.length>=80 ? '#f87171' : 'var(--cd)';
 }
-
 function gPix(){
-  let ig=document.getElementById('f_ig').value.trim();
-  const val=parseInt(document.getElementById('f_val').value)||0;
-  if(!ig){alert('Digite seu @Instagram');return}
-  if(val<30){alert('Valor mínimo é R$30');return}
+  let ig = document.getElementById('f_ig').value.trim();
+  const val = parseInt(document.getElementById('f_val').value)||0;
+  if(!ig){ alert('Digite seu @Instagram'); return; }
+  if(val<30){ alert('Valor mínimo é R$30'); return; }
   if(!ig.startsWith('@')) ig='@'+ig;
   if(!igPhotoUrl) igPhotoUrl=`https://i.pravatar.cc/100?u=${ig.replace('@','')}`;
-  document.getElementById('pval').textContent=fR(val);
-  document.getElementById('pqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomaderico@pix.com.br');
-  const pb=document.getElementById('pbox');pb.classList.add('on');
-  pb.scrollIntoView({behavior:'smooth',block:'nearest'});
+  document.getElementById('pval').textContent = fR(val);
+  document.getElementById('pqr').src = 'https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomaderico@pix.com.br');
+  const pb=document.getElementById('pbox'); pb.classList.add('on');
+  pb.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
-
 function doCopy(){
   const btn=document.getElementById('pcopy');
   navigator.clipboard.writeText('diplomaderico@pix.com.br').catch(()=>{
-    const t=document.createElement('textarea');t.value='diplomaderico@pix.com.br';
-    document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+    const t=document.createElement('textarea'); t.value='diplomaderico@pix.com.br';
+    document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
   });
-  btn.textContent='✅ Copiado!';btn.classList.add('ok');
-  setTimeout(()=>{btn.textContent='📋 Copiar código copia e cola';btn.classList.remove('ok')},2500);
+  btn.textContent='✅ Copiado!'; btn.classList.add('ok');
+  setTimeout(()=>{ btn.textContent='📋 Copiar código copia e cola'; btn.classList.remove('ok'); }, 2500);
 }
-
 function showDip(){
-  let ig=document.getElementById('f_ig').value.trim()||'você';
+  let ig = document.getElementById('f_ig').value.trim()||'você';
   if(!ig.startsWith('@')) ig='@'+ig;
   myDiplomaHandle = ig;
-  const val=parseInt(document.getElementById('f_val').value)||100;
-  const frase=document.getElementById('f_frase').value.trim();
-
-  // insere no DATA na posição correta por valor
+  const val = parseInt(document.getElementById('f_val').value)||100;
+  const frase = document.getElementById('f_frase').value.trim();
   const novoEntry={
     ig, nome:ig, valor:val,
     frase: frase ? `"${frase}"` : '"recém diplomado 🎓"',
     foto: igPhotoUrl||`https://i.pravatar.cc/100?u=${ig.replace('@','')}`,
     data:'agora'
   };
-  DATA.push(novoEntry);
-  DATA.sort((a,b)=>b.valor-a.valor);
-  // re-renderiza o ranking com a nova posição
+  DATA.push(novoEntry); DATA.sort((a,b)=>b.valor-a.valor);
   document.getElementById('hrList').innerHTML='';
-  hrShown=Math.max(hrShown, DATA.indexOf(novoEntry)+1);
-  renderHero();
-  renderStats();
-
-  document.getElementById('dnome').textContent=ig;
-  document.getElementById('dval').textContent=fR(val);
-  if(igPhotoUrl){const f=document.getElementById('dfoto');f.src=igPhotoUrl;f.style.display='block'}
-  const dfw=document.getElementById('dFraseWrap');
-  const df=document.getElementById('dFrase');
-  if(frase){
-    df.textContent='"'+frase+'"';
-    dfw.style.display='block';
-  } else {
-    dfw.style.display='none';
-  }
-  closeM();document.getElementById('dov').classList.add('on');document.body.style.overflow='hidden';
+  hrShown = Math.max(hrShown, DATA.indexOf(novoEntry)+1);
+  renderHero(); renderStats();
+  document.getElementById('dnome').textContent = ig;
+  document.getElementById('dval').textContent = fR(val);
+  if(igPhotoUrl){ const f=document.getElementById('dfoto'); f.src=igPhotoUrl; f.style.display='block'; }
+  const dfw=document.getElementById('dFraseWrap'), df=document.getElementById('dFrase');
+  if(frase){ df.textContent='"'+frase+'"'; dfw.style.display='block'; } else { dfw.style.display='none'; }
+  closeM();
+  document.getElementById('dov').classList.add('on');
+  document.body.style.overflow='hidden';
 }
 
-function doShare(){
-  if(navigator.share){
-    navigator.share({title:'Recebi meu Diploma de Rico! 🎓',text:'Me certifiquei oficialmente como rico.',url:'https://diplomaderico.com'}).catch(()=>{});
-  } else {
-    navigator.clipboard.wText('https://diplomaderico.com').then(()=>{alert('Link copiado!\ndiplomaderico.com')});
-  }
-}
-
+// ─────────────────────────────────────────────────────────────────────────────
+// STATS + LIVE
+// ─────────────────────────────────────────────────────────────────────────────
 function fmtCompact(n){
   if(n>=1000000) return 'R$'+(n/1000000).toFixed(1).replace('.',',')+'M';
   if(n>=1000) return 'R$'+(n/1000).toFixed(0)+'K';
   return fR(n);
 }
 function renderStats(){
-  const total=DATA.reduce((s,r)=>s+r.valor,0);
-  document.getElementById('statCount').textContent=DATA.length;
-  document.getElementById('statTotal').textContent=fmtCompact(total);
+  const total = DATA.reduce((s,r)=>s+r.valor, 0);
+  document.getElementById('statCount').textContent = DATA.length;
+  document.getElementById('statTotal').textContent = fmtCompact(total);
 }
-
-// contador ao vivo — base pós-viral 5 influencers 100k
-let liveBase=Math.floor(Math.random()*80)+300;
+let liveBase = Math.floor(Math.random()*80)+300;
 function updateLive(){
-  liveBase+=Math.floor(Math.random()*11)-5;
-  if(liveBase<280)liveBase=280;
-  if(liveBase>420)liveBase=420;
-  document.getElementById('liveCount').textContent=liveBase+' espiando agora';
+  liveBase += Math.floor(Math.random()*11)-5;
+  if(liveBase<280) liveBase=280; if(liveBase>420) liveBase=420;
+  document.getElementById('liveCount').textContent = liveBase+' espiando agora';
 }
-updateLive();
-setInterval(updateLive,4000);
+updateLive(); setInterval(updateLive, 4000);
 
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeM();closeDip();closeTU();closeView()}});
-// ---- LINK COMPARTILHÁVEL ----
+document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ closeM(); closeDip(); closeTU(); closeView(); } });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LINK COMPARTILHÁVEL
+// ─────────────────────────────────────────────────────────────────────────────
 let myDiplomaHandle = '';
-
 function copyDiplomaLink(){
   const handle = myDiplomaHandle.replace('@','');
-  const url = `https://radar-juridico.com/diplomaderico?diploma=${handle}`;
+  const url = `https://diplomaderico.com?diploma=${handle}`;
   navigator.clipboard.writeText(url).then(()=>{
-    const btn = document.getElementById('copyLinkBtn');
-    btn.textContent = '✓ Link copiado!';
-    setTimeout(()=>{ btn.innerHTML = '🔗 Copiar link do diploma'; }, 2000);
-  }).catch(()=>{
-    prompt('Copie seu link:', url);
-  });
+    showToast('🔗 Link copiado!');
+    const btn=document.getElementById('copyLinkBtn');
+    btn.textContent='✓ Copiado!';
+    setTimeout(()=>{ btn.textContent='🔗 Copiar link'; }, 2000);
+  }).catch(()=>{ prompt('Copie seu link:', url); });
 }
-
 function checkDiplomaParam(){
   const params = new URLSearchParams(window.location.search);
-  const handle = (params.get('diploma') || '').replace('@','').toLowerCase();
+  const handle = (params.get('diploma')||'').replace('@','').toLowerCase();
   if(!handle) return;
   const idx = DATA.findIndex(r => r.ig.replace('@','').toLowerCase() === handle);
   if(idx < 0) return;
   if(hrShown <= idx){ hrShown = idx+1; renderHero(); }
-  // pequeno delay pra garantir que o DOM do modal está pronto
   setTimeout(()=>{
     viewingIdx = idx;
     const r = DATA[idx];
     document.getElementById('vNome').textContent = r.ig;
     document.getElementById('vVal').textContent = fR(r.valor);
-    const foto = document.getElementById('vFoto');
-    foto.src = r.foto;
-    foto.style.display = 'block';
-    const vfw = document.getElementById('vFraseWrap');
-    const vf = document.getElementById('vFrase');
-    if(r.frase && r.frase.trim()){
-      vf.textContent = r.frase;
-      vfw.style.display = 'block';
-    } else {
-      vfw.style.display = 'none';
-    }
+    const foto=document.getElementById('vFoto'); foto.src=r.foto; foto.style.display='block';
+    const vfw=document.getElementById('vFraseWrap'), vf=document.getElementById('vFrase');
+    if(r.frase && r.frase.trim()){ vf.textContent=r.frase; vfw.style.display='block'; } else { vfw.style.display='none'; }
     document.getElementById('viewOv').classList.add('on');
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow='hidden';
   }, 600);
 }
 
-renderStats();
-renderHero();
-checkDiplomaParam();
+renderStats(); renderHero(); checkDiplomaParam();
 </script>
 </body>
 </html>
