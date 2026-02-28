@@ -439,7 +439,7 @@ function renderHero(){
     d.className='hr-item';
     d.innerHTML=`
       <div class="hr-med">${M[i]||i+1}</div>
-      <div class="hr-av" onclick="viewDiploma(event,${i})" style="cursor:pointer" title="Ver diploma"><img src="${r.foto}" alt="${r.nome[0]}"><div class="hr-av-eye"><svg width="13" height="9" viewBox="0 0 9 6" fill="none"><path d="M4.5 0.5C2.5 0.5 0.8 2 0.5 3C0.8 4 2.5 5.5 4.5 5.5C6.5 5.5 8.2 4 8.5 3C8.2 2 6.5 0.5 4.5 0.5Z" stroke="#c8a84b" stroke-width="0.8"/><circle cx="4.5" cy="3" r="1.2" fill="#c8a84b"/></svg></div></div>
+      <div class="hr-av" onclick="viewDiploma(event,${i})" style="cursor:pointer" title="Ver diploma"><img src="${r.foto}" alt="${r.nome[0]}" onerror="this.onerror=null;this.src='/api/ig-photo?username=${encodeURIComponent(r.ig.replace('@',''))}'"><div class="hr-av-eye"><svg width="13" height="9" viewBox="0 0 9 6" fill="none"><path d="M4.5 0.5C2.5 0.5 0.8 2 0.5 3C0.8 4 2.5 5.5 4.5 5.5C6.5 5.5 8.2 4 8.5 3C8.2 2 6.5 0.5 4.5 0.5Z" stroke="#c8a84b" stroke-width="0.8"/><circle cx="4.5" cy="3" r="1.2" fill="#c8a84b"/></svg></div></div>
       <div class="hr-info">
         <div class="hr-name"><a class="ig-link" href="https://instagram.com/${r.ig.replace('@','')}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${r.ig}</a>
         </div>
@@ -852,11 +852,13 @@ async function loadRanking(){
     const rows = await res.json();
     if(!Array.isArray(rows)) return;
 
+    const STORAGE = 'https://qvetnjpjjsndlxoczwsu.supabase.co/storage/v1/object/public/fotos';
+
     DATA.length = 0;
     rows.forEach(r => {
       const username = r.ig.replace('@','');
-      // Usa foto salva no banco se disponível, senão chama o proxy
-      const foto = r.foto_url || `/api/ig-photo?username=${encodeURIComponent(username)}`;
+      // Tenta Storage primeiro (permanente), senão proxy (vai buscar e salvar)
+      const foto = `${STORAGE}/${username}.jpg`;
       DATA.push({
         ig: r.ig,
         nome: r.ig,
