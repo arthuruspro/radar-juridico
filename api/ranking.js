@@ -10,12 +10,11 @@ export default async function handler(req, res) {
 
   try {
     const r = await fetch(
-      `${SUPA_URL}/rest/v1/diplomas?status=eq.paid&order=valor.desc&select=ig,valor,frase,created_at`,
+      `${SUPA_URL}/rest/v1/diplomas?status=eq.paid&order=valor.desc&select=ig,valor,frase,foto_url,created_at`,
       { headers: SUPA_HDR }
     );
     const data = await r.json();
 
-    // Cache de 30s no Vercel pra não sobrecarregar o Supabase
     res.setHeader('Cache-Control', 's-maxage=30, stale-while-revalidate');
     return res.status(200).json(data);
 
