@@ -290,11 +290,11 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
     <img class="dfoto" id="vFoto" src="" alt="" style="width:64px;height:64px;margin:10px auto 6px">
     <div class="dnome" id="vNome" style="font-size:28px;margin:4px 0">@alguem</div>
     <div class="dvb" style="margin-top:10px;padding-top:10px">
-      <div class="dvl" style="font-size:11px;font-weight:700">Valor Oficialmente Investido</div>
-      <div class="dvn" id="vVal" style="font-size:26px">R$ 0</div>
+      <div class="dvl" style="font-size:11px;font-weight:700">Valor Investido</div>
+      <div class="dvn" id="vVal" style="font-size:34px">R$ 0</div>
     </div>
     <div id="vFraseWrap" style="margin-top:10px;padding-top:10px;display:none">
-      <div id="vFrase" style="font-family:var(--fp);font-style:italic;font-size:16px;color:#7a5c1e;line-height:1.5;text-align:center"></div>
+      <div id="vFrase" style="font-family:var(--fp);font-style:italic;font-size:16px;color:#3a2008;line-height:1.5;text-align:center"></div>
     </div>
     <div class="dft"></div>
   </div>
@@ -379,7 +379,7 @@ footer{border-top:1px solid var(--b);padding:28px 24px;text-align:center;font-fa
       <div class="pt">⚡ PIX Gerado</div>
       <div class="pv" id="pval">R$ 100</div>
       <div class="pqr"><img id="pqr" src="" alt="QR PIX"></div>
-      <div class="pkey">diplomaderico@pix.com.br</div>
+      <div class="pkey" id="pkey" style="cursor:text;user-select:all"></div>
       <button class="pcopy" id="pcopy" onclick="doCopy()">📋 Copiar código copia e cola</button>
       <button class="ppaid" onclick="showDip()">✅ Já paguei — Ver meu Diploma</button>
     </div>
@@ -676,27 +676,62 @@ function onFraseInput(v){
   hint.style.color = v.length>=80 ? '#f87171' : 'var(--cd)';
 }
 
-function gPix(){
-  let ig=document.getElementById('f_ig').value.trim();
-  const val=parseInt(document.getElementById('f_val').value)||0;
-  if(!ig){alert('Digite seu @Instagram');return}
-  if(val<30){alert('Valor mínimo é R$30');return}
-  if(!ig.startsWith('@')) ig='@'+ig;
-  if(!igPhotoUrl) igPhotoUrl=`https://i.pravatar.cc/100?u=${ig.replace('@','')}`;
-  document.getElementById('pval').textContent=fR(val);
-  document.getElementById('pqr').src='https://api.qrserver.com/v1/create-qr-code/?size=156x156&data='+encodeURIComponent('diplomaderico@pix.com.br');
-  const pb=document.getElementById('pbox');pb.classList.add('on');
-  pb.scrollIntoView({behavior:'smooth',block:'nearest'});
+// ─── ASAAS PIX (via proxy /api/diploma-pix) ──────────────────────────────────
+let _pixPayload = '';
+let _currentPaymentId = '';
+
+async function gPix(){
+  let ig = document.getElementById('f_ig').value.trim();
+  const val = parseInt(document.getElementById('f_val').value)||0;
+  if(!ig){ alert('Digite seu @Instagram'); return; }
+  if(val < 30){ alert('Valor mínimo é R$30'); return; }
+  if(!ig.startsWith('@')) ig = '@'+ig;
+  if(!igPhotoUrl) igPhotoUrl = `https://i.pravatar.cc/100?u=${ig.replace('@','')}`;
+
+  const btn = document.querySelector('#mOv .sbtn');
+  const origTxt = btn.textContent;
+  btn.textContent = '⏳ Gerando PIX...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/diploma-pix', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ig, valor: val })
+    });
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Erro ao gerar PIX');
+
+    _pixPayload = data.payload;
+    _currentPaymentId = data.paymentId;
+
+    document.getElementById('pval').textContent = fR(val);
+    document.getElementById('pqr').src = 'data:image/png;base64,' + data.encodedImage;
+    document.getElementById('pkey').textContent = data.payload;
+
+    const pb = document.getElementById('pbox');
+    pb.classList.add('on');
+    pb.scrollIntoView({behavior:'smooth', block:'nearest'});
+
+  } catch(e){
+    alert('Erro ao gerar PIX: ' + e.message);
+    console.error('[diploma-pix]', e);
+  } finally {
+    btn.textContent = origTxt;
+    btn.disabled = false;
+  }
 }
 
 function doCopy(){
-  const btn=document.getElementById('pcopy');
-  navigator.clipboard.writeText('diplomaderico@pix.com.br').catch(()=>{
-    const t=document.createElement('textarea');t.value='diplomaderico@pix.com.br';
-    document.body.appendChild(t);t.select();document.execCommand('copy');document.body.removeChild(t);
+  const btn = document.getElementById('pcopy');
+  const txt = _pixPayload || document.getElementById('pkey').textContent;
+  navigator.clipboard.writeText(txt).catch(()=>{
+    const t = document.createElement('textarea');
+    t.value = txt;
+    document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t);
   });
-  btn.textContent='✅ Copiado!';btn.classList.add('ok');
-  setTimeout(()=>{btn.textContent='📋 Copiar código copia e cola';btn.classList.remove('ok')},2500);
+  btn.textContent = '✅ Copiado!'; btn.classList.add('ok');
+  setTimeout(()=>{ btn.textContent = '📋 Copiar código copia e cola'; btn.classList.remove('ok'); }, 2500);
 }
 
 function showDip(){
