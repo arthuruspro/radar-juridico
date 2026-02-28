@@ -633,18 +633,12 @@ async function fetchIgPhoto(username){
   const status=document.getElementById('igStatus');
 
   try{
-    const SEARCHAPI_KEY='SUA_CHAVE_AQUI';
-    const res=await fetch(
-      `https://www.searchapi.io/api/v1/search?engine=instagram_profile&username=${username}&api_key=${SEARCHAPI_KEY}`
-    );
+    const res = await fetch(`/api/ig-photo?username=${encodeURIComponent(username)}`);
+    const data = await res.json();
+    if(!res.ok || !data.avatar) throw new Error('não encontrado');
 
-    if(!res.ok) throw new Error('not found');
-    const data=await res.json();
-    const avatarUrl=data?.profile?.avatar;
-    if(!avatarUrl) throw new Error('no avatar');
-
-    igPhotoUrl=avatarUrl;
-    img.src=avatarUrl;
+    igPhotoUrl = data.avatar;
+    img.src = data.avatar;
     img.style.display='block';
     spin.style.display='none';
     wrap.classList.add('loaded');
