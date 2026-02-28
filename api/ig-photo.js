@@ -14,49 +14,48 @@ export default async function handler(req, res) {
   if (!username) return res.status(400).json({ error: 'username obrigatório' });
 
   try {
-    // 1. Verifica se já tem foto salva no banco
-    const dbRes = await fetch(
-      `${SUPA_URL}/rest/v1/diplomas?ig=eq.@${username}&select=foto_url&limit=1`,
-      { headers: SUPA_HDR }
-    );
-    const dbData = await dbRes.json();
-    const savedUrl = dbData?.[0]?.foto_url;
+    // 1. Verifica se já tem foto salva no Storage
+    const storageUrl = `${SUPA_URL}/storage/v1/object/public/fotos/${username}.jpg`;
+    const checkRes = await fetch(storageUrl, { method: 'HEAD' });
 
-    let avatarUrl;
-
-    if (savedUrl) {
-      // Já tem no banco — usa direto
-      avatarUrl = savedUrl;
-    } else {
-      // Busca na SearchAPI
-      const r = await fetch(
-        `https://www.searchapi.io/api/v1/search?engine=instagram_profile&username=${encodeURIComponent(username)}&api_key=${SEARCHAPI_KEY}`
-      );
-      if (!r.ok) throw new Error('Perfil não encontrado');
-      const data = await r.json();
-      avatarUrl = data?.profile?.profile_pic_url || data?.profile?.avatar || null;
-      if (!avatarUrl) throw new Error('Avatar não encontrado');
-
-      // Salva no banco pra não buscar de novo
-      await fetch(
-        `${SUPA_URL}/rest/v1/diplomas?ig=eq.@${username}`,
-        {
-          method: 'PATCH',
-          headers: { ...SUPA_HDR, 'Prefer': 'return=minimal' },
-          body: JSON.stringify({ foto_url: avatarUrl })
-        }
-      );
+    if (checkRes.ok) {
+      // Já existe no Storage — redireciona direto
+      res.setHeader('Cache-Control', 'public, max-age=86400');
+      return res.redirect(302, storageUrl);
     }
 
-    // Stream da imagem pro browser
+    // 2. Busca na SearchAPI
+    const r = await fetch(
+      `https://www.searchapi.io/api/v1/search?engine=instagram_profile&username=${encodeURIComponent(username)}&api_key=${SEARCHAPI_KEY}`
+    );
+    if (!r.ok) throw new Error('Perfil não encontrado');
+    const data = await r.json();
+    const avatarUrl = data?.profile?.profile_pic_url || data?.profile?.avatar || null;
+    if (!avatarUrl) throw new Error('Avatar não encontrado');
+
+    // 3. Baixa a imagem
     const imgRes = await fetch(avatarUrl, { headers: { 'User-Agent': 'Mozilla/5.0' } });
     if (!imgRes.ok) throw new Error('Erro ao buscar imagem');
+    const buffer = await imgRes.arrayBuffer();
 
+    // 4. Salva no Supabase Storage
+    await fetch(
+      `${SUPA_URL}/storage/v1/object/fotos/${username}.jpg`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${SUPA_KEY}`,
+          'Content-Type': 'image/jpeg',
+          'x-upsert': 'true'
+        },
+        body: buffer
+      }
+    );
+
+    // 5. Serve a imagem pro browser
     const contentType = imgRes.headers.get('content-type') || 'image/jpeg';
     res.setHeader('Content-Type', contentType);
     res.setHeader('Cache-Control', 'public, max-age=86400');
-
-    const buffer = await imgRes.arrayBuffer();
     return res.send(Buffer.from(buffer));
 
   } catch (err) {
