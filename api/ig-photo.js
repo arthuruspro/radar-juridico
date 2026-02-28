@@ -1,6 +1,7 @@
 const SEARCHAPI_KEY = 'Ukdduyf5VknGhiBUTGyH55ZF';
 const SUPA_URL = 'https://qvetnjpjjsndlxoczwsu.supabase.co';
 const SUPA_KEY = 'sb_secret_121GSIddP2B4y-lPPSB-RA_N-l6eJz0';
+const SUPA_SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF2ZXRuanBqanNuZGx4b2N6d3N1Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjI1MDE0MCwiZXhwIjoyMDg3ODI2MTQwfQ.h3DGgp30oBehIuZJ5hylybG4SkgGTLHEs8__Ot1Owu4';
 const SUPA_HDR = {
   'Content-Type': 'application/json',
   'apikey': SUPA_KEY,
@@ -19,7 +20,6 @@ export default async function handler(req, res) {
     const checkRes = await fetch(storageUrl, { method: 'HEAD' });
 
     if (checkRes.ok) {
-      // Já existe no Storage — redireciona direto
       res.setHeader('Cache-Control', 'public, max-age=86400');
       return res.redirect(302, storageUrl);
     }
@@ -38,13 +38,13 @@ export default async function handler(req, res) {
     if (!imgRes.ok) throw new Error('Erro ao buscar imagem');
     const buffer = await imgRes.arrayBuffer();
 
-   // 4. Salva no Supabase Storage
+    // 4. Salva no Supabase Storage usando service_role key
     const uploadRes = await fetch(
       `${SUPA_URL}/storage/v1/object/fotos/${username}.jpg`,
       {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${SUPA_KEY}`,
+          'Authorization': `Bearer ${SUPA_SERVICE_KEY}`,
           'Content-Type': 'image/jpeg',
           'x-upsert': 'true'
         },
@@ -54,12 +54,12 @@ export default async function handler(req, res) {
     console.log('[storage upload]', uploadRes.status, await uploadRes.text());
 
     // 5. Serve a imagem pro browser
-    const contentType = imgRes.headers.get('content-type') || 'image/jpeg';
-    res.setHeader('Content-Type', contentType);
+    res.setHeader('Content-Type', 'image/jpeg');
     res.setHeader('Cache-Control', 'public, max-age=86400');
     return res.send(Buffer.from(buffer));
 
   } catch (err) {
+    console.error('[ig-photo]', err.message);
     return res.status(404).json({ error: err.message });
   }
 }
