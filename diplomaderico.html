@@ -632,22 +632,18 @@ async function fetchIgPhoto(username){
   const wrap=document.getElementById('igPreviewWrap');
   const status=document.getElementById('igStatus');
 
-  try{
-    const proxyUrl=`/api/ig-photo?username=${encodeURIComponent(username)}`;
-    await new Promise((resolve,reject)=>{
-      const t=new Image();
-      t.onload=resolve;
-      t.onerror=reject;
-      t.src=proxyUrl;
-    });
+  const proxyUrl=`/api/ig-photo?username=${encodeURIComponent(username)}`;
+
+  img.onload=()=>{
     igPhotoUrl=proxyUrl;
-    img.src=proxyUrl;
     img.style.display='block';
     spin.style.display='none';
+    ph.style.display='none';
     wrap.classList.add('loaded');
     status.textContent='✓ Foto encontrada';
     status.className='ig-status ok';
-  }catch(e){
+  };
+  img.onerror=()=>{
     spin.style.display='none';
     ph.style.display='flex';
     ph.textContent=username[0].toUpperCase();
@@ -655,7 +651,8 @@ async function fetchIgPhoto(username){
     wrap.classList.add('loaded');
     status.textContent='Perfil privado ou não encontrado — usaremos suas iniciais';
     status.className='ig-status err';
-  }
+  };
+  img.src=proxyUrl;
 }
 document.getElementById('f_val').addEventListener('input',function(e){e.target.value=e.target.value.replace(/\D/g,'')});
 
