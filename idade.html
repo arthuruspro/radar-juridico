@@ -1,0 +1,244 @@
+import { useState, useCallback } from "react";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, PieChart, Pie, Legend } from "recharts";
+
+const COLORS = ["#0f172a", "#1e3a5f", "#2563eb", "#3b82f6", "#60a5fa", "#93c5fd", "#bfdbfe", "#dbeafe"];
+
+function calcAge(nascStr) {
+  if (!nascStr) return null;
+  const [d, m, y] = nascStr.split("/").map(Number);
+  const birth = new Date(y, m - 1, d);
+  const today = new Date();
+  let age = today.getFullYear() - birth.getFullYear();
+  const monthDiff = today.getMonth() - birth.getMonth();
+  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
+}
+
+function ageRange(age) {
+  if (age < 18) return "< 18";
+  if (age <= 24) return "18-24";
+  if (age <= 34) return "25-34";
+  if (age <= 44) return "35-44";
+  if (age <= 54) return "45-54";
+  if (age <= 64) return "55-64";
+  return "65+";
+}
+
+export default function App() {
+  const [apiKey, setApiKey] = useState("");
+  const [cpfText, setCpfText] = useState("");
+  const [results, setResults] = useState([]);
+  const [errors, setErrors] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState({ current: 0, total: 0 });
+  const [done, setDone] = useState(false);
+
+  const run = useCallback(async () => {
+    const raw = cpfText.replace(/[.\-\/\s]/g, "").split(/[\n,;]+/).map(s => s.trim()).filter(s => /^\d{11}$/.test(s));
+    if (!raw.length) return alert("Nenhum CPF válido encontrado.");
+    if (!apiKey.trim()) return alert("Cole sua API Key.");
+
+    setLoading(true);
+    setDone(false);
+    setResults([]);
+    setErrors([]);
+    setProgress({ current: 0, total: raw.length });
+
+    const ok = [];
+    const fail = [];
+
+    for (let i = 0; i < raw.length; i++) {
+      const cpf = raw[i];
+      try {
+        const res = await fetch(`https://api.cpf-brasil.org/cpf/${cpf}`, {
+          headers: { "X-API-Key": apiKey.trim() }
+        });
+        const json = await res.json();
+        if (json.success && json.data?.NASC) {
+          const age = calcAge(json.data.NASC);
+          ok.push({ cpf, nome: json.data.NOME, nasc: json.data.NASC, sexo: json.data.SEXO, age });
+        } else {
+          fail.push({ cpf, reason: json.message || "Sem data de nascimento" });
+        }
+      } catch (e) {
+        fail.push({ cpf, reason: e.message });
+      }
+      setProgress({ current: i + 1, total: raw.length });
+      if (raw.length > 5) await new Promise(r => setTimeout(r, 300));
+    }
+
+    setResults(ok);
+    setErrors(fail);
+    setLoading(false);
+    setDone(true);
+  }, [apiKey, cpfText]);
+
+  const ages = results.map(r => r.age).filter(a => a !== null);
+  const avg = ages.length ? (ages.reduce((a, b) => a + b, 0) / ages.length).toFixed(1) : 0;
+  const median = ages.length ? [...ages].sort((a, b) => a - b)[Math.floor(ages.length / 2)] : 0;
+  const youngest = ages.length ? Math.min(...ages) : 0;
+  const oldest = ages.length ? Math.max(...ages) : 0;
+
+  const rangeCounts = {};
+  ["< 18", "18-24", "25-34", "35-44", "45-54", "55-64", "65+"].forEach(r => rangeCounts[r] = 0);
+  ages.forEach(a => { rangeCounts[ageRange(a)]++; });
+  const barData = Object.entries(rangeCounts).map(([range, count]) => ({ range, count }));
+
+  const sexCounts = {};
+  results.forEach(r => {
+    const s = r.sexo || "Não informado";
+    sexCounts[s] = (sexCounts[s] || 0) + 1;
+  });
+  const pieData = Object.entries(sexCounts).map(([name, value]) => ({ name, value }));
+  const PIE_COLORS = { "Masculino": "#2563eb", "Feminino": "#e11d48", "Não informado": "#94a3b8" };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#f8fafc", fontFamily: "'DM Sans', 'Segoe UI', sans-serif" }}>
+      <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet" />
+      
+      <div style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #1e40af 100%)", padding: "40px 20px", textAlign: "center" }}>
+        <h1 style={{ fontFamily: "'Space Mono', monospace", color: "#fff", fontSize: 28, margin: 0, letterSpacing: "-0.5px" }}>
+          Análise de Idade dos Clientes
+        </h1>
+        <p style={{ color: "#93c5fd", margin: "8px 0 0", fontSize: 14 }}>Cole os CPFs, consulte a API e veja o perfil etário</p>
+      </div>
+
+      <div style={{ maxWidth: 800, margin: "0 auto", padding: "24px 16px" }}>
+        {!done && (
+          <div style={{ background: "#fff", borderRadius: 12, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.08)", border: "1px solid #e2e8f0" }}>
+            <label style={{ display: "block", fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 6 }}>API Key</label>
+            <input
+              type="password"
+              value={apiKey}
+              onChange={e => setApiKey(e.target.value)}
+              placeholder="Cole sua X-API-Key aqui"
+              style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: 14, outline: "none", boxSizing: "border-box", fontFamily: "'DM Sans', sans-serif", background: "#f8fafc" }}
+            />
+
+            <label style={{ display: "block", fontWeight: 600, fontSize: 13, color: "#334155", marginBottom: 6, marginTop: 16 }}>
+              Lista de CPFs <span style={{ fontWeight: 400, color: "#94a3b8" }}>(um por linha, ou separados por vírgula)</span>
+            </label>
+            <textarea
+              value={cpfText}
+              onChange={e => setCpfText(e.target.value)}
+              placeholder={"123.456.789-00\n987.654.321-00\n111.222.333-44"}
+              rows={8}
+              style={{ width: "100%", padding: "10px 14px", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: 14, outline: "none", resize: "vertical", boxSizing: "border-box", fontFamily: "'DM Sans', sans-serif", background: "#f8fafc" }}
+            />
+
+            <button
+              onClick={run}
+              disabled={loading}
+              style={{
+                marginTop: 16, width: "100%", padding: "12px 0", borderRadius: 8, border: "none",
+                background: loading ? "#94a3b8" : "linear-gradient(135deg, #1e40af, #2563eb)",
+                color: "#fff", fontSize: 15, fontWeight: 600, cursor: loading ? "not-allowed" : "pointer",
+                fontFamily: "'DM Sans', sans-serif", transition: "all 0.2s"
+              }}
+            >
+              {loading ? `Consultando... ${progress.current}/${progress.total}` : "Consultar e Gerar Gráfico"}
+            </button>
+
+            {loading && (
+              <div style={{ marginTop: 12, background: "#e2e8f0", borderRadius: 99, height: 6, overflow: "hidden" }}>
+                <div style={{ height: "100%", background: "linear-gradient(90deg, #2563eb, #60a5fa)", borderRadius: 99, width: `${(progress.current / progress.total) * 100}%`, transition: "width 0.3s" }} />
+              </div>
+            )}
+          </div>
+        )}
+
+        {done && results.length > 0 && (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 20 }}>
+              {[
+                { label: "Idade Média", value: avg, suffix: " anos", color: "#2563eb" },
+                { label: "Mediana", value: median, suffix: " anos", color: "#1e3a5f" },
+                { label: "Mais Novo", value: youngest, suffix: " anos", color: "#059669" },
+                { label: "Mais Velho", value: oldest, suffix: " anos", color: "#dc2626" },
+              ].map((s, i) => (
+                <div key={i} style={{ background: "#fff", borderRadius: 12, padding: "16px 12px", textAlign: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.06)", border: "1px solid #e2e8f0" }}>
+                  <div style={{ fontSize: 11, color: "#64748b", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.5px" }}>{s.label}</div>
+                  <div style={{ fontSize: 28, fontWeight: 700, color: s.color, fontFamily: "'Space Mono', monospace", marginTop: 4 }}>{s.value}<span style={{ fontSize: 13, fontWeight: 400, color: "#94a3b8" }}>{s.suffix}</span></div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
+              <div style={{ background: "#fff", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", border: "1px solid #e2e8f0" }}>
+                <h3 style={{ margin: "0 0 16px", fontSize: 14, color: "#334155", fontWeight: 600 }}>Distribuição por Faixa Etária</h3>
+                <ResponsiveContainer width="100%" height={260}>
+                  <BarChart data={barData} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                    <XAxis dataKey="range" tick={{ fontSize: 11, fill: "#64748b" }} />
+                    <YAxis tick={{ fontSize: 11, fill: "#64748b" }} allowDecimals={false} />
+                    <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 13 }} />
+                    <Bar dataKey="count" radius={[6, 6, 0, 0]} name="Clientes">
+                      {barData.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+
+              <div style={{ background: "#fff", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", border: "1px solid #e2e8f0" }}>
+                <h3 style={{ margin: "0 0 16px", fontSize: 14, color: "#334155", fontWeight: 600 }}>Distribuição por Sexo</h3>
+                <ResponsiveContainer width="100%" height={260}>
+                  <PieChart>
+                    <Pie data={pieData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={90} innerRadius={50} paddingAngle={3} label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`} style={{ fontSize: 11 }}>
+                      {pieData.map((entry, i) => <Cell key={i} fill={PIE_COLORS[entry.name] || "#94a3b8"} />)}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: 8, border: "1px solid #e2e8f0", fontSize: 13 }} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div style={{ background: "#fff", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.06)", border: "1px solid #e2e8f0", marginBottom: 20 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+                <h3 style={{ margin: 0, fontSize: 14, color: "#334155", fontWeight: 600 }}>Detalhamento ({results.length} clientes)</h3>
+                {errors.length > 0 && <span style={{ fontSize: 12, color: "#dc2626", background: "#fef2f2", padding: "2px 8px", borderRadius: 99 }}>{errors.length} erros</span>}
+              </div>
+              <div style={{ overflowX: "auto" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ borderBottom: "2px solid #e2e8f0" }}>
+                      {["CPF", "Nome", "Nascimento", "Sexo", "Idade"].map(h => (
+                        <th key={h} style={{ textAlign: "left", padding: "8px 10px", color: "#64748b", fontWeight: 600, fontSize: 11, textTransform: "uppercase", letterSpacing: "0.5px" }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {results.sort((a, b) => a.age - b.age).map((r, i) => (
+                      <tr key={i} style={{ borderBottom: "1px solid #f1f5f9", background: i % 2 === 0 ? "#fff" : "#f8fafc" }}>
+                        <td style={{ padding: "8px 10px", fontFamily: "'Space Mono', monospace", fontSize: 12 }}>{r.cpf}</td>
+                        <td style={{ padding: "8px 10px" }}>{r.nome}</td>
+                        <td style={{ padding: "8px 10px" }}>{r.nasc}</td>
+                        <td style={{ padding: "8px 10px" }}>{r.sexo}</td>
+                        <td style={{ padding: "8px 10px", fontWeight: 700, color: "#2563eb" }}>{r.age}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <button
+              onClick={() => { setDone(false); setResults([]); setErrors([]); }}
+              style={{ width: "100%", padding: "12px 0", borderRadius: 8, border: "1px solid #cbd5e1", background: "#fff", color: "#334155", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "'DM Sans', sans-serif" }}
+            >
+              Nova Consulta
+            </button>
+          </>
+        )}
+
+        {done && results.length === 0 && (
+          <div style={{ background: "#fff", borderRadius: 12, padding: 40, textAlign: "center", boxShadow: "0 1px 3px rgba(0,0,0,0.06)", border: "1px solid #e2e8f0" }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>⚠️</div>
+            <p style={{ color: "#dc2626", fontWeight: 600 }}>Nenhum resultado encontrado</p>
+            <p style={{ color: "#64748b", fontSize: 13 }}>{errors.length} CPFs retornaram erro. Verifique a API Key e os CPFs.</p>
+            <button onClick={() => { setDone(false); setResults([]); setErrors([]); }} style={{ marginTop: 16, padding: "10px 24px", borderRadius: 8, border: "1px solid #cbd5e1", background: "#fff", color: "#334155", fontSize: 14, cursor: "pointer" }}>Tentar Novamente</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
