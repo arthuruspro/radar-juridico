@@ -268,7 +268,7 @@ const cpfError = document.getElementById('cpfError');
 const wppError = document.getElementById('wppError');
 let rawCpf = '';
 let rawWpp = '';
-let currentPaymentId = '';
+let currentAuthId = '';
 let pixPayload = '';
 let pollInterval = null;
 let pollCount = 0;
@@ -396,7 +396,7 @@ async function handleCheckout() {
 
     document.getElementById('qrCodeImg').src = 'data:image/png;base64,' + data.qrCodeImage;
     pixPayload = data.qrCodeText;
-    currentPaymentId = data.paymentId;
+    currentAuthId = data.authorizationId;
 
     showStep(7);
     startPaymentPolling();
@@ -439,10 +439,10 @@ function startPaymentPolling() {
           'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
           'apikey': SUPABASE_ANON_KEY,
         },
-        body: JSON.stringify({ paymentId: currentPaymentId }),
+        body: JSON.stringify({ authorizationId: currentAuthId }),
       });
       const data = await res.json();
-      if (data.paid) {
+      if (data.active) {
         clearInterval(pollInterval);
         if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: 147, currency: 'BRL' });
         if (typeof gtag !== 'undefined') gtag('event', 'conversion', { send_to: 'AW-11225982551/purchase', value: 147, currency: 'BRL' });
