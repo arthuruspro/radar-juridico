@@ -134,6 +134,8 @@ footer{display:none}
 .success-steps-list li:last-child{border-bottom:none}
 .success-steps-list li strong{color:var(--text)}
 .input-label{font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;text-align:left;display:block}
+.wpp-section{max-height:0;overflow:hidden;opacity:0;transition:max-height 0.4s ease,opacity 0.4s ease,margin 0.4s ease;margin-top:0}
+.wpp-section.visible{max-height:200px;opacity:1;margin-top:16px}
 .pix-error{text-align:center;font-size:14px;color:var(--danger);margin-top:12px;display:none}
 .pix-error.visible{display:block}
 @media(max-width:600px){
@@ -169,19 +171,19 @@ footer{display:none}
 <div class="cpf-modal" id="cpfModal">
 <div class="cpf-modal-box">
 
-<!-- STEP 1: CPF + WhatsApp -->
+<!-- STEP 1: CPF + WhatsApp (progressive disclosure) -->
 <div class="cpf-step" id="cpfStep1">
-<h2>Verifique seu CPF:</h2>
-<p class="cpf-desc">Para onde enviamos os alertas?</p>
+<h2>Digite o CPF:</h2>
 <div class="cpf-input-wrap">
-<label class="input-label">CPF</label>
 <input type="text" class="cpf-input" id="cpfInput" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" autocomplete="off">
 <p class="cpf-error-msg" id="cpfError">Digite um CPF válido com 11 dígitos</p>
 </div>
+<div class="wpp-section" id="wppSection">
+<p class="cpf-desc" style="margin-bottom:12px">Para onde enviamos os alertas?</p>
 <div class="cpf-input-wrap">
-<label class="input-label">WhatsApp</label>
 <input type="text" class="cpf-input" id="wppInput" placeholder="(00) 00000-0000" maxlength="15" inputmode="numeric" autocomplete="off">
 <p class="cpf-error-msg" id="wppError">Digite um WhatsApp válido com DDD</p>
+</div>
 </div>
 <button class="cpf-submit" id="cpfSubmitBtn" onclick="startAnalysis()">Continuar</button>
 <div class="cpf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="m7 11V7a5 5 0 0 1 10 0v4"/></svg> Seus dados estão protegidos</div>
@@ -284,29 +286,6 @@ function showStep(n) {
   document.querySelector('.cpf-modal-box').scrollTop = 0;
 }
 
-// ===== MÁSCARAS =====
-cpfInput.addEventListener('input', e => {
-  let v = e.target.value.replace(/\D/g, '').slice(0, 11);
-  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
-  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-  else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
-  e.target.value = v;
-  cpfError.classList.remove('visible');
-  cpfInput.classList.remove('error');
-});
-
-wppInput.addEventListener('input', e => {
-  let v = e.target.value.replace(/\D/g, '').slice(0, 11);
-  if (v.length > 6) v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
-  else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-  e.target.value = v;
-  wppError.classList.remove('visible');
-  wppInput.classList.remove('error');
-});
-
-cpfInput.addEventListener('keydown', e => { if (e.key === 'Enter') wppInput.focus(); });
-wppInput.addEventListener('keydown', e => { if (e.key === 'Enter') startAnalysis(); });
-
 // ===== VALIDAÇÃO CPF =====
 function validateCpf(cpf) {
   cpf = cpf.replace(/\D/g, '');
@@ -320,6 +299,36 @@ function validateCpf(cpf) {
   let d2 = 11 - (sum % 11); if (d2 >= 10) d2 = 0;
   return parseInt(cpf[10]) === d2;
 }
+
+// ===== MÁSCARAS =====
+let wppRevealed = false;
+cpfInput.addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+  e.target.value = v;
+  cpfError.classList.remove('visible');
+  cpfInput.classList.remove('error');
+  // Revelar campo WhatsApp quando CPF tem 11 dígitos válidos
+  if (!wppRevealed && v.replace(/\D/g, '').length === 11 && validateCpf(v)) {
+    wppRevealed = true;
+    document.getElementById('wppSection').classList.add('visible');
+    setTimeout(() => wppInput.focus(), 400);
+  }
+});
+
+wppInput.addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 6) v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
+  else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+  e.target.value = v;
+  wppError.classList.remove('visible');
+  wppInput.classList.remove('error');
+});
+
+cpfInput.addEventListener('keydown', e => { if (e.key === 'Enter') wppInput.focus(); });
+wppInput.addEventListener('keydown', e => { if (e.key === 'Enter') startAnalysis(); });
 
 // ===== ANÁLISE =====
 function startAnalysis() {
