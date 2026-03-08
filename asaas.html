@@ -322,6 +322,14 @@ wppInput.addEventListener('input', e => {
   e.target.value = v;
   wppError.classList.remove('visible');
   wppInput.classList.remove('error');
+  // Mostrar botão quando WhatsApp completo (11 dígitos)
+  const btn = document.getElementById('checkoutBtn');
+  if (wppRevealed && v.replace(/\D/g, '').length >= 11) {
+    btn.style.display = '';
+    btn.textContent = 'Confirmar e Pagar';
+  } else if (wppRevealed) {
+    btn.style.display = 'none';
+  }
 });
 wppInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleCheckout(); });
 
@@ -371,7 +379,7 @@ async function handleCheckout() {
     wppRevealed = true;
     if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' });
     document.getElementById('wppSection').classList.add('visible');
-    btn.textContent = 'Confirmar e Pagar';
+    btn.style.display = 'none';
     setTimeout(() => wppInput.focus(), 400);
     return;
   }
