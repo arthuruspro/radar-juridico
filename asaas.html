@@ -252,7 +252,7 @@ footer{display:none}
 
   <!-- Botão continuar (aparece após CPF confirmado) → gera PIX diretamente -->
   <div class="prog-field" id="progContinueGroup">
-    <button class="cpf-submit" id="checkoutBtn" onclick="handleCheckout()">Continuar</button>
+    <button class="cpf-submit" id="checkoutBtn" onclick="handleCheckout()">Gerar PIX e pagar</button>
     <p class="pix-error" id="pixError"></p>
   </div>
 
@@ -526,7 +526,7 @@ async function handleCheckout() {
     startPaymentPolling();
   } catch (err) {
     btn.disabled = false;
-    btn.textContent = 'Continuar';
+    btn.textContent = 'Gerar PIX e pagar';
     errorEl.textContent = err.message || 'Erro ao gerar PIX. Tente novamente.';
     errorEl.classList.add('visible');
   }
