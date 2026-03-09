@@ -22,15 +22,6 @@ fbq('track', 'PageView');
 </script>
 <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2112230319524429&ev=PageView&noscript=1"/><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1961787600889582&ev=PageView&noscript=1"/></noscript>
 
-<script>
-window.pixelId = "698683615ce6a0f57cf14451";
-var a = document.createElement("script");
-a.async=true;a.defer=true;
-a.src="https://cdn.utmify.com.br/scripts/pixel/pixel.js";
-document.head.appendChild(a);
-</script>
-<script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids data-utmify-ignore-iframe data-utmify-ignore-retry async defer></script>
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11225982551"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -138,6 +129,12 @@ footer{display:none}
 .wpp-section.visible{max-height:280px;opacity:1;margin-top:24px;padding-top:24px;border-top:1px solid var(--border)}
 .pix-error{text-align:center;font-size:14px;color:var(--danger);margin-top:12px;display:none}
 .pix-error.visible{display:block}
+.prog-field{max-height:0;opacity:0;overflow:hidden;margin-bottom:0;transition:max-height 0.4s ease,opacity 0.35s ease,margin-bottom 0.35s ease}
+.prog-field.visible{max-height:100px;opacity:1;margin-bottom:14px}
+.prog-label{font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.prog-input{width:100%;padding:14px 16px;font-family:var(--font-body);font-size:16px;font-weight:500;border:2px solid var(--border);border-radius:12px;outline:none;transition:all 0.25s;color:var(--text);background:var(--bg-alt)}
+.prog-input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 4px rgba(26,86,219,0.1)}
+.prog-input::placeholder{color:var(--text-dim);font-weight:400}
 @media(max-width:600px){
   .cpf-modal-box{padding:28px 20px;border-radius:20px;max-height:95vh}
   .cpf-step h2{font-size:20px}
@@ -198,11 +195,56 @@ footer{display:none}
 <div class="cpf-step" id="cpfStep5">
 <div class="cpf-result-status danger"><div class="status-dot"></div> Este CPF não possui monitoramento ativo. </div>
 <p class="cpf-result-msg">Se alguém te processar, você descobrirá tarde demais — com <strong style="color:#df0101">conta bloqueada, nome sujo, multas ou até risco de prisão</strong>.</p>
-<button class="cpf-result-btn" onclick="showStep(6)" style="background:var(--danger);">Ver como se proteger</button>
+<button class="cpf-result-btn" onclick="showStep(6)" style="background:var(--danger);">Teste por 7 dias</button>
 </div>
 
-<!-- STEP 6: Preço + botão checkout -->
+<!-- STEP 6: Formulário progressivo (step separado, limpo) -->
 <div class="cpf-step" id="cpfStep6">
+<div class="cpf-step-icon">&#128100;</div>
+<h2>Precisamos de alguns dados</h2>
+<p class="cpf-desc">Para ativar seu monitoramento</p>
+
+  <!-- Campo 1: Nome (sempre visível) -->
+  <div style="margin-bottom:14px;" id="progNameGroup">
+    <label class="prog-label">Qual o seu nome?</label>
+    <input type="text" class="prog-input" id="progName" placeholder="Como podemos te chamar?" autocomplete="given-name">
+  </div>
+
+  <!-- Campo 2: Email -->
+  <div class="prog-field" id="progEmailGroup">
+    <label class="prog-label">Seu melhor e-mail</label>
+    <input type="email" class="prog-input" id="progEmail" placeholder="seuemail@exemplo.com" autocomplete="email">
+  </div>
+
+  <!-- Campo 3: WhatsApp -->
+  <div class="prog-field" id="progWppGroup">
+    <label class="prog-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Qual o seu WhatsApp?</label>
+    <input type="text" class="prog-input" id="wppInput" placeholder="(00) 00000-0000" maxlength="15" inputmode="numeric" autocomplete="off">
+    <p class="cpf-error-msg" id="wppError">Digite um WhatsApp válido com DDD</p>
+  </div>
+
+  <!-- Campo 4: Área de atuação -->
+  <div class="prog-field" id="progAreaGroup">
+    <label class="prog-label">Qual a sua área de atuação?</label>
+    <input type="text" class="prog-input" id="progArea" placeholder="Ex: advocacia, contabilidade, comércio..." autocomplete="off">
+  </div>
+
+  <!-- Campo 5: Confirme CPF (micro-commitment, não salva) -->
+  <div class="prog-field" id="progCpfConfirmGroup">
+    <label class="prog-label">Confirme seu CPF</label>
+    <input type="text" class="prog-input" id="progCpfConfirm" placeholder="000.000.000-00" maxlength="14" inputmode="numeric" autocomplete="off">
+  </div>
+
+  <!-- Botão continuar (aparece após CPF confirmado) -->
+  <div class="prog-field" id="progContinueGroup">
+    <button class="cpf-submit" onclick="showStep(7)">Continuar</button>
+  </div>
+
+  <div class="cpf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="m7 11V7a5 5 0 0 1 10 0v4"/></svg> Seus dados estão protegidos</div>
+</div>
+
+<!-- STEP 7: Preço + botão checkout -->
+<div class="cpf-step" id="cpfStep7">
 <div class="cpf-solution-title" style="margin-top:24px;">Ative o<br>Monitoramento Processual 24h</div>
 <div class="cpf-result-solution">
   <div class="cpf-result-price" style="margin-bottom:20px;">
@@ -213,21 +255,17 @@ footer{display:none}
     <li>Alerta imediato no WhatsApp</li>
     <li>Todo tipo de processo</li>
   </ul>
-  <!-- WhatsApp aparece após clicar "Ativar Monitoramento" -->
-  <div class="wpp-section" id="wppSection">
-    <label class="input-label" style="display:flex;align-items:center;gap:8px;font-size:15px;margin-bottom:10px"><svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg> Qual o seu WhatsApp?</label>
-    <div class="cpf-input-wrap">
-      <input type="text" class="cpf-input" id="wppInput" placeholder="(00) 00000-0000" maxlength="15" inputmode="numeric" autocomplete="off">
-      <p class="cpf-error-msg" id="wppError">Digite um WhatsApp válido com DDD</p>
-    </div>
-  </div>
-  <button id="checkoutBtn" class="cpf-result-btn" onclick="handleCheckout()" style="margin-top:20px;">Testar por 7 dias</button>
+  <button id="checkoutBtn" class="cpf-result-btn" onclick="handleCheckout()" style="margin-top:20px;">Confirmar e Pagar</button>
   <p class="pix-error" id="pixError"></p>
+  <div class="cpf-result-guarantees" style="margin-top:12px;">
+    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Dados protegidos</span>
+    <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> Cancele quando quiser</span>
+  </div>
 </div>
 </div>
 
-<!-- STEP 7: QR Code PIX + polling -->
-<div class="cpf-step" id="cpfStep7">
+<!-- STEP 8: QR Code PIX + polling -->
+<div class="cpf-step" id="cpfStep8">
 <h2>Quase lá!</h2>
 <p class="cpf-desc">Escaneie o QR Code com o app do seu banco</p>
 <div class="qr-wrap">
@@ -267,6 +305,10 @@ const cpfInput = document.getElementById('cpfInput');
 const wppInput = document.getElementById('wppInput');
 const cpfError = document.getElementById('cpfError');
 const wppError = document.getElementById('wppError');
+const progName = document.getElementById('progName');
+const progEmail = document.getElementById('progEmail');
+const progArea = document.getElementById('progArea');
+const progCpfConfirm = document.getElementById('progCpfConfirm');
 let rawCpf = '';
 let rawWpp = '';
 let currentAuthId = '';
@@ -314,7 +356,7 @@ cpfInput.addEventListener('input', e => {
 
 cpfInput.addEventListener('keydown', e => { if (e.key === 'Enter') startAnalysis(); });
 
-// Máscara WhatsApp (campo agora no Step 6)
+// Máscara WhatsApp
 wppInput.addEventListener('input', e => {
   let v = e.target.value.replace(/\D/g, '').slice(0, 11);
   if (v.length > 6) v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
@@ -322,16 +364,80 @@ wppInput.addEventListener('input', e => {
   e.target.value = v;
   wppError.classList.remove('visible');
   wppInput.classList.remove('error');
-  // Mostrar botão quando WhatsApp completo (11 dígitos)
-  const btn = document.getElementById('checkoutBtn');
-  if (wppRevealed && v.replace(/\D/g, '').length >= 11) {
-    btn.style.display = '';
-    btn.textContent = 'Confirmar e Pagar';
-  } else if (wppRevealed) {
-    btn.style.display = 'none';
-  }
+  updateProgressive();
 });
-wppInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleCheckout(); });
+
+// Máscara CPF confirmação
+progCpfConfirm.addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 11);
+  if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+  else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+  else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+  e.target.value = v;
+  updateProgressive();
+});
+
+// Progressive form listeners
+progName.addEventListener('input', updateProgressive);
+progEmail.addEventListener('input', updateProgressive);
+progArea.addEventListener('input', updateProgressive);
+
+function updateProgressive() {
+  var name = progName.value.trim();
+  var email = progEmail.value.trim();
+  var wpp = wppInput.value.replace(/\D/g, '');
+  var area = progArea.value.trim();
+  var cpfConf = progCpfConfirm.value.replace(/\D/g, '');
+
+  // Nome >= 3 chars → show email
+  if (name.length >= 3) {
+    document.getElementById('progEmailGroup').classList.add('visible');
+  } else {
+    document.getElementById('progEmailGroup').classList.remove('visible');
+    document.getElementById('progWppGroup').classList.remove('visible');
+    document.getElementById('progAreaGroup').classList.remove('visible');
+    document.getElementById('progCpfConfirmGroup').classList.remove('visible');
+    document.getElementById('progContinueGroup').classList.remove('visible');
+    return;
+  }
+
+  // Email has @ and >= 5 chars → show WhatsApp
+  if (email.includes('@') && email.length >= 5) {
+    document.getElementById('progWppGroup').classList.add('visible');
+  } else {
+    document.getElementById('progWppGroup').classList.remove('visible');
+    document.getElementById('progAreaGroup').classList.remove('visible');
+    document.getElementById('progCpfConfirmGroup').classList.remove('visible');
+    document.getElementById('progContinueGroup').classList.remove('visible');
+    return;
+  }
+
+  // WhatsApp >= 10 digits → show area
+  if (wpp.length >= 10) {
+    document.getElementById('progAreaGroup').classList.add('visible');
+  } else {
+    document.getElementById('progAreaGroup').classList.remove('visible');
+    document.getElementById('progCpfConfirmGroup').classList.remove('visible');
+    document.getElementById('progContinueGroup').classList.remove('visible');
+    return;
+  }
+
+  // Area >= 3 chars → show CPF confirm
+  if (area.length >= 3) {
+    document.getElementById('progCpfConfirmGroup').classList.add('visible');
+  } else {
+    document.getElementById('progCpfConfirmGroup').classList.remove('visible');
+    document.getElementById('progContinueGroup').classList.remove('visible');
+    return;
+  }
+
+  // CPF confirmed (11 digits) → show continue button
+  if (cpfConf.length >= 11) {
+    document.getElementById('progContinueGroup').classList.add('visible');
+  } else {
+    document.getElementById('progContinueGroup').classList.remove('visible');
+  }
+}
 
 // ===== ANÁLISE =====
 function startAnalysis() {
@@ -367,24 +473,12 @@ function startAnalysis() {
 }
 
 // ===== CHECKOUT (gerar PIX) =====
-let wppRevealed = false;
-
 async function handleCheckout() {
   const btn = document.getElementById('checkoutBtn');
   const errorEl = document.getElementById('pixError');
   errorEl.classList.remove('visible');
 
-  // Primeiro clique: revelar campo WhatsApp
-  if (!wppRevealed) {
-    wppRevealed = true;
-    if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' });
-    document.getElementById('wppSection').classList.add('visible');
-    btn.style.display = 'none';
-    setTimeout(() => wppInput.focus(), 400);
-    return;
-  }
-
-  // Segundo clique: validar WhatsApp e gerar PIX
+  // Validar WhatsApp
   rawWpp = wppInput.value.replace(/\D/g, '');
   if (rawWpp.length < 10 || rawWpp.length > 11) {
     wppInput.classList.add('error');
@@ -392,8 +486,22 @@ async function handleCheckout() {
     return;
   }
 
+  if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' });
+
   btn.disabled = true;
   btn.textContent = 'Gerando PIX...';
+
+  // Coletar dados do formulário progressivo
+  const leadName = progName.value.trim();
+  const leadEmail = progEmail.value.trim();
+  const leadArea = progArea.value.trim();
+
+  // Coletar UTMs
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmData = {};
+  ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach(k => {
+    if (urlParams.get(k)) utmData[k] = urlParams.get(k);
+  });
 
   try {
     const res = await fetch(SUPABASE_URL + '/functions/v1/radar-juridico-asaas-gerar-pix', {
@@ -403,7 +511,14 @@ async function handleCheckout() {
         'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
         'apikey': SUPABASE_ANON_KEY,
       },
-      body: JSON.stringify({ cpf: rawCpf, whatsapp: rawWpp }),
+      body: JSON.stringify({
+        cpf: rawCpf,
+        whatsapp: rawWpp,
+        nome: leadName,
+        email: leadEmail,
+        area_atuacao: leadArea,
+        utm: Object.keys(utmData).length > 0 ? utmData : undefined
+      }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || 'Erro ao gerar PIX');
@@ -412,7 +527,7 @@ async function handleCheckout() {
     pixPayload = data.qrCodeText;
     currentAuthId = data.authorizationId;
 
-    showStep(7);
+    showStep(8);
     startPaymentPolling();
   } catch (err) {
     btn.disabled = false;
