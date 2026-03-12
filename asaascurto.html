@@ -126,6 +126,8 @@ footer{display:none}
 .success-steps-list li strong{color:var(--text)}
 .pix-error{text-align:center;font-size:14px;color:var(--danger);margin-top:12px;display:none}
 .pix-error.visible{display:block}
+.prog-field{max-height:0;opacity:0;overflow:hidden;margin-bottom:0;transition:max-height 0.4s ease,opacity 0.35s ease,margin-bottom 0.35s ease}
+.prog-field.visible{max-height:120px;opacity:1;margin-bottom:14px}
 .prog-label{font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .prog-input{width:100%;padding:12px 14px;font-family:var(--font-body);font-size:15px;font-weight:500;border:2px solid var(--border);border-radius:12px;outline:none;transition:all 0.25s;color:var(--text);background:var(--bg-alt)}
 .prog-input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 4px rgba(26,86,219,0.1)}
@@ -221,8 +223,8 @@ footer{display:none}
     <p class="cpf-error-msg" id="wppError">Digite um WhatsApp válido com DDD</p>
   </div>
 
-  <!-- Botão gerar PIX -->
-  <div>
+  <!-- Botão gerar PIX (aparece após WhatsApp válido) -->
+  <div class="prog-field" id="checkoutBtnGroup">
     <button class="cpf-submit" id="checkoutBtn" onclick="handleCheckout()">Gerar PIX e pagar</button>
     <p class="pix-error" id="pixError"></p>
   </div>
@@ -318,7 +320,7 @@ cpfInput.addEventListener('input', e => {
 
 cpfInput.addEventListener('keydown', e => { if (e.key === 'Enter') startAnalysis(); });
 
-// Máscara WhatsApp
+// Máscara WhatsApp + mostrar botão
 wppInput.addEventListener('input', e => {
   let v = e.target.value.replace(/\D/g, '').slice(0, 11);
   if (v.length > 6) v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
@@ -326,6 +328,12 @@ wppInput.addEventListener('input', e => {
   e.target.value = v;
   wppError.classList.remove('visible');
   wppInput.classList.remove('error');
+  // Mostrar botão quando WhatsApp tiver 10+ dígitos
+  if (v.length >= 10) {
+    document.getElementById('checkoutBtnGroup').classList.add('visible');
+  } else {
+    document.getElementById('checkoutBtnGroup').classList.remove('visible');
+  }
 });
 
 // ===== ANÁLISE =====
