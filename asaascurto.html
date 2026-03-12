@@ -132,6 +132,37 @@ footer{display:none}
 .prog-input{width:100%;padding:12px 14px;font-family:var(--font-body);font-size:15px;font-weight:500;border:2px solid var(--border);border-radius:12px;outline:none;transition:all 0.25s;color:var(--text);background:var(--bg-alt)}
 .prog-input:focus{border-color:var(--accent);background:#fff;box-shadow:0 0 0 4px rgba(26,86,219,0.1)}
 .prog-input::placeholder{color:var(--text-dim);font-weight:400}
+/* Checkout Asaas-style */
+.ck-header{margin-bottom:24px}
+.ck-header h3{font-size:20px;font-weight:700;color:var(--text);margin-bottom:2px}
+.ck-header .ck-price{font-size:16px;font-weight:700;color:var(--accent)}
+.ck-section{margin-bottom:20px}
+.ck-section-title{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:700;color:var(--text);margin-bottom:16px}
+.ck-section-title svg{width:20px;height:20px;color:var(--text-muted)}
+.ck-field{margin-bottom:14px}
+.ck-field label{display:block;font-size:13px;font-weight:500;color:var(--text-secondary);margin-bottom:5px}
+.ck-field input{width:100%;padding:13px 14px;font-family:var(--font-body);font-size:15px;font-weight:400;border:1px solid var(--border);border-radius:10px;outline:none;transition:all 0.2s;color:var(--text);background:#fff}
+.ck-field input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,86,219,0.08)}
+.ck-field input::placeholder{color:var(--text-dim)}
+.ck-field input.error{border-color:var(--danger)}
+.ck-field .ck-phone-wrap{display:flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all 0.2s}
+.ck-field .ck-phone-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,86,219,0.08)}
+.ck-field .ck-phone-prefix{display:flex;align-items:center;gap:4px;padding:13px 10px 13px 14px;font-size:15px;color:var(--text-secondary);background:#fafafa;border-right:1px solid var(--border);white-space:nowrap;flex-shrink:0}
+.ck-field .ck-phone-prefix span{font-size:16px}
+.ck-field .ck-phone-wrap input{border:none;border-radius:0;padding:13px 14px;box-shadow:none}
+.ck-field .ck-phone-wrap input:focus{box-shadow:none}
+.ck-pay-methods{display:flex;gap:0;margin-bottom:16px;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.ck-pay-method{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 8px;cursor:pointer;border:2px solid transparent;transition:all 0.2s;background:#fff}
+.ck-pay-method.active{border-color:var(--accent);background:var(--accent-light);border-radius:10px}
+.ck-pay-method svg,.ck-pay-method img{width:28px;height:28px}
+.ck-pay-method span{font-size:12px;font-weight:600;color:var(--text-secondary);text-align:center}
+.ck-pix-benefits{border:2px dashed #16a34a;border-radius:12px;padding:16px 18px;margin-bottom:20px}
+.ck-pix-benefits li{display:flex;align-items:flex-start;gap:8px;font-size:14px;color:var(--text-secondary);line-height:1.5;margin-bottom:8px;list-style:none}
+.ck-pix-benefits li:last-child{margin-bottom:0}
+.ck-pix-benefits li .ck-check{color:#16a34a;font-size:16px;flex-shrink:0;margin-top:1px}
+.ck-submit{width:100%;padding:18px;background:var(--accent);color:#fff;font-family:var(--font-body);font-size:17px;font-weight:700;border:none;border-radius:12px;cursor:pointer;transition:all 0.2s}
+.ck-submit:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,86,219,0.3)}
+.ck-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
 @media(max-width:600px){
   .cpf-modal-box{padding:28px 20px;border-radius:20px;max-height:95vh}
   .cpf-step h2{font-size:20px}
@@ -211,23 +242,71 @@ footer{display:none}
 </div>
 </div>
 
-<!-- STEP 7: Formulário CURTO — só WhatsApp -->
+<!-- STEP 7: Checkout estilo Asaas -->
 <div class="cpf-step" id="cpfStep7">
-<h2 style="margin-bottom:4px;">Digite seu WhatsApp</h2>
-<p class="cpf-desc" style="margin-bottom:18px;">Você receberá os alertas por lá</p>
 
-  <div style="margin-bottom:14px;">
-    <input type="text" class="prog-input" id="wppInput" placeholder="(00) 00000-0000" maxlength="15" inputmode="numeric" autocomplete="off" style="text-align:center;font-size:20px;font-weight:600;letter-spacing:0.04em;padding:18px 20px;">
-    <p class="cpf-error-msg" id="wppError">Digite um WhatsApp válido com DDD</p>
+  <!-- Header do produto -->
+  <div class="ck-header">
+    <h3>Monitoramento Processual 24h</h3>
+    <div class="ck-price">R$ 147,00 / mês</div>
   </div>
 
-  <!-- Botão gerar PIX (aparece após WhatsApp válido) -->
-  <div class="prog-field" id="checkoutBtnGroup">
-    <button class="cpf-submit" id="checkoutBtn" onclick="handleCheckout()">Gerar PIX e pagar</button>
-    <p class="pix-error" id="pixError"></p>
+  <!-- Seus dados -->
+  <div class="ck-section">
+    <div class="ck-section-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Seus dados
+    </div>
+    <div class="ck-field">
+      <label>Nome completo</label>
+      <input type="text" id="ckNome" placeholder="Preencha seu nome" autocomplete="name">
+    </div>
+    <div class="ck-field">
+      <label>Email</label>
+      <input type="email" id="ckEmail" placeholder="Preencha seu email" autocomplete="email">
+    </div>
+    <div class="ck-field">
+      <label>CPF/CNPJ</label>
+      <input type="text" id="ckCpfCnpj" placeholder="Preencha seu CPF/CNPJ" maxlength="18" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="ck-field">
+      <label>Celular</label>
+      <div class="ck-phone-wrap">
+        <div class="ck-phone-prefix"><span>🇧🇷</span> +55</div>
+        <input type="text" id="ckCelular" placeholder="" maxlength="15" inputmode="numeric" autocomplete="tel">
+      </div>
+    </div>
   </div>
 
-  <div class="cpf-privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="m7 11V7a5 5 0 0 1 10 0v4"/></svg> Seus dados estão protegidos</div>
+  <!-- Pagamento -->
+  <div class="ck-section">
+    <div class="ck-section-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      Pagamento
+    </div>
+
+    <div class="ck-pay-methods">
+      <div class="ck-pay-method" id="ckMethodCard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+        <span>Cartão de Crédito</span>
+      </div>
+      <div class="ck-pay-method active" id="ckMethodPix">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="0"><path d="M13.365 16.673l-1.345 1.345a2.4 2.4 0 01-3.395 0l-2.643-2.643a2.4 2.4 0 010-3.395l1.345-1.345a.6.6 0 00-.849-.849l-1.345 1.345a3.6 3.6 0 000 5.093l2.643 2.643a3.6 3.6 0 005.093 0l1.345-1.345a.6.6 0 10-.849-.849z" fill="#16a34a"/><path d="M16.673 13.365l1.345-1.345a2.4 2.4 0 000-3.395l-2.643-2.643a2.4 2.4 0 00-3.395 0l-1.345 1.345a.6.6 0 10.849.849l1.345-1.345a1.2 1.2 0 011.697 0l2.643 2.643a1.2 1.2 0 010 1.697l-1.345 1.345a.6.6 0 10.849.849z" fill="#16a34a"/></svg>
+        <span>Pix Automático</span>
+      </div>
+    </div>
+
+    <ul class="ck-pix-benefits">
+      <li><span class="ck-check">✅</span> Liberação imediata</li>
+      <li><span class="ck-check">✅</span> Assinatura sempre em dia</li>
+      <li><span class="ck-check">✅</span> Com o Pix Automático, as renovações são feitas de forma recorrente, sem preocupação</li>
+      <li><span class="ck-check">✅</span> Autorize uma vez o pagamento no app do seu banco e os próximos a gente cuida para você</li>
+    </ul>
+  </div>
+
+  <button class="ck-submit" id="checkoutBtn" onclick="handleCheckout()">Pagar com Pix Automático</button>
+  <p class="pix-error" id="pixError"></p>
+
 </div>
 
 <!-- STEP 8: QR Code PIX + polling -->
@@ -268,9 +347,7 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 // ===== ESTADO =====
 const cpfModal = document.getElementById('cpfModal');
 const cpfInput = document.getElementById('cpfInput');
-const wppInput = document.getElementById('wppInput');
 const cpfError = document.getElementById('cpfError');
-const wppError = document.getElementById('wppError');
 let rawCpf = '';
 let rawWpp = '';
 let currentAuthId = '';
@@ -289,6 +366,15 @@ function showStep(n) {
   document.querySelectorAll('.cpf-step').forEach(s => s.classList.remove('active'));
   document.getElementById('cpfStep' + n).classList.add('active');
   document.querySelector('.cpf-modal-box').scrollTop = 0;
+  // Pre-preencher CPF no checkout
+  if (n === 7 && rawCpf) {
+    const el = document.getElementById('ckCpfCnpj');
+    if (el && !el.value) {
+      let v = rawCpf;
+      if (v.length === 11) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+      el.value = v;
+    }
+  }
 }
 
 // ===== VALIDAÇÃO CPF =====
@@ -318,20 +404,27 @@ cpfInput.addEventListener('input', e => {
 
 cpfInput.addEventListener('keydown', e => { if (e.key === 'Enter') startAnalysis(); });
 
-// Máscara WhatsApp + mostrar botão
-wppInput.addEventListener('input', e => {
+// Máscara CPF/CNPJ do checkout
+document.getElementById('ckCpfCnpj').addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g, '');
+  if (v.length <= 11) {
+    v = v.slice(0, 11);
+    if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+    else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+  } else {
+    v = v.slice(0, 14);
+    v = v.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, '$1.$2.$3/$4-$5');
+  }
+  e.target.value = v;
+});
+
+// Máscara Celular do checkout
+document.getElementById('ckCelular').addEventListener('input', e => {
   let v = e.target.value.replace(/\D/g, '').slice(0, 11);
   if (v.length > 6) v = v.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3');
   else if (v.length > 2) v = v.replace(/(\d{2})(\d{0,5})/, '($1) $2');
   e.target.value = v;
-  wppError.classList.remove('visible');
-  wppInput.classList.remove('error');
-  // Mostrar botão quando WhatsApp tiver 10+ dígitos
-  if (v.length >= 10) {
-    document.getElementById('checkoutBtnGroup').classList.add('visible');
-  } else {
-    document.getElementById('checkoutBtnGroup').classList.remove('visible');
-  }
 });
 
 // ===== ANÁLISE =====
@@ -373,13 +466,24 @@ async function handleCheckout() {
   const errorEl = document.getElementById('pixError');
   errorEl.classList.remove('visible');
 
-  // Validar WhatsApp
-  rawWpp = wppInput.value.replace(/\D/g, '');
-  if (rawWpp.length < 10 || rawWpp.length > 11) {
-    wppInput.classList.add('error');
-    wppError.classList.add('visible');
-    return;
-  }
+  // Pegar valores dos campos
+  const nome = document.getElementById('ckNome').value.trim();
+  const email = document.getElementById('ckEmail').value.trim();
+  const cpfCnpj = document.getElementById('ckCpfCnpj').value.replace(/\D/g, '');
+  const celular = document.getElementById('ckCelular').value.replace(/\D/g, '');
+
+  // Validações
+  if (!nome) { document.getElementById('ckNome').classList.add('error'); errorEl.textContent = 'Preencha seu nome'; errorEl.classList.add('visible'); return; }
+  document.getElementById('ckNome').classList.remove('error');
+  if (!email || !email.includes('@')) { document.getElementById('ckEmail').classList.add('error'); errorEl.textContent = 'Preencha um email válido'; errorEl.classList.add('visible'); return; }
+  document.getElementById('ckEmail').classList.remove('error');
+  if (cpfCnpj.length < 11) { document.getElementById('ckCpfCnpj').classList.add('error'); errorEl.textContent = 'Preencha seu CPF/CNPJ'; errorEl.classList.add('visible'); return; }
+  document.getElementById('ckCpfCnpj').classList.remove('error');
+  if (celular.length < 10) { document.getElementById('ckCelular').querySelector('input') ? document.getElementById('ckCelular').classList.add('error') : null; errorEl.textContent = 'Preencha seu celular'; errorEl.classList.add('visible'); return; }
+
+  // Usar CPF do checkout ou o digitado no Step 1
+  rawWpp = celular;
+  if (cpfCnpj.length >= 11) rawCpf = cpfCnpj;
 
   if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' });
 
@@ -404,6 +508,8 @@ async function handleCheckout() {
       body: JSON.stringify({
         cpf: rawCpf,
         whatsapp: rawWpp,
+        nome: nome,
+        email: email,
         utm: Object.keys(utmData).length > 0 ? utmData : undefined
       }),
     });
@@ -418,7 +524,7 @@ async function handleCheckout() {
     startPaymentPolling();
   } catch (err) {
     btn.disabled = false;
-    btn.textContent = 'Gerar PIX e pagar';
+    btn.textContent = 'Pagar com Pix Automático';
     errorEl.textContent = err.message || 'Erro ao gerar PIX. Tente novamente.';
     errorEl.classList.add('visible');
   }
