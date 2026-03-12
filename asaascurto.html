@@ -328,20 +328,6 @@ footer{display:none}
           <input type="text" id="ckCardCvv" placeholder="000" maxlength="4" inputmode="numeric" autocomplete="cc-csc">
         </div>
       </div>
-      <div class="ck-field">
-        <label>Nome no cartão</label>
-        <input type="text" id="ckCardHolder" placeholder="Como está no cartão" autocomplete="cc-name">
-      </div>
-      <div class="ck-card-row">
-        <div class="ck-field">
-          <label>CEP</label>
-          <input type="text" id="ckCardCep" placeholder="00000-000" maxlength="9" inputmode="numeric" autocomplete="postal-code">
-        </div>
-        <div class="ck-field">
-          <label>Número</label>
-          <input type="text" id="ckCardAddrNum" placeholder="Nº" inputmode="numeric">
-        </div>
-      </div>
     </div>
 
     <!-- Benefits do PIX (visíveis por padrão) -->
@@ -563,17 +549,9 @@ document.getElementById('ckCardExpiry')?.addEventListener('input', function(e) {
 document.getElementById('ckCardCvv')?.addEventListener('input', function(e) {
   e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
 });
-document.getElementById('ckCardCep')?.addEventListener('input', function(e) {
-  let v = e.target.value.replace(/\D/g, '').slice(0, 8);
-  if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
-  e.target.value = v;
-});
-document.getElementById('ckCardAddrNum')?.addEventListener('input', function(e) {
-  e.target.value = e.target.value.replace(/\D/g, '');
-});
 
 // Remove erro ao digitar nos campos do cartão
-['ckCardNumber','ckCardExpiry','ckCardCvv','ckCardHolder','ckCardCep','ckCardAddrNum'].forEach(id => {
+['ckCardNumber','ckCardExpiry','ckCardCvv'].forEach(id => {
   document.getElementById(id)?.addEventListener('input', function(){ this.classList.remove('error'); document.getElementById('pixError').classList.remove('visible'); });
 });
 
@@ -613,16 +591,10 @@ async function handleCheckout() {
     const cardNum = document.getElementById('ckCardNumber').value.replace(/\D/g, '');
     const cardExp = document.getElementById('ckCardExpiry').value;
     const cardCvv = document.getElementById('ckCardCvv').value.replace(/\D/g, '');
-    const cardHolder = document.getElementById('ckCardHolder').value.trim();
-    const cardCep = document.getElementById('ckCardCep').value.replace(/\D/g, '');
-    const cardAddrNum = document.getElementById('ckCardAddrNum').value.trim();
 
     if (cardNum.length < 13) { document.getElementById('ckCardNumber').classList.add('error'); errorEl.textContent = 'Número do cartão inválido'; errorEl.classList.add('visible'); return; }
     if (!cardExp || cardExp.length < 5) { document.getElementById('ckCardExpiry').classList.add('error'); errorEl.textContent = 'Validade inválida'; errorEl.classList.add('visible'); return; }
     if (cardCvv.length < 3) { document.getElementById('ckCardCvv').classList.add('error'); errorEl.textContent = 'CVV inválido'; errorEl.classList.add('visible'); return; }
-    if (!cardHolder) { document.getElementById('ckCardHolder').classList.add('error'); errorEl.textContent = 'Preencha o nome no cartão'; errorEl.classList.add('visible'); return; }
-    if (cardCep.length !== 8) { document.getElementById('ckCardCep').classList.add('error'); errorEl.textContent = 'CEP inválido'; errorEl.classList.add('visible'); return; }
-    if (!cardAddrNum) { document.getElementById('ckCardAddrNum').classList.add('error'); errorEl.textContent = 'Preencha o número'; errorEl.classList.add('visible'); return; }
   }
 
   if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' });
@@ -656,14 +628,14 @@ async function handleCheckout() {
           email: email,
           utm: Object.keys(utmData).length > 0 ? utmData : undefined,
           creditCard: {
-            holderName: document.getElementById('ckCardHolder').value.trim(),
+            holderName: nome,
             number: document.getElementById('ckCardNumber').value.replace(/\D/g, ''),
             expiryMonth: expParts[0],
             expiryYear: expParts[1],
             ccv: document.getElementById('ckCardCvv').value.replace(/\D/g, ''),
           },
-          postalCode: document.getElementById('ckCardCep').value.replace(/\D/g, ''),
-          addressNumber: document.getElementById('ckCardAddrNum').value.trim(),
+          postalCode: '01001000',
+          addressNumber: '1',
         }),
       });
       const data = await res.json();
