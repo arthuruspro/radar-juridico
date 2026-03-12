@@ -387,6 +387,23 @@ footer{display:none}
 const SUPABASE_URL = 'https://tppswustlduttskozhkk.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRwcHN3dXN0bGR1dHRza296aGtrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI1MjExMzIsImV4cCI6MjA4ODA5NzEzMn0.5IjWnMnZwJ-pmpPr0I3hxYZrfR8q_9vk0jH7DYTArqA';
 
+// ===== TRACKING HELPERS =====
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? decodeURIComponent(match[2]) : '';
+}
+function generateEventId() {
+  return 'eid_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 9);
+}
+function getTrackingData() {
+  return {
+    fbp: getCookie('_fbp'),
+    fbc: getCookie('_fbc') || (new URLSearchParams(window.location.search).get('fbclid') ? 'fb.1.' + Date.now() + '.' + new URLSearchParams(window.location.search).get('fbclid') : ''),
+    event_source_url: window.location.href,
+    user_agent: navigator.userAgent,
+  };
+}
+
 // ===== ESTADO =====
 const cpfModal = document.getElementById('cpfModal');
 const cpfInput = document.getElementById('cpfInput');
@@ -597,7 +614,13 @@ async function handleCheckout() {
     if (cardCvv.length < 3) { document.getElementById('ckCardCvv').classList.add('error'); errorEl.textContent = 'CVV inválido'; errorEl.classList.add('visible'); return; }
   }
 
-  if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' });
+  // Gerar event_ids e tracking
+  const tracking = getTrackingData();
+  const eventIdIC = generateEventId();
+  const eventIdPurchase = generateEventId();
+
+  // InitiateCheckout com event_id para deduplicação
+  if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' }, { eventID: eventIdIC });
 
   btn.disabled = true;
 
@@ -636,13 +659,19 @@ async function handleCheckout() {
           },
           postalCode: '01001000',
           addressNumber: '1',
+          fbp: tracking.fbp,
+          fbc: tracking.fbc,
+          event_id_ic: eventIdIC,
+          event_id_purchase: eventIdPurchase,
+          event_source_url: tracking.event_source_url,
+          user_agent: tracking.user_agent,
         }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Erro ao processar cartão');
 
-      // Sucesso! Conversion tracking
-      if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: 147, currency: 'BRL' });
+      // Sucesso! Conversion tracking com event_id para deduplicação
+      if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: 147, currency: 'BRL' }, { eventID: eventIdPurchase });
       if (typeof gtag !== 'undefined') gtag('event', 'conversion', { send_to: 'AW-11225982551/purchase', value: 147, currency: 'BRL' });
 
       // Mostrar Step 8 adaptado (sucesso cartão)
@@ -677,7 +706,12 @@ async function handleCheckout() {
           whatsapp: rawWpp,
           nome: nome,
           email: email,
-          utm: Object.keys(utmData).length > 0 ? utmData : undefined
+          utm: Object.keys(utmData).length > 0 ? utmData : undefined,
+          fbp: tracking.fbp,
+          fbc: tracking.fbc,
+          event_id: eventIdIC,
+          event_source_url: tracking.event_source_url,
+          user_agent: tracking.user_agent,
         }),
       });
       const data = await res.json();
@@ -686,6 +720,8 @@ async function handleCheckout() {
       document.getElementById('qrCodeImg').src = 'data:image/png;base64,' + data.qrCodeImage;
       pixPayload = data.qrCodeText;
       currentAuthId = data.authorizationId;
+      // Salvar eventIdPurchase para usar no polling
+      window._pixEventIdPurchase = eventIdPurchase;
 
       // Restaurar Step 8 pra modo PIX
       document.querySelector('#cpfStep8 h2').textContent = 'Quase lá!';
@@ -736,12 +772,12 @@ function startPaymentPolling() {
           'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
           'apikey': SUPABASE_ANON_KEY,
         },
-        body: JSON.stringify({ authorizationId: currentAuthId }),
+        body: JSON.stringify({ authorizationId: currentAuthId, event_id: window._pixEventIdPurchase }),
       });
       const data = await res.json();
       if (data.active) {
         clearInterval(pollInterval);
-        if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: 147, currency: 'BRL' });
+        if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: 147, currency: 'BRL' }, { eventID: window._pixEventIdPurchase });
         if (typeof gtag !== 'undefined') gtag('event', 'conversion', { send_to: 'AW-11225982551/purchase', value: 147, currency: 'BRL' });
         document.getElementById('pixWaiting').innerHTML = '<span style="color:var(--success);font-weight:700">\u2705 Pagamento confirmado! Redirecionando...</span>';
         setTimeout(() => { window.location.href = 'https://radar-juridico.com/remocao'; }, 2000);
