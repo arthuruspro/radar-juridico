@@ -146,6 +146,7 @@ footer{display:none}
 .ck-field input:focus{border-color:#9ca3af;box-shadow:none}
 .ck-field input::placeholder{color:#c0c4cc}
 .ck-field input.error{border-color:var(--danger)}
+.ck-field .ck-phone-wrap.error{border-color:var(--danger)}
 .ck-field .ck-phone-wrap{display:flex;align-items:center;gap:0;border:1px solid #d1d5db;border-radius:8px;overflow:hidden;transition:all 0.2s}
 .ck-field .ck-phone-wrap:focus-within{border-color:#9ca3af;box-shadow:none}
 .ck-field .ck-phone-prefix{display:flex;align-items:center;gap:4px;padding:12px 12px 12px 14px;font-size:15px;color:var(--text-secondary);background:#fafafa;border-right:1px solid var(--border);white-space:nowrap;flex-shrink:0}
@@ -483,6 +484,12 @@ function startAnalysis() {
 }
 
 // ===== CHECKOUT (gerar PIX) =====
+// Remove erro ao digitar
+['ckNome','ckEmail','ckCpfCnpj'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', function(){ this.classList.remove('error'); document.getElementById('pixError').classList.remove('visible'); });
+});
+document.getElementById('ckCelular')?.addEventListener('input', function(){ this.closest('.ck-phone-wrap')?.classList.remove('error'); document.getElementById('pixError').classList.remove('visible'); });
+
 async function handleCheckout() {
   const btn = document.getElementById('checkoutBtn');
   const errorEl = document.getElementById('pixError');
@@ -501,7 +508,7 @@ async function handleCheckout() {
   document.getElementById('ckEmail').classList.remove('error');
   if (cpfCnpj.length < 11) { document.getElementById('ckCpfCnpj').classList.add('error'); errorEl.textContent = 'Preencha seu CPF/CNPJ'; errorEl.classList.add('visible'); return; }
   document.getElementById('ckCpfCnpj').classList.remove('error');
-  if (celular.length < 10) { document.getElementById('ckCelular').querySelector('input') ? document.getElementById('ckCelular').classList.add('error') : null; errorEl.textContent = 'Preencha seu celular'; errorEl.classList.add('visible'); return; }
+  if (celular.length < 10) { document.getElementById('ckCelular').closest('.ck-phone-wrap')?.classList.add('error'); errorEl.textContent = 'Preencha seu celular'; errorEl.classList.add('visible'); return; }
 
   // Usar CPF do checkout ou o digitado no Step 1
   rawWpp = celular;
