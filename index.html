@@ -216,7 +216,7 @@ Monitorar meu CPF
     <li>Alerta imediato no WhatsApp</li>
     <li>Todo tipo de processo</li>
   </ul>
-  <button class="cpf-result-btn" onclick="showStep(7)" style="margin-top:20px;">Teste por 7 dias</button>
+  <button class="cpf-result-btn" onclick="fireInitiateCheckout(); showStep(7)" style="margin-top:20px;">Teste por 7 dias</button>
 </div>
 </div>
 
@@ -483,6 +483,17 @@ function animateProcessCounter() {
     el.textContent = (current + 1).toLocaleString('pt-BR');
   }, 2000 + Math.random() * 2000);
   setTimeout(() => clearInterval(ticker), 15000);
+}
+
+// ===== INITIATE CHECKOUT (dispara no clique "Teste por 7 dias") =====
+function fireInitiateCheckout() {
+  const eid = generateEventId();
+  if (typeof fbq !== 'undefined') {
+    fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' }, { eventID: eid });
+  }
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'begin_checkout', { value: 147, currency: 'BRL' });
+  }
 }
 
 // ===== TOGGLE CARTÃO / PIX =====
