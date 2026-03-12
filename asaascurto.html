@@ -167,6 +167,10 @@ footer{display:none}
 .ck-summary-title{font-size:15px;font-weight:700;color:var(--text);margin-bottom:14px}
 .ck-summary-row{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--text-secondary);margin-bottom:12px}
 .ck-summary-total{display:flex;justify-content:space-between;align-items:center;font-size:16px;font-weight:700;color:var(--text);padding-top:12px;border-top:1px solid #e5e7eb}
+.ck-card-fields{display:none;margin-bottom:20px}
+.ck-card-fields.visible{display:block}
+.ck-card-row{display:flex;gap:12px}
+.ck-card-row .ck-field{flex:1}
 .ck-submit{width:100%;padding:18px;background:var(--accent);color:#fff;font-family:var(--font-body);font-size:16px;font-weight:700;border:none;border-radius:14px;cursor:pointer;transition:all 0.2s}
 .ck-submit:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:0 6px 20px rgba(26,86,219,0.3)}
 .ck-submit:disabled{opacity:0.5;cursor:not-allowed;transform:none;box-shadow:none}
@@ -298,17 +302,50 @@ footer{display:none}
     </div>
 
     <div class="ck-pay-methods">
-      <div class="ck-pay-method" id="ckMethodCard">
+      <div class="ck-pay-method" id="ckMethodCard" onclick="selectPayMethod('card')">
         <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
         <span>Cartão de Crédito</span>
       </div>
-      <div class="ck-pay-method active" id="ckMethodPix">
+      <div class="ck-pay-method active" id="ckMethodPix" onclick="selectPayMethod('pix')">
         <svg width="32" height="32" viewBox="0 0 512 512" fill="#ffffff"><path d="M242.4 292.5C247.8 287.1 257.1 287.1 262.5 292.5L339.5 369.5C353.7 383.7 372.6 391.5 392.6 391.5H407.7L310.6 488.6C280.3 518.1 231.1 518.1 200.8 488.6L103.3 391.2H112.6C132.6 391.2 151.5 383.4 165.7 369.2L242.4 292.5zM262.5 218.9C256.1 224.4 247.9 224.5 242.4 218.9L165.7 142.2C151.5 127.1 132.6 120.2 112.6 120.2H103.3L200.7 22.76C231.1-7.586 280.3-7.586 310.6 22.76L407.8 119.9H392.6C372.6 119.9 353.7 127.7 339.5 141.9L262.5 218.9zM112.6 142.7C126.4 142.7 139.1 148.3 149.7 158.1L226.4 234.8C233.6 241.1 243 245.6 252.5 245.6C261.9 245.6 271.3 241.1 278.5 234.8L355.5 157.8C365.3 148.1 378.8 142.5 392.6 142.5H430.3L488.6 200.8C518.9 231.1 518.9 280.3 488.6 310.6L430.3 368.9H392.6C378.8 368.9 365.3 363.3 355.5 353.5L278.5 276.5C264.6 262.6 240.3 262.6 226.4 276.6L149.7 353.2C139.1 363 126.4 368.6 112.6 368.6H80.78L22.76 310.6C-7.586 280.3-7.586 231.1 22.76 200.8L80.78 142.7H112.6z"/></svg>
         <span>Pix Automático</span>
       </div>
     </div>
 
-    <ul class="ck-pix-benefits">
+    <!-- Campos do cartão (ocultos por padrão) -->
+    <div class="ck-card-fields" id="ckCardFields">
+      <div class="ck-field">
+        <label>Número do cartão</label>
+        <input type="text" id="ckCardNumber" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" autocomplete="cc-number">
+      </div>
+      <div class="ck-card-row">
+        <div class="ck-field">
+          <label>Validade</label>
+          <input type="text" id="ckCardExpiry" placeholder="MM/AA" maxlength="5" inputmode="numeric" autocomplete="cc-exp">
+        </div>
+        <div class="ck-field">
+          <label>CVV</label>
+          <input type="text" id="ckCardCvv" placeholder="000" maxlength="4" inputmode="numeric" autocomplete="cc-csc">
+        </div>
+      </div>
+      <div class="ck-field">
+        <label>Nome no cartão</label>
+        <input type="text" id="ckCardHolder" placeholder="Como está no cartão" autocomplete="cc-name">
+      </div>
+      <div class="ck-card-row">
+        <div class="ck-field">
+          <label>CEP</label>
+          <input type="text" id="ckCardCep" placeholder="00000-000" maxlength="9" inputmode="numeric" autocomplete="postal-code">
+        </div>
+        <div class="ck-field">
+          <label>Número</label>
+          <input type="text" id="ckCardAddrNum" placeholder="Nº" inputmode="numeric">
+        </div>
+      </div>
+    </div>
+
+    <!-- Benefits do PIX (visíveis por padrão) -->
+    <ul class="ck-pix-benefits" id="ckPixBenefits">
       <li><span class="ck-check">✓</span> Liberação imediata</li>
       <li><span class="ck-check">✓</span> Assinatura sempre em dia</li>
       <li><span class="ck-check">✓</span> Com o Pix Automático, as renovações são feitas de forma recorrente, sem preocupação</li>
@@ -375,6 +412,7 @@ let pixPayload = '';
 let pollInterval = null;
 let pollCount = 0;
 const MAX_POLLS = 360; // 30 minutos
+let selectedPayMethod = 'pix'; // 'pix' ou 'card'
 
 // ===== MODAL =====
 function openCpfModal() { cpfModal.classList.add('active'); document.body.style.overflow = 'hidden'; showStep(1); }
@@ -483,7 +521,63 @@ function startAnalysis() {
   setTimeout(() => { showStep(5); }, 7000);
 }
 
-// ===== CHECKOUT (gerar PIX) =====
+// ===== TOGGLE CARTÃO / PIX =====
+function selectPayMethod(method) {
+  selectedPayMethod = method;
+  const cardBtn = document.getElementById('ckMethodCard');
+  const pixBtn = document.getElementById('ckMethodPix');
+  const cardFields = document.getElementById('ckCardFields');
+  const pixBenefits = document.getElementById('ckPixBenefits');
+  const submitBtn = document.getElementById('checkoutBtn');
+  if (method === 'card') {
+    cardBtn.classList.add('active');
+    pixBtn.classList.remove('active');
+    cardFields.classList.add('visible');
+    pixBenefits.style.display = 'none';
+    submitBtn.textContent = 'Assinar com Cartão de Crédito';
+    // Fix SVG colors
+    cardBtn.querySelector('svg').setAttribute('stroke', '#ffffff');
+    pixBtn.querySelector('svg').setAttribute('fill', '#6b7280');
+  } else {
+    pixBtn.classList.add('active');
+    cardBtn.classList.remove('active');
+    cardFields.classList.remove('visible');
+    pixBenefits.style.display = '';
+    submitBtn.textContent = 'Pagar com Pix Automático';
+    pixBtn.querySelector('svg').setAttribute('fill', '#ffffff');
+    cardBtn.querySelector('svg').setAttribute('stroke', '#6b7280');
+  }
+}
+
+// ===== MÁSCARAS CARTÃO =====
+document.getElementById('ckCardNumber')?.addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 16);
+  v = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+  e.target.value = v;
+});
+document.getElementById('ckCardExpiry')?.addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 4);
+  if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
+  e.target.value = v;
+});
+document.getElementById('ckCardCvv')?.addEventListener('input', function(e) {
+  e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+});
+document.getElementById('ckCardCep')?.addEventListener('input', function(e) {
+  let v = e.target.value.replace(/\D/g, '').slice(0, 8);
+  if (v.length > 5) v = v.slice(0, 5) + '-' + v.slice(5);
+  e.target.value = v;
+});
+document.getElementById('ckCardAddrNum')?.addEventListener('input', function(e) {
+  e.target.value = e.target.value.replace(/\D/g, '');
+});
+
+// Remove erro ao digitar nos campos do cartão
+['ckCardNumber','ckCardExpiry','ckCardCvv','ckCardHolder','ckCardCep','ckCardAddrNum'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', function(){ this.classList.remove('error'); document.getElementById('pixError').classList.remove('visible'); });
+});
+
+// ===== CHECKOUT =====
 // Remove erro ao digitar
 ['ckNome','ckEmail','ckCpfCnpj'].forEach(id => {
   document.getElementById(id)?.addEventListener('input', function(){ this.classList.remove('error'); document.getElementById('pixError').classList.remove('visible'); });
@@ -514,10 +608,26 @@ async function handleCheckout() {
   rawWpp = celular;
   if (cpfCnpj.length >= 11) rawCpf = cpfCnpj;
 
+  // Validações extras para cartão
+  if (selectedPayMethod === 'card') {
+    const cardNum = document.getElementById('ckCardNumber').value.replace(/\D/g, '');
+    const cardExp = document.getElementById('ckCardExpiry').value;
+    const cardCvv = document.getElementById('ckCardCvv').value.replace(/\D/g, '');
+    const cardHolder = document.getElementById('ckCardHolder').value.trim();
+    const cardCep = document.getElementById('ckCardCep').value.replace(/\D/g, '');
+    const cardAddrNum = document.getElementById('ckCardAddrNum').value.trim();
+
+    if (cardNum.length < 13) { document.getElementById('ckCardNumber').classList.add('error'); errorEl.textContent = 'Número do cartão inválido'; errorEl.classList.add('visible'); return; }
+    if (!cardExp || cardExp.length < 5) { document.getElementById('ckCardExpiry').classList.add('error'); errorEl.textContent = 'Validade inválida'; errorEl.classList.add('visible'); return; }
+    if (cardCvv.length < 3) { document.getElementById('ckCardCvv').classList.add('error'); errorEl.textContent = 'CVV inválido'; errorEl.classList.add('visible'); return; }
+    if (!cardHolder) { document.getElementById('ckCardHolder').classList.add('error'); errorEl.textContent = 'Preencha o nome no cartão'; errorEl.classList.add('visible'); return; }
+    if (cardCep.length !== 8) { document.getElementById('ckCardCep').classList.add('error'); errorEl.textContent = 'CEP inválido'; errorEl.classList.add('visible'); return; }
+    if (!cardAddrNum) { document.getElementById('ckCardAddrNum').classList.add('error'); errorEl.textContent = 'Preencha o número'; errorEl.classList.add('visible'); return; }
+  }
+
   if (typeof fbq !== 'undefined') fbq('track', 'InitiateCheckout', { value: 147, currency: 'BRL' });
 
   btn.disabled = true;
-  btn.textContent = 'Gerando PIX...';
 
   // Coletar UTMs
   const urlParams = new URLSearchParams(window.location.search);
@@ -526,36 +636,100 @@ async function handleCheckout() {
     if (urlParams.get(k)) utmData[k] = urlParams.get(k);
   });
 
-  try {
-    const res = await fetch(SUPABASE_URL + '/functions/v1/radar-juridico-asaas-gerar-pix', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
-        'apikey': SUPABASE_ANON_KEY,
-      },
-      body: JSON.stringify({
-        cpf: rawCpf,
-        whatsapp: rawWpp,
-        nome: nome,
-        email: email,
-        utm: Object.keys(utmData).length > 0 ? utmData : undefined
-      }),
-    });
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || 'Erro ao gerar PIX');
+  if (selectedPayMethod === 'card') {
+    // === FLUXO CARTÃO ===
+    btn.textContent = 'Processando...';
+    const expParts = document.getElementById('ckCardExpiry').value.split('/');
 
-    document.getElementById('qrCodeImg').src = 'data:image/png;base64,' + data.qrCodeImage;
-    pixPayload = data.qrCodeText;
-    currentAuthId = data.authorizationId;
+    try {
+      const res = await fetch(SUPABASE_URL + '/functions/v1/radar-juridico-asaas-criar-assinatura-cartao', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          'apikey': SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          cpf: rawCpf,
+          whatsapp: rawWpp,
+          nome: nome,
+          email: email,
+          utm: Object.keys(utmData).length > 0 ? utmData : undefined,
+          creditCard: {
+            holderName: document.getElementById('ckCardHolder').value.trim(),
+            number: document.getElementById('ckCardNumber').value.replace(/\D/g, ''),
+            expiryMonth: expParts[0],
+            expiryYear: expParts[1],
+            ccv: document.getElementById('ckCardCvv').value.replace(/\D/g, ''),
+          },
+          postalCode: document.getElementById('ckCardCep').value.replace(/\D/g, ''),
+          addressNumber: document.getElementById('ckCardAddrNum').value.trim(),
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro ao processar cartão');
 
-    showStep(8);
-    startPaymentPolling();
-  } catch (err) {
-    btn.disabled = false;
-    btn.textContent = 'Pagar com Pix Automático';
-    errorEl.textContent = err.message || 'Erro ao gerar PIX. Tente novamente.';
-    errorEl.classList.add('visible');
+      // Sucesso! Conversion tracking
+      if (typeof fbq !== 'undefined') fbq('track', 'Purchase', { value: 147, currency: 'BRL' });
+      if (typeof gtag !== 'undefined') gtag('event', 'conversion', { send_to: 'AW-11225982551/purchase', value: 147, currency: 'BRL' });
+
+      // Mostrar Step 8 adaptado (sucesso cartão)
+      showStep(8);
+      document.querySelector('#cpfStep8 h2').textContent = 'Assinatura ativada!';
+      document.querySelector('#cpfStep8 .cpf-desc').textContent = 'Seu cartão foi aprovado com sucesso.';
+      document.querySelector('.qr-wrap').style.display = 'none';
+      document.querySelector('.success-steps').style.display = 'none';
+      document.getElementById('pixWaiting').innerHTML = '<span style="color:var(--success);font-weight:700">✅ Pagamento confirmado! Redirecionando...</span>';
+      setTimeout(() => { window.location.href = 'https://radar-juridico.com/remocao'; }, 2000);
+
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Assinar com Cartão de Crédito';
+      errorEl.textContent = err.message || 'Erro ao processar cartão. Tente novamente.';
+      errorEl.classList.add('visible');
+    }
+  } else {
+    // === FLUXO PIX (original) ===
+    btn.textContent = 'Gerando PIX...';
+
+    try {
+      const res = await fetch(SUPABASE_URL + '/functions/v1/radar-juridico-asaas-gerar-pix', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + SUPABASE_ANON_KEY,
+          'apikey': SUPABASE_ANON_KEY,
+        },
+        body: JSON.stringify({
+          cpf: rawCpf,
+          whatsapp: rawWpp,
+          nome: nome,
+          email: email,
+          utm: Object.keys(utmData).length > 0 ? utmData : undefined
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Erro ao gerar PIX');
+
+      document.getElementById('qrCodeImg').src = 'data:image/png;base64,' + data.qrCodeImage;
+      pixPayload = data.qrCodeText;
+      currentAuthId = data.authorizationId;
+
+      // Restaurar Step 8 pra modo PIX
+      document.querySelector('#cpfStep8 h2').textContent = 'Quase lá!';
+      document.querySelector('#cpfStep8 .cpf-desc').textContent = 'Escaneie o QR Code com o app do seu banco';
+      document.querySelector('.qr-wrap').style.display = '';
+      document.querySelector('.success-steps').style.display = '';
+      document.getElementById('pixWaiting').innerHTML = 'Aguardando pagamento<div class="dot-pulse"><span></span><span></span><span></span></div>';
+
+      showStep(8);
+      startPaymentPolling();
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = 'Pagar com Pix Automático';
+      errorEl.textContent = err.message || 'Erro ao gerar PIX. Tente novamente.';
+      errorEl.classList.add('visible');
+    }
   }
 }
 
